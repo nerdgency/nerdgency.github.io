@@ -9,7 +9,7 @@ permalink: /formidable/changelog/
 
 ## Unreleased
 
-Current feature set:
+Current feature set2:
 
 - Capture tag: HTML5 form parsing, Registry fieldtype matching, sync
   (report/update), drift detection, and conversion to a builder form.
