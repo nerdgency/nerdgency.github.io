@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="nerdgencyIconTitle">
+  <title id="nerdgencyIconTitle">nerdgency</title>
+  <rect width="512" height="512" rx="72" fill="#374654"/>
+  <text x="66" y="345" font-family="Montserrat, 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="700" font-size="300" fill="#faaf40">{</text>
+  <text x="196" y="335" font-family="Montserrat, 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="600" font-size="220" fill="#ffffff">n</text>
+  <text x="335" y="345" font-family="Montserrat, 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="700" font-size="300" fill="#faaf40">}</text>
+</svg>
