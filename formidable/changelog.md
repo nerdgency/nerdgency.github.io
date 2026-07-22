@@ -9,14 +9,14 @@ permalink: /formidable/changelog/
 
 ## Unreleased
 
-Current feature set2:
+Current feature set:
 
 - Capture tag: HTML5 form parsing, Registry fieldtype matching, sync
   (report/update), drift detection, and conversion to a builder form.
 - Control panel field builder: drag/drop grid, resizable columns,
   attributes/rules/options tabs, all backed by the Registry.
-- Field conditions: show if / hide if / require if, enforced both
-  server-side and via injected front-end JS.
+- Field conditions: show if, enforced both server-side and via injected
+  front-end JS.
 - Workflows: submission created/updated events, condition-gated actions
   (email, webhook, connection), in-page modal management.
 - Connections: Mailchimp, Campaign Monitor, Dotdigital, Constant Contact,

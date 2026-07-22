@@ -53,8 +53,9 @@ rules or workflows.
 
 ## What happens on a valid submission
 
-1. The submission is validated against each field's rules (including any
-   `require if` conditions that are currently active).
+1. The submission is validated against each field's rules; a field hidden
+   by its `show if` conditions is skipped entirely, since the visitor never
+   saw it.
 2. If **Store Submissions** is enabled for the form, the submission and its
    values are saved (per-field encryption is honored where configured).
 3. Any workflow whose event and conditions match runs its action --

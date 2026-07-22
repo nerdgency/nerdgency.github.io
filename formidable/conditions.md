@@ -12,15 +12,11 @@ NOT rules evaluated against the current submission's values.
 
 ## Field conditions
 
-Every field has a **Conditions** tab with three independent condition trees:
+Every field has a **Conditions** tab with a single **Show if** condition
+tree: the field is only displayed when these conditions match against the
+submitted/live values (empty = always shown).
 
-- **Show if** -- the field is only displayed when these conditions match
-  (empty = always shown).
-- **Hide if** -- the field is hidden when these conditions match.
-- **Require if** -- the field becomes required when these conditions match,
-  enforced on submission regardless of what the front end shows.
-
-Each tree is built with the same condition-builder component used for
+This tree is built with the same condition-builder component used for
 control panel table search, so the interaction (adding rows, grouping with
 AND/OR, negating a group) is consistent everywhere it appears in Formidable.
 
@@ -38,11 +34,11 @@ Both field and workflow conditions are stored as the same JSON payload
 shape (nested groups of `{ field, operator, value }` leaves with `boolean`/
 `not` grouping). One evaluator enforces them everywhere:
 
-- **Server-side**, on submission: determines which fields are actually
-  required, and which workflows fire.
+- **Server-side**, on submission: determines which fields were actually
+  visible (and therefore validated), and which workflows fire.
 - **Client-side**, via the JS the [Form tag](/formidable/form-tag/) injects
-  into `<head>`: mirrors the same payload contract to show/hide/require
-  fields live as the visitor fills out the form.
+  into `<head>`: mirrors the same payload contract to show/hide fields live
+  as the visitor fills out the form.
 
 Because both sides evaluate the exact same payload the same way, what a
 visitor sees in the browser always matches what's enforced when the

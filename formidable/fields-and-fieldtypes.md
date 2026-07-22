@@ -20,8 +20,7 @@ grid. Adding a field opens a modal (no page navigation) grouped into tabs:
 - **Options** *(options-engine fieldtypes only)* -- source a select/radio/
   checkbox field's choices from manual entries, a Formidable list, channel
   entries, categories, members, or roles.
-- **Conditions** -- show if / hide if / require if, see
-  [Conditions](/formidable/conditions/).
+- **Conditions** -- show if, see [Conditions](/formidable/conditions/).
 
 Reordering and column width (1--4 columns wide) are drag/resize interactions
 on the grid itself and save immediately.
