@@ -1,4 +1,4 @@
-name: Deploy Jekyll site to Pages
+name: Deploy Docusaurus site to Pages
 
 on:
   push:
@@ -21,25 +21,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          ruby-version: '3.2'
-          bundler-cache: true
+          node-version: "20"
+          cache: npm
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v6
 
-      - name: Build with Jekyll
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
-        env:
-          JEKYLL_ENV: production
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: "_site/"
+          path: "build/"
 
   deploy:
     environment:

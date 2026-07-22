@@ -1,8 +1,6 @@
 ---
 title: Conditions
-parent: Formidable
-nav_order: 5
-permalink: /formidable/conditions/
+sidebar_position: 6
 ---
 
 # Conditions
@@ -36,7 +34,7 @@ shape (nested groups of `{ field, operator, value }` leaves with `boolean`/
 
 - **Server-side**, on submission: determines which fields were actually
   visible (and therefore validated), and which workflows fire.
-- **Client-side**, via the JS the [Form tag](/formidable/form-tag/) injects
+- **Client-side**, via the JS the [Form tag](./form-tag.md) injects
   into `<head>`: mirrors the same payload contract to show/hide fields live
   as the visitor fills out the form.
 

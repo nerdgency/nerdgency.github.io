@@ -1,8 +1,6 @@
 ---
 title: CLI commands
-parent: Formidable
-nav_order: 9
-permalink: /formidable/cli/
+sidebar_position: 10
 ---
 
 # CLI commands
@@ -27,13 +25,14 @@ Lists recent submissions, optionally scoped to one form.
 php system/ee/eecli.php formidable:submissions [--form=handle] [--limit=20] [--json]
 ```
 
-{: .note }
+:::note
 Encrypted field values are not decrypted by this command -- use the control
 panel's CSV export for that.
+:::
 
 ## `formidable:capture-status`
 
-Reports capture/drift state for [captured forms](/formidable/capture-tag/):
+Reports capture/drift state for [captured forms](./capture-tag.md):
 last capture time, whether the template has drifted from what's stored, and
 the specific fields that were added, removed, or modified.
 

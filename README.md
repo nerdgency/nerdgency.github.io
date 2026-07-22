@@ -1,36 +1,46 @@
 # nerdgency.github.io
 
 Documentation site for Nerdgency's ExpressionEngine addons, built with
-[Jekyll](https://jekyllrb.com/) and the
-[Just the Docs](https://just-the-docs.com/) theme.
+[Docusaurus](https://docusaurus.io/).
 
 ## Local development
 
 ```
-bundle install
-bundle exec jekyll serve
+npm install
+npm start
 ```
 
-Then visit `http://localhost:4000`.
+This starts a local dev server at `http://localhost:3000` and opens up a
+browser window. Most changes are reflected live without restarting the
+server.
+
+## Build
+
+```
+npm run build
+```
+
+Generates a static site into the `build/` directory, servable with any
+static hosting service.
 
 ## Structure
 
-- `_config.yml` -- site settings, nav, and Just the Docs configuration.
-- `_sass/color_schemes/nerdgency.scss` -- brand colors and font
-  (`#faaf40` orange / `#374654` grey / Montserrat as a free stand-in for
-  Proxima Nova).
-- `_sass/custom/custom.scss` -- everything else (homepage cards, nav accent,
-  logo sizing) that isn't a plain color-scheme variable.
-- `_includes/head_custom.html` -- favicons, Google Fonts, social preview
-  meta.
-- `assets/images/logo.svg` / `icon.svg` -- brand marks; the favicon set in
-  `assets/images/` and `favicon.ico` at the repo root are generated from
-  `icon.svg`.
-- `formidable/` -- Formidable addon documentation (one page per topic,
-  `formidable/index.md` is the section landing page).
+- `docusaurus.config.js` -- site settings, navbar/footer, brand colors, and
+  the Google Fonts (Montserrat) link.
+- `sidebars.js` -- the Formidable docs sidebar.
+- `src/css/custom.css` -- brand color ramp (`#faaf40` orange / `#374654`
+  grey), typography, and homepage card styles.
+- `src/pages/index.js` -- the custom React homepage (hero + addon cards).
+- `static/img/` -- brand marks (`logo.svg` / `icon.svg`) and the generated
+  favicon set.
+- `docs/formidable/` -- Formidable addon documentation (one page per topic,
+  `docs/formidable/index.md` is the section landing page, ordered via
+  `sidebar_position` front matter).
 
-Each future addon gets its own top-level folder the same way `formidable/`
-is set up, with its own `index.md` (`has_children: true`) and child pages.
+Each future addon gets its own top-level folder under `docs/` the same way
+`docs/formidable/` is set up, with its own `_category_.json` and an
+`index.md` landing page, then added to `sidebars.js` and the navbar in
+`docusaurus.config.js`.
 
 ## Deployment
 
@@ -44,10 +54,9 @@ Pages**, the source needs to be set to **GitHub Actions** (rather than
 The site currently loads Montserrat from Google Fonts as a free lookalike.
 To switch to the real Proxima Nova once you have a license:
 
-- **Adobe Fonts (Typekit):** replace the Google Fonts `<link>` tags in
-  `_includes/head_custom.html` with your kit's embed `<link>`, then update
-  `$body-font-family` in `_sass/color_schemes/nerdgency.scss` to
-  `"proxima-nova", ...`.
+- **Adobe Fonts (Typekit):** replace the Google Fonts `headTags` entries in
+  `docusaurus.config.js` with your kit's embed `<link>`, then update
+  `--ifm-font-family-base` in `src/css/custom.css` to `'proxima-nova', ...`.
 - **Self-hosted files:** drop the licensed `.woff2`/`.woff` files in
-  `assets/fonts/`, add `@font-face` declarations for them in
-  `_sass/custom/custom.scss`, and update `$body-font-family` the same way.
+  `static/fonts/`, add `@font-face` declarations for them in
+  `src/css/custom.css`, and update `--ifm-font-family-base` the same way.

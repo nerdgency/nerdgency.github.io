@@ -1,8 +1,6 @@
 ---
 title: Installation
-parent: Formidable
-nav_order: 1
-permalink: /formidable/installation/
+sidebar_position: 2
 ---
 
 # Installation
@@ -22,7 +20,7 @@ permalink: /formidable/installation/
    `formidable_connections`) and seed the Registry with default field
    attributes, fieldtype groups/fieldtypes, and validation rules.
 3. Formidable adds itself to the control panel sidebar. From there you can
-   create a form in the builder, or use the [Capture tag](/formidable/capture-tag/)
+   create a form in the builder, or use the [Capture tag](./capture-tag.md)
    against an existing template.
 
 ## Seeded defaults

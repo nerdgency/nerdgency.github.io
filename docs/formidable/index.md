@@ -1,8 +1,7 @@
 ---
 title: Formidable
-nav_order: 2
-has_children: true
-permalink: /formidable/
+sidebar_position: 1
+slug: /formidable
 ---
 
 # Formidable
@@ -15,26 +14,27 @@ services -- backed by the same submission and validation pipeline.
 
 ## What's here
 
-- **[Installation](/formidable/installation/)** -- requirements and setup.
-- **[The Capture tag](/formidable/capture-tag/)** -- turn existing template
+- **[Installation](./installation.md)** -- requirements and setup.
+- **[The Capture tag](./capture-tag.md)** -- turn existing template
   markup into a managed form.
-- **[The Form tag](/formidable/form-tag/)** -- render and process a
+- **[The Form tag](./form-tag.md)** -- render and process a
   control-panel-built form on the front end.
-- **[Fields & fieldtypes](/formidable/fields-and-fieldtypes/)** -- the field
+- **[Fields & fieldtypes](./fields-and-fieldtypes.md)** -- the field
   builder, the fieldtype registry, and attributes/rules.
-- **[Conditions](/formidable/conditions/)** -- show/hide/require fields based
+- **[Conditions](./conditions.md)** -- show/hide/require fields based
   on other field values.
-- **[Workflows](/formidable/workflows/)** -- run actions (email, webhook,
+- **[Workflows](./workflows.md)** -- run actions (email, webhook,
   connection) when a submission is created or updated.
-- **[Connections](/formidable/connections/)** -- send submissions to
+- **[Connections](./connections.md)** -- send submissions to
   mailing lists and CRMs.
-- **[Submissions](/formidable/submissions/)** -- the control panel
+- **[Submissions](./submissions.md)** -- the control panel
   submissions list, statuses, and export.
-- **[CLI commands](/formidable/cli/)** -- `eecli` commands shipped with the
+- **[CLI commands](./cli.md)** -- `eecli` commands shipped with the
   addon.
-- **[Changelog](/formidable/changelog/)**
+- **[Changelog](./changelog.md)**
 
-{: .note }
+:::note
 This section is a living reference and gets expanded alongside the addon.
 If something you rely on isn't documented yet, treat the source as the
 source of truth in the meantime.
+:::

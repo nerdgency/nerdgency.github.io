@@ -1,15 +1,13 @@
 ---
 title: Submissions
-parent: Formidable
-nav_order: 8
-permalink: /formidable/submissions/
+sidebar_position: 9
 ---
 
 # Submissions
 
 **Formidable &raquo; Submissions** lists every stored submission across your
 forms (only forms with **Store Submissions** enabled write here -- see
-[the Form tag](/formidable/form-tag/)).
+[the Form tag](./form-tag.md)).
 
 ## List and detail
 

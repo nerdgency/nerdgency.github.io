@@ -1,8 +1,6 @@
 ---
 title: Changelog
-parent: Formidable
-nav_order: 10
-permalink: /formidable/changelog/
+sidebar_position: 11
 ---
 
 # Changelog

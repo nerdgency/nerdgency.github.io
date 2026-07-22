@@ -1,8 +1,6 @@
 ---
 title: Workflows
-parent: Formidable
-nav_order: 6
-permalink: /formidable/workflows/
+sidebar_position: 7
 ---
 
 # Workflows
@@ -20,7 +18,7 @@ field.
 
 ## Conditions
 
-Every workflow has a [conditions](/formidable/conditions/) tree, evaluated
+Every workflow has a [conditions](./conditions.md) tree, evaluated
 against the base submission columns plus the form's fields. No conditions
 means the workflow always runs for its configured event.
 
@@ -49,7 +47,7 @@ receiving endpoint can verify the request came from your site.
 
 ### Send to a connection
 
-Pushes the submission to a configured [connection](/formidable/connections/)
+Pushes the submission to a configured [connection](./connections.md)
 -- a mailing list or CRM. Map the provider's fields to this form's field
 handles (plus a few common built-ins: email, name, first/last name, phone,
 company); custom provider-specific keys can be added as their own mapping
@@ -61,7 +59,8 @@ Workflow actions run inline as part of the submission request. A failing
 webhook or send doesn't fail the visitor's submission -- errors are caught
 and written to the developer log so they don't take down form processing.
 
-{: .note }
+:::note
 Workflow/connection sends currently run synchronously during the request.
 Queued/async dispatch (with retry and backoff) is a planned addition -- see
 the addon's `todo.md`.
+:::

@@ -1,15 +1,13 @@
 ---
 title: Connections
-parent: Formidable
-nav_order: 7
-permalink: /formidable/connections/
+sidebar_position: 8
 ---
 
 # Connections
 
 A connection is a configured link to a third-party mailing list or CRM.
 Once set up under **Formidable &raquo; Connections**, it becomes available
-as a **Send to a connection** action on any form's [workflows](/formidable/workflows/).
+as a **Send to a connection** action on any form's [workflows](./workflows.md).
 
 ## Supported providers
 
@@ -46,7 +44,8 @@ the core provider list plus a `$config['formidable_connection_providers']`
 override -- so a project (or another addon) can register additional
 providers without modifying Formidable itself.
 
-{: .note }
+:::note
 OAuth token refresh (Constant Contact, Salesforce) and a "test connection"
 button aren't implemented yet -- tracked alongside queued/async dispatch in
 the addon's `todo.md`.
+:::

@@ -1,8 +1,6 @@
 ---
 title: Fields & fieldtypes
-parent: Formidable
-nav_order: 4
-permalink: /formidable/fields-and-fieldtypes/
+sidebar_position: 5
 ---
 
 # Fields & fieldtypes
@@ -20,7 +18,7 @@ grid. Adding a field opens a modal (no page navigation) grouped into tabs:
 - **Options** *(options-engine fieldtypes only)* -- source a select/radio/
   checkbox field's choices from manual entries, a Formidable list, channel
   entries, categories, members, or roles.
-- **Conditions** -- show if, see [Conditions](/formidable/conditions/).
+- **Conditions** -- show if, see [Conditions](./conditions.md).
 
 Reordering and column width (1--4 columns wide) are drag/resize interactions
 on the grid itself and save immediately.
@@ -39,7 +37,7 @@ fieldtype's metadata describes:
   `settings.allow_validation`, `settings.show_required`, ...).
 - Its builder display template and icon.
 - Search/condition metadata used to build the operator choices it offers in
-  the [conditions](/formidable/conditions/) builder.
+  the [conditions](./conditions.md) builder.
 
 Because this is just Registry data, you can add a new fieldtype (or an
 entirely new fieldtype group) without touching addon code -- it shows up in

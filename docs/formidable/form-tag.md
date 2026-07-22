@@ -1,8 +1,6 @@
 ---
 title: The Form tag
-parent: Formidable
-nav_order: 3
-permalink: /formidable/form-tag/
+sidebar_position: 4
 ---
 
 # The Form tag
@@ -35,7 +33,7 @@ preserves what the visitor already typed.
 
 ## Conditional fields on the front end
 
-If any field has [conditions](/formidable/conditions/) configured, the form
+If any field has [conditions](./conditions.md) configured, the form
 tag injects a small vanilla-JS file into the page `<head>` (via a
 `template_post_parse` hook) that watches the relevant inputs and
 shows/hides/requires fields exactly as configured -- mirroring the same
@@ -60,4 +58,4 @@ rules or workflows.
    values are saved (per-field encryption is honored where configured).
 3. Any workflow whose event and conditions match runs its action --
    sending an email, calling a webhook, or pushing to a connection. See
-   [Workflows](/formidable/workflows/).
+   [Workflows](./workflows.md).

@@ -1,8 +1,6 @@
 ---
 title: The Capture tag
-parent: Formidable
-nav_order: 2
-permalink: /formidable/capture-tag/
+sidebar_position: 3
 ---
 
 # The Capture tag
