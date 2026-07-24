@@ -11,7 +11,7 @@ const sidebars = {
       items: [
         'formidable/installation',
         'formidable/capture-tag',
-        'formidable/form-tag',
+        'formidable/tags/form-tag',
         'formidable/fields-and-fieldtypes',
         'formidable/conditions',
         'formidable/workflows',
