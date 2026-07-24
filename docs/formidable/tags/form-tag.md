@@ -1,6 +1,6 @@
 ---
-title: The Form tag
-sidebar_position: 4
+title: Form
+sidebar_position: 2
 ---
 
 # The Form tag
