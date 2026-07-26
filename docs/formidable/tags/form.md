@@ -116,6 +116,31 @@ The width of the grid the form's layout was designed against. Each field's own c
 
 With the default of `16`, a field occupying one column of the CP builder's four-column grid reports `4`; against `columns="12"` the same field reports `3`.
 
+### `template=`
+
+```html
+template="forms/contact_layout"
+```
+
+Renders the form through a full-custom template instead of the tag's own inline tagdata — a `group/name` path to an EE Template whose body is parsed against the exact same variable set documented on this page.
+
+Only consulted when the tag has no inline tagdata between `{exp:formidable:form}` and `{/exp:formidable:form}`; inline tagdata always wins. When neither is present, resolution falls back to the form's own configured default Template (set in the control panel), then to a minimal built-in render.
+
+### `rule_method=`
+
+```html
+rule_method="m"
+```
+
+Default: the form's own **Rule Method** configuration setting (`r`)
+
+Controls how `field:HANDLE:rule:NAME=` overrides (below) combine with each field's own saved validation rules for this render/submission only:
+
+- `r` — **replace.** The tag's rule overrides for a field replace that field's saved rules entirely.
+- `m` — **merge.** The tag's rule overrides layer on top of the field's saved rules; a rule name given by the tag wins, every other saved rule stays in effect.
+
+This setting has no effect on a field with no `field:HANDLE:rule:` override at all — its saved rules are always used unchanged.
+
 ### `form_wrap=`
 
 ```html
@@ -204,6 +229,43 @@ field:message:attribute:rows="10"
 ```
 
 Sets or overrides a single attribute on one field, addressed by its handle. Merges the same way as `form:attribute:` — only the named attribute is affected.
+
+### `form:setting:NAME=`
+
+```html
+form:setting:enable_storage="no"
+form:setting:submission_prefix="Contact —"
+form:setting:show_instructions="b"
+```
+
+Overrides one of the form's own **Configuration** settings for this render/submission only — nothing is written back to the saved form. Unknown setting names are ignored rather than raising an error.
+
+| `NAME` | Type | Notes |
+| --- | --- | --- |
+| `rule_method` | `r` \| `m` | Same effect as `rule_method=` above |
+| `show_instructions` | `t` \| `b` | Where field instructions are placed |
+| `enable_storage` | boolean | Whether a submission is stored at all ("workflows only" when off) |
+| `store_submission_data` | boolean | Whether the stored submission's field data is populated |
+| `submission_prefix` | string | Prefix used to build a stored submission's display name |
+| `enable_honeypot` | boolean | Classic hidden-field honeypot |
+| `enable_js_honeypot` | boolean | JavaScript-only honeypot |
+| `disable_submit_on_process` | boolean | Disables the submit button(s) for the duration of a request |
+| `template_id` | integer | The Template id used by `template=`'s fallback chain |
+
+Boolean settings accept `yes`/`no`, `1`/`0`, `true`/`false`, or `on`/`off`.
+
+Only `enable_storage`, `store_submission_data`, and `submission_prefix` affect anything past this render — they're threaded through to submission processing along with the encrypted `{form_meta}` payload, so overriding them here genuinely changes what gets stored, not just what's displayed. Every other setting only ever affects this one render (instructions placement, honeypot markup, the submit-disable attribute, and so on).
+
+### `field:HANDLE:rule:NAME=`
+
+```html
+field:email:rule:enum="you@example.com,team@example.com"
+field:promo_code:rule:required=""
+```
+
+Overrides or adds a single validation rule on one field, addressed by its handle, for this render/submission only. `NAME` is any EE-native validation rule handle (`required`, `enum`, `maxLength`, and so on); the tag param's value is the rule's argument, or an empty string for a rule that takes none.
+
+How this combines with the field's own saved rules is controlled by `rule_method=`/the form's **Rule Method** setting — replace (default) or merge. This is threaded through to `Actions/Submit` via `{form_meta}`, so it changes real server-side validation, not just this render.
 
 ## Single Variables
 
