@@ -1,0 +1,67 @@
+---
+title: Overview
+sidebar_position: 20
+slug: /registry/overview
+---
+
+import Link from '@docusaurus/Link';
+
+# Registry
+The Registry is the inner workings of Formidable — the master list of the building blocks every form on your site is assembled from. It doesn't hold your forms or your submissions; it holds the structure those forms draw on. This includes:
+
+- Fieldtypes you can add (text, email, select, checkboxes, file upload, signature, and so on) and the settings each kind offers
+- HTML attributes you're allowed to attach to a field or a form
+- Validation rules available to you and
+- Reusable lists of options that appear in dropdowns throughout the control panel. 
+
+Formidable ships with all of this filled in, so you never have to think about it to build a form — but it's there, and it's configurable, for the times when the standard set doesn't quite fit what you're building.
+
+Because everything downstream depends on it, changes here reach every form at once: adjust a validation rule and you've adjusted it everywhere that rule is used. That's the Registry's real value and its one caution, which is why the control panel warns you before you edit it, and why an addon update may reset changes you've made.
+
+:::info Registry Updates 
+Registry updates may be introduced in future addon releases. Any changes will be clearly documented in the release notes, and future updates will include a migration path to preserve user-configured customisations wherever possible.
+:::
+
+## Configurations
+
+The starting settings every new form inherits from instruction placement, whether submissions are stored, spam protection defaults, the default template. Change these to set your style once, rather than adjusting every form you build. Existing forms keep their own settings; this only shapes new ones.
+
+**Configurations are a special-use case of the registry and are handled per site.**
+
+<Link
+  className="button button--primary"
+  to="/docs/getting-started/installation">Learn more about Configurations</Link>
+
+## Field and Form Attributes
+
+The list of HTML attributes you're offered when configuring a field or form such as placeholder, maxlength, autocomplete and the like. It's the menu behind field's and form's Attributes tab, so adding one here makes it available on every field and form across the site.
+
+<Link
+  className="button button--primary"
+  to="/docs/getting-started/installation">Check out what attributes exist</Link>
+
+## Fieldtype Groups & Fieldtypes
+
+**Fieldtype groups** are a sorted collection of fields which is what you see when picking a field to add. Each group also carries the shared markup its fieldtypes fall back on, so a change here reaches every field of that family at once.
+
+**Fieldtypes** are every kind of field you can add to a form: text, email, dropdown, checkboxes, file upload, signature, spam challenges, and the rest. Each one defines what it looks like, what settings it offers, and how its answers are stored.
+
+<Link
+  className="button button--primary"
+  to="/docs/getting-started/installation">See what fieldtypes are available</Link>
+
+## Form Templates
+
+A small library of ready-made layouts for rendering forms on your site, from plain semantic markup to Bootstrap, Tailwind and Material versions. You don't edit these in place: you can copy one into your own templates and take it from there, so future updates never disturb your work.
+
+<Link
+  className="button button--primary"
+  to="/docs/getting-started/installation">Browse which templates Formidable ships with</Link>
+
+## Lists
+
+Reusable sets of options with a name. They do two jobs: they fill the dropdowns you see throughout the control panel, and they can supply the choices for a dropdown, radio or checkbox field — so a list you'll reuse across several forms is defined once here. This registry component is mostly used for Formidable internal workings at this time.
+
+## Rules
+
+The validation checks available when setting up a field — required, email, minimum length, number ranges and so on. This is the menu behind a field's Rules tab. Formidable uses [ExpressionEngine's built-in rules](https://docs.expressionengine.com/latest/development/services/validation.html#built-in-rules) under the hood with plans to allow for additional rules in future updates.

@@ -16,6 +16,20 @@ const config = {
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
+  
+  plugins: [
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      {
+        hashed: true,
+        language: ["en"],
+        docsRouteBasePath: "/",
+        indexDocs: true,
+        indexBlog: false,
+        indexPages: true,
+      },
+    ],
+  ],
 
   markdown: {
     hooks: {
@@ -75,7 +89,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: 'img/logo.svg',
+      image: 'img/logo.png',
       colorMode: {
         defaultMode: 'light',
         disableSwitch: true,
@@ -85,7 +99,7 @@ const config = {
         title: 'nerdgency',
         logo: {
           alt: 'Nerdgency logo',
-          src: 'img/logo.svg',
+          src: 'img/logo.png',
         },
         items: [
           {
