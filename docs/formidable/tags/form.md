@@ -66,14 +66,30 @@ Turn this on in staging when a field or form is not appearing. It names the spec
 
 ```html
 return="thanks"
+return="thanks/SUBMISSION_HANDLE"
 ```
 
 The template path to redirect to after a successful submission. May also be a full URL.
 
-### `error_return=`
+**Two tokens are substituted** if present, so the visitor can be sent straight to the thing they just created:
+
+| Token | Replaced with |
+| --- | --- |
+| `SUBMISSION_HANDLE` | the new submission's random public token |
+| `SUBMISSION_ID` | its sequential id |
+
+Both are case-sensitive, and a path containing neither is used verbatim. Substitution happens before the redirect target is checked against the allowed-host list, so the URL that gets vetted is the one the visitor is actually sent to.
+
+:::tip Prefer the handle
+`SUBMISSION_ID` is a sequential integer, so a visitor handed one can trivially guess its neighbours. `SUBMISSION_HANDLE` is random and unguessable, which is why it exists — pair it with `submission_handle=` on the destination template to show someone their own answers back. Note the access-control warning under that parameter: unguessable is not the same as authorised.
+:::
+
+If storage is disabled for the form (`enable_storage` off, "workflows only"), there is no submission to reference and the tokens are left in place unsubstituted.
+
+### `return_on_error=`
 
 ```html
-error_return="contact"
+return_on_error="contact"
 ```
 
 The template path to return to when a submission fails validation. The form redisplays with `{has_errors}` set, per-field errors populated, and every field repopulated with what was submitted.
@@ -104,10 +120,10 @@ Default: unset (all fields)
 
 Limits `{fields}` to the fields assigned to that step of a multi-page form. When omitted, every field is rendered. `{form_page}` and `{form_page_count}` are available for building the navigation between steps.
 
-### `columns=`
+### `template_columns=`
 
 ```html
-columns="12"
+template_columns="12"
 ```
 
 Default: `16`
@@ -126,25 +142,37 @@ Renders the form through a full-custom template instead of the tag's own inline 
 
 Only consulted when the tag has no inline tagdata between `{exp:formidable:form}` and `{/exp:formidable:form}`; inline tagdata always wins. When neither is present, resolution falls back to the form's own configured default Template (set in the control panel), then to a minimal built-in render.
 
-### `rule_method=`
+### `only=` / `exclude=`
 
 ```html
-rule_method="m"
+only="first_name|last_name|email"
+exclude="first_name|last_name"
 ```
 
-Default: the form's own **Rule Method** configuration setting (`r`)
+Pipe-separated field handles limiting which fields the `{fields}` loop renders.
 
-Controls how `field:HANDLE:rule:NAME=` overrides (below) combine with each field's own saved validation rules for this render/submission only:
+`only=` renders just the fields named; `exclude=` renders everything except them. If both are given, `only=` wins — it is the more explicit statement of intent.
 
-- `r` — **replace.** The tag's rule overrides for a field replace that field's saved rules entirely.
-- `m` — **merge.** The tag's rule overrides layer on top of the field's saved rules; a rule name given by the tag wins, every other saved rule stays in effect.
+The usual reason to reach for `exclude=` is placing a few fields by hand with `{field:HANDLE:...}` and letting the loop handle the rest, without those fields appearing twice.
 
-This setting has no effect on a field with no `field:HANDLE:rule:` override at all — its saved rules are always used unchanged.
+:::note Skipped, not removed
+A field left out of the loop is still part of the form. It is not rendered, so nothing is submitted for it, and its saved validation rules still apply on submission — a required field excluded from the markup will fail validation with no visible input to correct. Use `field:HANDLE:rules=` if you need to relax that.
+:::
 
-### `form_wrap=`
+### `prefix=`
 
 ```html
-form_wrap="no"
+prefix="signup_"
+```
+
+Default: none
+
+Prefixes every variable this tag publishes, so two copies of the tag on one page do not collide. With `prefix="signup_"`, `{form_attributes}` becomes `{signup_form_attributes}`, `{field_label}` becomes `{signup_field_label}`, and so on throughout.
+
+### `include_form_wrapper=`
+
+```html
+include_form_wrapper="no"
 ```
 
 Default: `yes`
@@ -156,7 +184,7 @@ With `yes`, the wrapper and its attributes are generated for you, and the hidden
 With `no`, the wrapper becomes the template's responsibility. Build it from `{form_attributes}` and place `{form_meta}` yourself:
 
 ```html
-{exp:formidable:form form_handle="contact_us" form_wrap="no"}
+{exp:formidable:form form_handle="contact_us" include_form_wrapper="no"}
 	<form {form_attributes}>
 		{form_meta}
 		{fields}{field_template}{/fields}
@@ -165,23 +193,33 @@ With `no`, the wrapper becomes the template's responsibility. Build it from `{fo
 ```
 
 :::caution
-When `form_wrap="no"`, `{form_meta}` must be placed inside your `<form>` element. Without it the submission cannot be processed.
+When `include_form_wrapper="no"`, `{form_meta}` must be placed inside your `<form>` element. Without it the submission cannot be processed.
 :::
 
-### `form_meta_wrap=`
+### `include_meta_wrapper=`
 
 ```html
-form_meta_wrap="no"
+include_meta_wrapper="no"
 ```
 
 Default: `yes`
 
 Whether `{form_meta}`'s hidden inputs are wrapped in their own hidden `<div>`. The wrapper guarantees the inputs cannot affect layout regardless of theme CSS. Turn it off to take the bare `<input>` tags instead.
 
-### `load_js=`
+### `include_content_wrapper=`
 
 ```html
-load_js="no"
+include_content_wrapper="no"
+```
+
+Default: `yes`
+
+Whether the tag outputs its content wrapper — the `<div>` inside `<form>`, after the hidden meta block, that the fields are rendered into. Style it with `{form_content_attributes}`, or turn it off to place your own.
+
+### `include_js=`
+
+```html
+include_js="no"
 ```
 
 Default: `yes`
@@ -200,10 +238,10 @@ Default: `formidable_hp`
 
 The field name used for the classic honeypot input — a field hidden from humans that bots tend to fill in. Only rendered when the form's Spam settings enable it. Changing the name per site makes it harder to fingerprint.
 
-### `js_honeypot=`
+### `honeypot_js=`
 
 ```html
-js_honeypot="_ok"
+honeypot_js="_ok"
 ```
 
 Default: `_formidable_js_ok`
@@ -219,7 +257,7 @@ form:attribute:method="get"
 
 Sets or overrides a single attribute on the `<form>` element.
 
-Overrides always merge. Setting one attribute replaces only that attribute — the form's other computed defaults and everything saved on its Attributes tab stay in place. This works whether the wrapper is generated (`form_wrap="yes"`) or built by hand from `{form_attributes}`.
+Overrides always merge. Setting one attribute replaces only that attribute — the form's other computed defaults and everything saved on its Attributes tab stay in place. This works whether the wrapper is generated (`include_form_wrapper="yes"`) or built by hand from `{form_attributes}`.
 
 ### `field:HANDLE:attribute:NAME=`
 
@@ -242,13 +280,12 @@ Overrides one of the form's own **Configuration** settings for this render/submi
 
 | `NAME` | Type | Notes |
 | --- | --- | --- |
-| `rule_method` | `r` \| `m` | Same effect as `rule_method=` above |
 | `show_instructions` | `t` \| `b` | Where field instructions are placed |
 | `enable_storage` | boolean | Whether a submission is stored at all ("workflows only" when off) |
 | `store_submission_data` | boolean | Whether the stored submission's field data is populated |
 | `submission_prefix` | string | Prefix used to build a stored submission's display name |
 | `enable_honeypot` | boolean | Classic hidden-field honeypot |
-| `enable_js_honeypot` | boolean | JavaScript-only honeypot |
+| `enable_honeypot_js` | boolean | JavaScript-only honeypot |
 | `disable_submit_on_process` | boolean | Disables the submit button(s) for the duration of a request |
 | `template_id` | integer | The Template id used by `template=`'s fallback chain |
 
@@ -256,16 +293,86 @@ Boolean settings accept `yes`/`no`, `1`/`0`, `true`/`false`, or `on`/`off`.
 
 Only `enable_storage`, `store_submission_data`, and `submission_prefix` affect anything past this render — they're threaded through to submission processing along with the encrypted `{form_meta}` payload, so overriding them here genuinely changes what gets stored, not just what's displayed. Every other setting only ever affects this one render (instructions placement, honeypot markup, the submit-disable attribute, and so on).
 
-### `field:HANDLE:rule:NAME=`
+### `field:HANDLE:rules=`
 
 ```html
-field:email:rule:enum="you@example.com,team@example.com"
-field:promo_code:rule:required=""
+field:email:rules="required|email"
+field:message:rules="required|maxLength[500]"
+field:role:rules="enum[editor|author|guest]"
 ```
 
-Overrides or adds a single validation rule on one field, addressed by its handle, for this render/submission only. `NAME` is any EE-native validation rule handle (`required`, `enum`, `maxLength`, and so on); the tag param's value is the rule's argument, or an empty string for a rule that takes none.
+Overrides or adds validation rules on one field, addressed by its handle, for this render/submission only.
 
-How this combines with the field's own saved rules is controlled by `rule_method=`/the form's **Rule Method** setting — replace (default) or merge. This is threaded through to `Actions/Submit` via `{form_meta}`, so it changes real server-side validation, not just this render.
+The value is a pipe-separated list in the syntax EE validation already uses: a rule handle on its own for a rule that takes no argument, or `handle[argument]` for one that does. A pipe *inside* brackets belongs to the argument, so `enum[editor|author|guest]` is one rule with three alternatives rather than three rules.
+
+**Rules merge by default; prefix `=` to replace.** This is the same convention `class` follows in every attribute bag:
+
+```html
+field:email:rules="email"      <!-- adds to the field's saved rules -->
+field:email:rules="=email"     <!-- replaces them outright -->
+field:email:rules="="          <!-- drops the field's saved rules -->
+```
+
+Merging is keyed by rule name: a rule the tag names wins, and every other saved rule stays in effect. A field with no `field:HANDLE:rules=` param is unaffected either way.
+
+:::note Replaced a form-level setting
+This used to be governed by a **Rule Method** setting on the form. That setting answered the same question once per form and stored the answer in the database, so a template could not add a single rule to one field without knowing how the form happened to be configured — and the answer lived nowhere near the template depending on it. The `=` prefix is per-field, per-call, and visible in the markup.
+:::
+
+This is threaded through to `Actions/Submit` via `{form_meta}`, so it changes real server-side validation, not just this render.
+
+### `REGION:attribute:NAME=`
+
+```html
+form:attribute:class="contact-form"
+label:attribute:class="form-label"
+field_wrapper:attribute:class="col-span-6"
+option_label:attribute:class="checkbox-label"
+```
+
+Sets or overrides a single attribute on every instance of one region — the named parts of a rendered form. See regions for the full model.
+
+| Region | Element |
+| --- | --- |
+| `form` | the `<form>` element itself |
+| `form_content` | the content wrapper inside `<form>` |
+| `meta_wrapper` | the hidden processing inputs block |
+| `page_nav` | multi-page navigation |
+| `field_wrapper` | a field's outer wrapper |
+| `field` | the input itself |
+| `label` | a field's `<label>` |
+| `instructions` | a field's instructions element |
+| `error` | a field's error element |
+| `button` | submit / reset controls |
+| `options_wrapper` | the list around all of a field's options |
+| `option` | one option's own wrapper |
+| `option_label` | one option's `<label>` |
+
+`class` **appends** rather than replacing, so adding a class never silently drops the ones a fieldtype or your form configuration already set. Prefix the value with `=` to replace outright:
+
+```html
+label:attribute:class="mt-2"     <!-- appended -->
+label:attribute:class="=mt-2"    <!-- replaces everything below -->
+```
+
+:::note One grammar, no exceptions
+`form:attribute:` is not a separate parameter family — the `<form>` element is simply the `form` region. Every attribute parameter reads `REGION:attribute:NAME`, at both levels.
+
+Tag **parameters** use colons throughout. Template **variables** keep underscores — `{label_attributes}`, not `{label:attributes}` — because `:` is EE's modifier separator, so `{label:attributes}` would parse as variable `label` with modifier `attributes`.
+:::
+
+### `field:HANDLE:REGION:attribute:NAME=`
+
+```html
+field:email:label:attribute:class="sr-only"
+field:message:field_wrapper:attribute:class="col-span-12"
+```
+
+The same regions as above, applied to one field only. Takes precedence over the unqualified `REGION:attribute:` form.
+
+Only the field-level and option-level regions accept this — `form`, `form_content`, `meta_wrapper` and `page_nav` are rendered once per form, so there is no per-field axis for them.
+
+`field:HANDLE:attribute:NAME=` (documented above) is shorthand for `field:HANDLE:field:attribute:NAME=`; both set attributes on that field's input.
 
 ## Single Variables
 
@@ -320,7 +427,7 @@ Available inside [`{fields}`](#fields).
 | `{field_value}` | The field's current value — see [Value resolution](#value-resolution) |
 | `{field_submitted_value}` | Only what was submitted, ignoring stored and default values |
 | `{field_content}` | Admin-authored markup for content fieldtypes such as `html` |
-| `{field_columns}` | The field's column span, scaled to `columns=` |
+| `{field_columns}` | The field's column span, scaled to `template_columns=` |
 | `{field_page}` | Which page of a multi-page form the field belongs to |
 | `{field_error}` | The validation error for this field, if any |
 | `{field_has_error}` | Whether this field failed validation — conditional |
@@ -493,12 +600,12 @@ The whole form, wrapper included, with no markup of its own:
 
 The same form with the theme in control of every element — its own `<form>` tag, its own field markup, per-field attribute overrides, and errors rendered beside each field:
 
-```html title="contact.html"
+```expressionengine title="contact.html"
 {exp:formidable:form
 	form_handle="contact_us"
-	form_wrap="no"
+	include_form_wrapper="no"
 	return="thanks"
-	error_return="contact"
+	return_on_error="contact"
 	field:email:attribute:placeholder="you@example.com"
 	field:message:attribute:rows="8"
 }

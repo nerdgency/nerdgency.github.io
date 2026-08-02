@@ -1,6 +1,8 @@
 // @ts-check
 import { themes as prismThemes } from 'prism-react-renderer';
 
+const {themes} = require('prism-react-renderer');
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Nerdgency Docs',
@@ -86,14 +88,15 @@ const config = {
     ],
   ],
 
+  //themes: ['cosmos-docusaurus-theme'],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       image: 'img/logo.png',
       colorMode: {
-        defaultMode: 'light',
-        disableSwitch: true,
-        respectPrefersColorScheme: false,
+        defaultMode: 'dark',
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
       },
       navbar: {
         title: 'nerdgency',
