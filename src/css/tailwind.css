@@ -7,6 +7,6 @@
 
 @layer components {
   .tw-btn-primary {
-    @apply bg-brand text-black font-semibold px-4 py-2 rounded;
+    @apply tw-bg-brand tw-text-black tw-font-semibold tw-px-4 tw-py-2 tw-rounded;
   }
 }
