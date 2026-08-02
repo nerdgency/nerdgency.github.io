@@ -1,17 +1,10 @@
 /* Tailwind entry for Docusaurus
-   Keep very small to minimise conflicts with Infima.
-   This file is imported via docusaurus.config.js theme.customCss.
+   Keep minimal to avoid overriding Infima. Import this BEFORE custom.css so custom.css can override base styles if needed.
 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Example small helper mapping so you can use Tailwind utilities alongside existing tokens */
-:root {
-  --tw-brand: theme('colors.brand.DEFAULT');
-}
-
-/* Minimal component example (optional) */
 @layer components {
   .tw-btn-primary {
     @apply bg-brand text-black font-semibold px-4 py-2 rounded;

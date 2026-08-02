@@ -16,9 +16,5 @@ module.exports = {
       },
     },
   },
-  corePlugins: {
-    // Disable preflight to reduce conflicts with Docusaurus/Infima base styles
-    preflight: false,
-  },
   plugins: [],
 };
