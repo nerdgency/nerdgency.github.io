@@ -88,7 +88,9 @@ const config = {
     ],
   ],
 
-  //themes: ['cosmos-docusaurus-theme'],
+  // Use the Cosmos Docusaurus theme as the base visual system.
+  themes: ['cosmos-docusaurus-theme'],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -103,6 +105,7 @@ const config = {
         logo: {
           alt: 'Nerdgency logo',
           src: 'img/logo.png',
+          srcDark: 'img/logo-dark.png',
         },
         items: [
           {
@@ -144,7 +147,7 @@ const config = {
       },
       prism: {
         theme: prismThemes.github,
-        darkTheme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
       },
     }),
 };
