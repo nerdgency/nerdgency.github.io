@@ -6,7 +6,7 @@ import Heading from '@theme/Heading';
 function HomepageHero() {
   return (
     <header className="hero" style={{ padding: '4rem 0 2rem' }}>
-      <div className="container">
+      <div className="container tw-flex tw-flex-col tw-max-w-xl tw-space-y-32 tw-bg-white">
         <Heading as="h1" className="hero__title">
           Nerdgency Docs
         </Heading>

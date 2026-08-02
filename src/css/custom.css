@@ -68,18 +68,3 @@
 
   --nerdgency-focus-ring: 3px solid rgba(250,175,64,0.26);
 }
-
-.hero {
-  background: #0f172a;
-}
-
-.hero .container {
-  max-width: 65%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.hero__title {
-  
-}
