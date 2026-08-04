@@ -1,17 +1,7 @@
-@import 'cosmos-docusaurus-theme/css/theme.css';
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "tailwindcss";
 
-/**
- * Nerdgency brand theme for Docusaurus/Infima (updated: accessible light + dark)
- *
- * Primary brand color: #faaf40
- * Dark theme background: #172554
- *
- * Goals:
- *  - Full accessible color tokens for both light and dark modes (WCAG AA where appropriate)
- *  - Modern, sleek, clean sidebar and page navs
- *  - Clear focus states and keyboard accessibility
- *  - Minimal, maintainable overrides (leave most Infima behavior intact)
- */
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 :root {
   /* Brand */
@@ -20,51 +10,98 @@
   --nerdgency-orange-strong: #c9821a; /* stronger contrast variant */
 
   /* Light palette */
-  --nerd-light-bg: #ffffff;
-  --nerd-light-surface: #fbfbfd; /* subtle surface */
-  --nerd-light-muted: #57697a; /* secondary text */
-  --nerd-light-text: #0f1720; /* high-contrast body text */
-  --nerd-light-border: #e6ebef;
+  --nerdgency-light-bg: #ffffff;
+  --nerdgency-light-surface: #fbfbfd; /* subtle surface */
+  --nerdgency-light-muted: #57697a; /* secondary text */
+  --nerdgency-light-text: #0f1720; /* high-contrast body text */
+  --nerdgency-light-border: #e6ebef;
 
   /* Dark palette (requested background #172554) */
-  --nerd-dark-bg: #172554; /* page background for dark theme */
-  --nerd-dark-surface: #0f234a; /* cards, surfaces */
-  --nerd-dark-muted: #9fb0db; /* secondary text */
-  --nerd-dark-text: #eaf4ff; /* primary text on dark */
-  --nerd-dark-border: rgba(255,255,255,0.06);
+  --nerdgency-dark-bg: #020617; /* page background for dark theme */
+  --nerdgency-dark-surface: #172554; /* cards, surfaces */
+  --nerdgency-dark-muted: #9fb0db; /* secondary text */
+  --nerdgency-dark-text: #eaf4ff; /* primary text on dark */
+  --nerdgency-dark-border: rgba(255,255,255,0.06);
+
+  --nerdgency-wordmark-bracket: var(--nerdgency-orange);
+  --nerdgency-wordmark: #374654;
 
   /* Common tokens */
   --ifm-color-primary: var(--nerdgency-orange);
   --ifm-color-primary-dark: var(--nerdgency-orange-strong);
-  --ifm-font-family-base: 'Montserrat', system-ui, -apple-system,
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system,
     BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
     sans-serif, 'Segoe UI Emoji';
 
   /* Light-mode defaults */
-  --ifm-background-color: var(--nerd-light-bg);
-  --ifm-background-surface-color: var(--nerd-light-surface);
-  --ifm-font-color-base: var(--nerd-light-text);
-  --ifm-heading-color: var(--nerd-light-text);
+  --ifm-navbar-background-color: var(--nerdgency-light-bg);
+  --ifm-hero-background-color: #ddd;
+  --ifm-background-color: var(--nerdgency-light-bg);
+  --ifm-background-surface-color: var(--nerdgency-light-surface);
+  --ifm-font-color-base: var(--nerdgency-light-text);
+  --ifm-heading-color: var(--nerdgency-light-text);
   --ifm-link-color: var(--nerdgency-orange-strong);
   --ifm-link-hover-color: color-mix(in srgb, var(--ifm-link-color) 85%, black 15%);
-  --ifm-navbar-link-hover-color: rgba(250,175,64,0.12);
+  --ifm-navbar-link-hover-color: var(--nerdgency-orange-ink);
   --ifm-code-background: #f6f7fb;
   --ifm-code-font-size: 95%;
 
   --nerdgency-focus-ring: 3px solid rgba(250,175,64,0.22);
   --nerdgency-focus-outline-offset: 3px;
+  
+  --nerdgency-card-border: #cbd5e1;
+  --nerdgency-card-icon-background: #e2e8f0;
 }
 
 /* Dark theme overrides — used when docusaurus sets data-theme='dark' on <html> */
-[data-theme='dark'] {
-  --ifm-background-color: var(--nerd-dark-bg);
-  --ifm-background-surface-color: var(--nerd-dark-surface);
-  --ifm-font-color-base: var(--nerd-dark-text);
-  --ifm-heading-color: var(--nerd-dark-text);
+:root[data-theme='dark'] {
+  --ifm-navbar-background-color: var(--nerdgency-dark-bg);
+  --ifm-hero-background-color: #0f172a;
+  --ifm-background-color: var(--nerdgency-dark-bg);
+  --ifm-background-surface-color: var(--nerdgency-dark-surface);
+  --ifm-font-color-base: var(--nerdgency-dark-text);
+  --ifm-heading-color: var(--nerdgency-dark-text);
   --ifm-link-color: #ffd089; /* slightly lighter brand for links on dark */
   --ifm-link-hover-color: rgba(255,208,137,0.9);
   --ifm-code-background: #0b1730;
   --ifm-code-font-size: 95%;
+  --ifm-navbar-link-hover-color: var(--nerdgency-orange);
 
   --nerdgency-focus-ring: 3px solid rgba(250,175,64,0.26);
+  --nerdgency-card-border: var(--nerdgency-orange);
+  
+  --nerdgency-card-icon-background: var(--nerdgency-orange);
+  
+  --nerdgency-wordmark-bracket: var(--nerdgency-orange);
+  --nerdgency-wordmark: #ffffff;
+}
+
+.features__container {
+  background: var(--ifm-background-color);
+}
+
+.features {
+
+}
+
+.features h3 {
+  color: var(--ifm-heading-color);
+}
+
+.features__icon {
+
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nerdgency-orange-ink);
+}
+
+.features__card {
+  border: 1px var(--nerdgency-card-border) solid;
+  border-radius: 8px;
+  padding: 32px 24px;
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Formidable</title>
+
+    <!-- Shield / badge -->
+    <path
+        d="M100,14 C124,14 146,22 168,38 L168,96 C168,146 138,178 100,194 C62,178 32,146 32,96 L32,38 C54,22 76,14 100,14 Z"
+        fill="#FAAF40"
+        stroke="#374654"
+        stroke-width="6" />
+
+    <!-- Form-field lines -->
+    <rect x="62" y="64" width="76" height="13" rx="6.5" fill="#FFFFFF" />
+    <rect x="62" y="86" width="58" height="13" rx="6.5" fill="#FFFFFF" />
+    <rect x="62" y="108" width="40" height="13" rx="6.5" fill="#FFFFFF" />
+
+    <!-- Validated / submitted badge -->
+    <circle cx="146" cy="150" r="27" fill="#FFFFFF" stroke="#374654" stroke-width="6" />
+    <polyline
+        points="134,150 143,159 160,140"
+        fill="none"
+        stroke="#FAAF40"
+        stroke-width="6"
+        stroke-linecap="round"
+        stroke-linejoin="round" />
+</svg>

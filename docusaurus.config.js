@@ -1,105 +1,132 @@
 // @ts-check
-import { themes as prismThemes } from 'prism-react-renderer';
+//import { themes as prismThemes } from 'prism-react-renderer';
 
-const {themes} = require('prism-react-renderer');
+//const {themes} = require('prism-react-renderer');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Nerdgency Docs',
-  tagline: 'Documentation for Formidable and other ExpressionEngine addons',
-  favicon: 'img/favicon.ico',
+    title: 'Nerdgency Docs',
+    tagline: 'Documentation for Formidable and other ExpressionEngine addons',
+    favicon: 'img/favicon.ico',
 
-  url: 'https://nerdgency.github.io',
-  baseUrl: '/',
+    url: 'https://nerdgency.github.io',
+    baseUrl: '/',
 
-  organizationName: 'nerdgency',
-  projectName: 'nerdgency.github.io',
-  deploymentBranch: 'gh-pages',
-  trailingSlash: false,
+    organizationName: 'nerdgency',
+    projectName: 'nerdgency.github.io',
+    deploymentBranch: 'gh-pages',
+    trailingSlash: false,
 
-  onBrokenLinks: 'throw',
-  
-  plugins: [
-    [
-      require.resolve("@easyops-cn/docusaurus-search-local"),
-      {
-        hashed: true,
-        language: ["en"],
-        docsRouteBasePath: "/",
-        indexDocs: true,
-        indexBlog: false,
-        indexPages: true,
-      },
+    onBrokenLinks: 'throw',
+    
+    plugins: [
+        "./src/plugins/tailwind-plugin.js",
+        [
+            require.resolve("@easyops-cn/docusaurus-search-local"),
+            {
+              hashed: true,
+              language: ["en"],
+              docsRouteBasePath: "/",
+              indexDocs: true,
+              indexBlog: false,
+              indexPages: true,
+            },
+        ],
     ],
-  ],
-
-  markdown: {
-    hooks: {
-      onBrokenMarkdownLinks: 'warn',
+    
+    markdown: {
+        hooks: { onBrokenMarkdownLinks: 'warn' }
     },
-  },
-
-  i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
-  },
-
-  headTags: [
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.googleapis.com',
-      },
+    
+    i18n: {
+        defaultLocale: 'en',
+        locales: ['en'],
     },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
-        crossorigin: 'anonymous',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap',
-      },
-    },
-  ],
-
-  presets: [
-    [
-      'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+    
+    headTags: [
+        {
+            tagName: 'link',
+            attributes: {
+                rel: 'preconnect',
+                href: 'https://fonts.googleapis.com',
+            },
+        },
+        {
+            tagName: 'link',
+            attributes: {
+                rel: 'preconnect',
+                href: 'https://fonts.gstatic.com',
+                crossorigin: 'anonymous',
+            },
+        },
+    ],
+    
+    presets: [
+        [
+            '@docusaurus/preset-classic',
+            {
+                docs: { sidebarPath: './sidebars.js' },
+                theme: { customCss: require.resolve('./src/css/custom.css') },
+                blog: false
+            }
+        ]
+    ],
+    
+    themeConfig: {
         docs: {
-          path: 'docs',
-          routeBasePath: 'docs',
-          sidebarPath: './sidebars.js',
-          editUrl: 'https://github.com/nerdgency/nerdgency.github.io/tree/main/',
+            sidebar: {
+                hideable: false,
+                autoCollapseCategories: false,
+            },
         },
-        blog: false,
-        theme: {
-          customCss: './src/css/custom.css',
+        colorMode: {
+            defaultMode: 'light',
+            disableSwitch: false,
+            respectPrefersColorScheme: true,
         },
-      }),
-    ],
-  ],
+        navbar: {
+            title: 'nerdgency',
+            logo: {
+                alt: 'Nerdgency logo',
+                src: 'img/logos/grey-n-logo.png',
+                srcDark: 'img/logos/white-n-logo.png',
+            },
+            hideOnScroll: false,
+            items: [
+                {
+                    type: 'dropdown',
+                    label: 'Addons',
+                    position: 'left',
+                    items: [
+                        {
+                            href: '/formidable',
+                            label: 'Formidable'
+                        }
+                    ]
+                },
+                {
+                    type: 'dropdown',
+                    label: 'Docs',
+                    position: 'left',
+                    items: [
+                        {
+                            type: 'docSidebar',
+                            sidebarId: 'formidableSidebar',
+                            label: 'Formidable'
+                        }
+                    ]
+                }
+            ]
+        }
+    }
 
-  // Use the Cosmos Docusaurus theme as the base visual system.
-  themes: ['cosmos-docusaurus-theme'],
-
-  themeConfig:
+    //themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
+    /*({
       image: 'img/logo.png',
-      colorMode: {
-        defaultMode: 'dark',
-        disableSwitch: false,
-        respectPrefersColorScheme: true,
-      },
+      metadata: [
+        {name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+      ],
       navbar: {
         title: 'nerdgency',
         logo: {
@@ -145,11 +172,11 @@ const config = {
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Nerdgency.`,
       },
-      prism: {
+      /*prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
-    }),
+    }),*/
 };
 
 export default config;
