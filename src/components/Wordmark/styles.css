@@ -1,0 +1,17 @@
+.nerdgency-wordmark {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.nerdgency-wordmark-bracket {
+  display: block;
+  font-size: 1.25em;
+  line-height: 1;
+  color: var(--nerdgency-wordmark-bracket);
+}
+
+.nerdgency-wordmark-name {
+  color: var(--nerdgency-wordmark);
+  font-weight: normal;
+}

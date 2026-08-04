@@ -1,0 +1,51 @@
+
+.hero__title {
+  font-family: 'Figtree';
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero__subtitle {
+  max-width: 740px;
+}
+
+.hero__container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hero__footer {
+  display: flex;
+  align-items: center;
+}
+
+.hero {
+  padding: 4rem 0 2rem;
+}
+
+.default {
+  padding-bottom: 2rem;
+}
+
+.large {
+  padding-bottom: 4rem;
+}
+
+.icon {
+  width: 100px;
+  height: auto;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
