@@ -494,12 +494,154 @@ Loops over the validation errors from the last submission.
 
 | Variable | Description |
 | --- | --- |
-| `{error_handle}` | The handle of the field that failed |
+| `{error_name}` | The field's label, as shown on the form — what you almost always want |
+| `{error_handle}` | The field's handle, for `data-` attributes and anchors |
 | `{error_message}` | The error message |
+
+:::tip
+Use `{error_name}`, not `{error_handle}`. `first_name: This field is
+required` shows a visitor an identifier out of the database;
+`First Name: …` shows them the form they just filled in. The handle
+falls back in when an error is not tied to a field.
+:::
+
+### `{form_pages}`
+
+Loops over the form's pages, for a step indicator.
+
+| Variable | Description |
+| --- | --- |
+| `{page_number}` | The step's number, from 1 |
+| `{page_name}` | The page's label from the builder |
+| `{page_description}` | Its description, if one was set |
+| `{page_is_current}` | Boolean — the step being shown |
+| `{page_state}` | `complete`, `current` or `upcoming` |
+
+Alongside the loop, `{form_page}` is the current number and
+`{form_page_count}` the total — enough for "Step 2 of 4" without
+iterating.
+
+#### Styling and clicking the current step
+
+Mark each step with `data-formidable-page-step="{page_number}"` and the
+stepper maintains two attributes on it as the visitor moves:
+
+- `aria-current="step"` on the current one, removed from the rest
+- `data-formidable-page-state` — `complete` / `current` / `upcoming`
+
+Both are also written server-side, so the first paint is correct and a
+form rendered without JavaScript still shows where the visitor is.
+
+Steps are also **clickable**. Going back always works; going forward
+validates every page it would skip, and the first failure stops the jump
+and lands there instead. `data-formidable-page-reachable` is `yes` for
+pages already visited, so a cursor can be honest. Reachable steps answer
+Enter and Space; add `data-formidable-page-jump="no"` to a step that
+should stay decorative.
+
+```html
+<ol {page_progress_attributes}>
+  {form_pages}
+    <li data-formidable-page-step="{page_number}"
+        data-formidable-page-state="{page_state}">
+      {if page_name}{page_name}{if:else}Step {page_number}{/if}
+    </li>
+  {/form_pages}
+</ol>
+```
+
+```css
+[data-formidable-page-step][aria-current="step"] { font-weight: 600; }
+[data-formidable-page-state="complete"] { opacity: .6; }
+[data-formidable-page-reachable="yes"] { cursor: pointer; }
+```
+
+Target `aria-current` rather than inventing a class: it is the standard
+signal for "the current item in a sequence", screen readers announce it,
+and nothing has to agree on a class name.
 
 ### `{if no_results}`
 
 Rendered when no form matches `form_id=`/`form_handle=`, or the form has no fields, and `debug=` is off.
+
+## After a successful submission
+
+A form whose `return=` comes back to its own page used to arrive looking
+like a first visit. It now flashes a success state, read once and gone on
+the request after.
+
+| Variable | Description |
+| --- | --- |
+| `{form_success}` | Conditional — the previous request succeeded |
+| `{form_success_message}` | The notice text |
+| `{submission_id}` | The stored row's id, if the form stores submissions |
+| `{submission_handle}` | Its handle, for a link to what they created |
+| `{submission:handle}` | One answer — see below |
+| `{success_wrapper_attributes}` | The notice block's region attributes |
+| `{success_message_attributes}` | The message's |
+
+`{form_success_notice}` renders the whole block for you and, like the
+error summary, renders **nothing at all** when there is nothing to say.
+Turn it off with `include_success_notice="no"`.
+
+```html
+{if form_success}
+  <div {success_wrapper_attributes}>
+    <p {success_message_attributes}>{form_success_message}</p>
+  </div>
+{/if}
+```
+
+### Echoing the answers back
+
+`{submission:handle}` is empty unless the tag asks for it:
+
+```
+{exp:formidable:form form_handle="contact" success_values="yes"}
+```
+
+:::warning
+Off by default, deliberately. Those are the visitor's own answers, and
+turning them on writes them into the site's cache on a path that does not
+otherwise need them — including anything the form encrypts at rest. The
+failure path flashes them because it has to repopulate the form; that is
+not a reason to do it after a success as well.
+:::
+
+## Settings that need not be on the tag
+
+`return`, `return_on_error`, `template_columns` and `success_message`
+each resolve through four layers, most specific first:
+
+1. the tag parameter — this render only
+2. the form's own setting — **Form → Settings**
+3. the site-wide setting — **Configuration**
+4. the shipped default
+
+Empty means inherit at every level, so clearing a box in the control
+panel returns to the default rather than setting the value to nothing.
+
+Which means a tag can be as short as:
+
+```
+{exp:formidable:form form_handle="contact"}
+```
+
+and still return somewhere sensible on success and on failure, on the
+grid the site uses, with a message the client can edit.
+
+### Two spellings of layer 1
+
+The dedicated parameter, and the generic one:
+
+```
+{exp:formidable:form form_handle="contact" return="/thanks"}
+{exp:formidable:form form_handle="contact" form:setting:return="/thanks"}
+```
+
+Both sit at the same level. `form:setting:` reaches **every** setting on
+the form, including those with no parameter of their own — the parameter
+name and the setting name are deliberately one string.
 
 ## Attributes
 
