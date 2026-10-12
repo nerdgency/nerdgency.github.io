@@ -15,7 +15,7 @@ export default function CapturedResponse({name, title, caption, note}) {
   if (!ex?.request) throw new Error(`[docs] No captured API response "${name}".`);
   const r = ex.renderedBy;
   const from =
-    `HTTP ${ex.status}. Formidable ${r.formidable} on ExpressionEngine ${r.expressionEngine}, captured ${r.capturedAt}, ` +
+    `HTTP ${ex.status}. Captured from ExpressionEngine ${r.expressionEngine} on ${r.capturedAt}, ` +
     `requested from the browser address bar while signed out. Host replaced with example.com${note ? `. ${note}` : ''}.`;
   return (
     <Example title={title} caption={caption}>

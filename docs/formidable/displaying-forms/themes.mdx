@@ -1,0 +1,191 @@
+---
+title: Themes
+description: How a theme decides a form's markup, the themes Formidable ships, and how to copy one into a template group and change any part of it.
+keywords:
+  - formidable
+  - themes
+  - tailwind
+  - bootstrap
+  - templates
+---
+
+# Themes
+
+## Introduction
+
+A **theme** decides the markup of every form: the form element's contents, its pages and sections, each field, the buttons, the error summary and the success notice. Formidable ships three, and each works with no setup.
+
+| Theme | Handle | For |
+| --- | --- | --- |
+| **Default** | `default` | Plain, semantic markup with `formidable-*` classes. Works on any site, and every other theme falls back to it. |
+| **Tailwind** | `tailwind` | Tailwind utility classes. Assumes your site already builds Tailwind. |
+| **Bootstrap 5** | `bootstrap` | Bootstrap's form classes (`form-control`, `form-check` and so on). Assumes your site loads Bootstrap 5. |
+
+There is also an **Email** theme for the emails workflows send. See [Email themes](#email-themes).
+
+Themes decide **markup**. Classes and attributes on that markup can also come from the control panel and tag parameters, without editing a theme. See [Regions and attributes](/docs/formidable/displaying-forms/regions-and-attributes).
+
+## Choosing a theme
+
+| Where | How |
+| --- | --- |
+| Every form on the site | **Configuration › Templating › Theme** |
+| One form | The form's **Templating** tab. Blank follows the site. |
+| One render | `theme="bootstrap"` on the tag |
+
+The tag wins, then the form, then the site, then Default.
+
+<CapturedExample
+  name="theme-bootstrap"
+  title="The same form rendered with the Bootstrap theme"
+  start='<div class="formidable-form-content">'
+  end="</form>"
+/>
+
+## Changing a theme: copy it into a template group
+
+Shipped themes are read straight from the add-on and update with it. To change one, copy it, or just the parts you want to change, into an **ExpressionEngine template group**. That group is then a theme too.
+
+<Steps>
+  <Step title="Copy the theme">
+
+Open **Formidable › Themes** and copy a theme into a template group: pick the theme to start from, name the group (for example `forms_tailwind`, created if it does not exist), and tick the parts to copy, or none to copy every part.
+
+From the command line, for a build or deploy script:
+
+```bash
+php system/ee/eecli.php formidable:theme:copy --theme=tailwind --group=forms_tailwind
+php system/ee/eecli.php formidable:theme:copy --theme=tailwind --group=forms_tailwind --partials=field,control-checkboxes
+```
+
+  </Step>
+  <Step title="Use it">
+
+Choose `forms_tailwind` in Configuration or on a form, or set `theme="forms_tailwind"` on the tag.
+
+Copying creates ExpressionEngine templates, so it needs ExpressionEngine's permission to administer templates (**Design**) as well as Formidable's **Manage registry**.
+
+  </Step>
+  <Step title="Edit the parts">
+
+The copied parts are ordinary **hidden** ExpressionEngine templates, whose names start with `_`. Edit them in **Design › Templates** with EE's editor and revisions, or as files when EE saves templates as files.
+
+```text title="system/user/templates/default_site/forms_tailwind.group/"
+_form.html
+_field.html
+_control.html
+_control-checkboxes.html
+…
+```
+
+  </Step>
+</Steps>
+
+**Copy only what you change.** Any part a theme group does not have comes from the theme it was copied from, then from Default, and keeps updating with Formidable. Copy `_control-checkboxes` alone to restyle checkboxes. **Delete a copied part to go back** to Formidable's version.
+
+The **Themes** screen shows, for every part, whether it is Formidable's, copied and unchanged, customised, or one whose original has changed in a newer release. **Compare** shows your copy beside Formidable's.
+
+Hidden templates cannot be visited by URL. The group can hold other templates too, such as a thank-you page. Formidable reads only the hidden ones.
+
+### Deleting a theme
+
+On **Formidable › Themes**, open the theme's card and choose **Delete theme…**. The panel lists the forms that use it, and says whether the site does. Deleting:
+
+- deletes the template group and its templates, unless you untick that option, in which case they stay as ordinary templates;
+- removes the theme from every theme menu;
+- puts every form that chose it, and the site if it was the site's theme or email theme, back on *inherit*.
+
+Deleting the template group in EE's Template Manager instead leaves the theme listed as **Missing**. Forms using it fall back to its base theme, and its card offers **Remove from Formidable**.
+
+## The parts of a theme
+
+| Part | Renders | Main variables |
+| --- | --- | --- |
+| `_form` | The whole form, inside `<form>` | `{form_meta}` `{form_success_notice}` `{form_error_summary}` `{form_page_progress}` `{form_fields}` |
+| `_page` | One page | `{page_name}` `{page_heading_tag}` `{page_attributes}` `{page_content}` `{page_nav}` |
+| `_section` | One section | `{section_name}` `{section_heading_tag}` `{section_attributes}` `{section_content}` |
+| `_field` | One field's **shell**: wrapper, label, instructions, error | `{field_wrapper_attributes}` `{field_label}` `{field_instructions_top}` `{field_control}` `{field_error}` |
+| `_control` | The **control**: the input itself | `{field_attributes}` `{field_value}` `{field_options}…{/field_options}` |
+| `_nav` | A page's Back, Next, Save and Submit buttons | `{page_has_back}` `{page_has_next}` `{page_has_save}` `{page_submit_label}` and their attribute variables |
+| `_repeat` | A repeating section's rows, the row template and **Add another** | `{repeat_rows}` `{repeat_template}` `{repeat_add_label}` `{repeat_attributes}` `{repeat_add_attributes}` |
+| `_repeat-row` | One row of a repeating section, with **Remove** | `{repeat_row_content}` `{repeat_row_number}` `{repeat_remove_label}` `{repeat_row_attributes}` `{repeat_remove_attributes}` |
+| `_errors` | The error summary after a failed submission | `{form_error_count}` `{form_errors}…{/form_errors}` |
+| `_success` | The success notice | `{form_success_message}` |
+| `_progress` | The step indicator on a multi-page form | `{form_pages}…{/form_pages}` |
+
+Which parts each shipped theme provides:
+
+<ThemePartsTable />
+
+A dash means the theme uses Default's part. The Tailwind theme's `_safelist` is never rendered. It lists classes built at render time, so a Tailwind build can see them.
+
+### Fields: a shell around a control
+
+`_field` is written once. Only the control differs by fieldtype. For each field, Formidable uses the most specific part it can find:
+
+```text
+shell:    _field-<fieldtype>   →  _field-group-<group>   →  _field
+control:  _control-<fieldtype> →  _control-group-<group> →  _control
+```
+
+For example, a Textarea uses `_field` and `_control-textarea`. A Select uses `_field` and `_control-group-options`. A single Checkbox has its own shell, `_field-checkbox`, with the label after the box.
+
+**The most specific name wins, whichever layer it is in.** Your group's `_control` does not replace Default's `_control-textarea`, or every textarea would become a text input. To restyle textareas, copy `_control-textarea`.
+
+### What a part can contain
+
+- Formidable's variables, EE conditionals (`{if}`, `{if:else}`) and the `:bag` modifier.
+- **No prefixes.** Write `{field_label}`, never `{x:field_label}`. A part works whatever `prefix=` the tag uses.
+- Global variables such as `{site_url}`, and `{exp:…}` tags. They are parsed after the form tag has rendered, so an `{exp:…}` tag inside `_field` runs once per field.
+- **Not** snippets, template partials, `{embed}` or `{layout}`. EE resolves those before any tag runs.
+- EE comments (`{!-- --}`), which are removed.
+
+Keep each part's attribute variables on the elements that carry them. They hold the `data-formidable-*` hooks the form's script uses.
+
+## Tailwind and other build tools
+
+A CSS build that scans your templates for class names must also see Formidable's classes.
+
+1. **Point the build at the theme.** Copied parts are in your templates folder already. For parts you did not copy, add the add-on's theme folder:
+
+   ```js title="tailwind.config.js"
+   content: [
+     './system/user/templates/**/*.html',
+     './system/user/addons/formidable/themes/tailwind/**/*.html',
+   ]
+   ```
+
+2. **Classes built at render** cannot be seen by any scanner. Field widths are `lg:col-span-{field_columns}`, so the Tailwind theme's `_safelist` part lists `lg:col-span-1` to `lg:col-span-12`. Copy it with the rest.
+
+3. **Classes typed into the control panel** live in the database. Write them into the theme group as a `_classes` part, from the group's card on **Formidable › Themes**, or in your build:
+
+   ```bash
+   php system/ee/eecli.php formidable:theme:classes --group=forms_tailwind
+   ```
+
+## Email themes
+
+Workflow emails come from an email theme. The shipped **Email** theme has two parts:
+
+| Part | What it is |
+| --- | --- |
+| `_layout` | The HTML document around every email. The message goes where it says `{email_content}`. |
+| `_submission` | A message listing every answer (`{submission_answers}`). |
+
+Each workflow email chooses its **message**, either one of the email theme's templates or text written on the workflow, and whether the layout wraps it. To change them, copy the Email theme into a template group and choose it as the **email theme** in Configuration or on a form. Add your own messages as more hidden templates in that group (`_welcome`, `_quote-request`), and workflows can choose them.
+
+| Variable in an email | Is |
+| --- | --- |
+| `{field:HANDLE}` | One answer |
+| `{submission_answers}` | Every answer, as a table |
+| `{form_name}`, `{form_handle}` | The form |
+| `{submission_id}`, `{status}` | The submission |
+| `{email_content}` | In `_layout`, the message |
+
+## Commands
+
+<CommandTable only descriptions={{
+  'formidable:theme:copy': 'Copy parts of a shipped theme into a template group: --theme, --group, optional --partials=a,b and --replace (parts already there are left alone without it).',
+  'formidable:theme:status': 'List the themes, or with --group show where each part of one theme group comes from. --json for scripts.',
+  'formidable:theme:classes': 'Write the control panel\'s classes into a group\'s _classes part (--group).',
+}} />

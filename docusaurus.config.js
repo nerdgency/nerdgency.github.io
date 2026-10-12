@@ -1,5 +1,5 @@
 // @ts-check
-import {themes as prismThemes} from 'prism-react-renderer';
+import prismNerdgency from './src/theme/prism-nerdgency.js';
 
 const siteUrl = 'https://nerdgency.github.io';
 const siteRepo = 'https://github.com/nerdgency/nerdgency.github.io';
@@ -126,7 +126,9 @@ const config = {
         ],
         docs: {
             sidebar: {
-                hideable: true,
+                // No collapse control: the sidebar is part of the page's
+                // shape, as in Laravel's docs.
+                hideable: false,
                 autoCollapseCategories: false,
             },
         },
@@ -141,23 +143,14 @@ const config = {
         },
         navbar: {
             title: 'nerdgency',
-            logo: {
-                alt: 'Nerdgency',
-                src: 'img/logos/n-logo-grey.png',
-                srcDark: 'img/logos/n-logo-white.png',
-                width: 30,
-                height: 30,
-            },
             hideOnScroll: false,
             items: [
                 {
                     type: 'dropdown',
-                    label: 'Formidable',
+                    label: 'Products',
                     position: 'left',
                     items: [
-                        {to: '/formidable', label: 'Overview'},
-                        {type: 'docSidebar', sidebarId: 'formidableSidebar', label: 'Documentation'},
-                        {to: '/docs/formidable/release/changelog', label: 'Changelog'},
+                        {to: '/formidable', label: 'Formidable · forms for ExpressionEngine'},
                     ],
                 },
                 {type: 'docSidebar', sidebarId: 'formidableSidebar', label: 'Docs', position: 'left'},
@@ -168,33 +161,18 @@ const config = {
                     className: 'navbar-github-link',
                     'aria-label': 'Nerdgency on GitHub',
                 },
+                {to: '/docs/formidable/getting-started/installation', label: 'Get started', position: 'right', className: 'navbar-cta'},
             ],
         },
+        // The footer is src/theme/Footer; this only keeps the copyright for feeds.
         footer: {
-            style: 'light',
-            links: [
-                {
-                    title: 'Formidable',
-                    items: [
-                        {label: 'Overview', to: '/formidable'},
-                        {label: 'Quick start', to: '/docs/formidable/getting-started/quick-start'},
-                        {label: 'Tag reference', to: '/docs/formidable/developer/tags/form'},
-                        {label: 'Changelog', to: '/docs/formidable/release/changelog'},
-                    ],
-                },
-                {
-                    title: 'Nerdgency',
-                    items: [
-                        {label: 'Blog', to: '/blog'},
-                        {label: 'GitHub', href: 'https://github.com/nerdgency'},
-                    ],
-                },
-            ],
             copyright: `Copyright © ${new Date().getFullYear()} Nerdgency.`,
         },
         prism: {
-            theme: prismThemes.oneLight,
-            darkTheme: prismThemes.oneDark,
+            // One ink theme for both modes: code blocks are always dark
+            // panels (src/css/theme/base.css).
+            theme: prismNerdgency,
+            darkTheme: prismNerdgency,
             additionalLanguages: ['php', 'bash', 'json'],
         },
     },

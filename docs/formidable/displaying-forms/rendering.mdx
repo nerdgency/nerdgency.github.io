@@ -1,0 +1,126 @@
+---
+title: Rendering forms
+description: Go from the one-line form tag to your own markup one layer at a time, keeping everything Formidable does for you at each step.
+keywords:
+  - formidable
+  - form tag
+  - custom markup
+  - templates
+---
+
+# Rendering forms
+
+## Introduction
+
+The form tag is built so you can take over one layer at a time. Each step below keeps everything from the step before that you did not replace. The examples render the same *Contact Us* form on a real install, and the output beside each template is what came back.
+
+## 1. One tag, no markup
+
+With no markup between the tags, the form renders from its [theme](/docs/formidable/displaying-forms/themes): the `<form>` element, the hidden meta block, the success and error notices, the pages, sections and fields, and each page's buttons.
+
+<CapturedExample
+  name="minimal"
+  title="The whole form from the theme"
+  parts={[
+    ['<form id="contact_us"', '>'],
+    ['<div class="formidable-form-content">', '<span class="formidable-field-instructions text-sm text-grey-300" id="first_name-instructions">We prefer your legal name</span>'],
+    ['<div class="formidable-page-nav', '</form>'],
+  ]}
+/>
+
+Use this when the theme's markup suits you. You can still change classes and attributes from the control panel or the tag. See [Regions and attributes](/docs/formidable/displaying-forms/regions-and-attributes).
+
+## 2. Your own `<form>`, the theme's fields
+
+Write the `<form>` element yourself and Formidable stops writing its own. It notices the literal `<form` in your template. Keep `{form_attributes}` on it: it carries the action URL, the method, and `enctype="multipart/form-data"` when the form has a file field. Without that, uploads are silently dropped.
+
+`{form_meta}` places the hidden inputs. If you forget it, Formidable adds them straight after your opening `<form>` tag. Inside `{fields}`, `{field_template}` renders each field from the theme.
+
+<CapturedExample
+  name="fields-loop"
+  title="Your <form>, theme fields"
+  parts={[
+    ['<form id="contact_us"', '>'],
+    ['<div data-formidable-columns="12" data-formidable-page="1" data-formidable-section="s_1_1" class="col-span-1 flex flex-col space-y-1 lg:col-span-12">\n\t<label class="formidable-field-label font-semibold" for="first_name">', '</form>'],
+  ]}
+/>
+
+The form's other fields render the same way. A plain `{fields}` loop has no pages, so your own `<button type="submit">` ends the form. On a multi-page form, use [`{form_layout}`](/docs/formidable/reference/tags/form#pages-and-sections-in-your-own-markup) to keep the page navigation.
+
+## 3. Write your own field markup
+
+Inside `{fields}`, every field's parts are available: `{field_name}`, `{field_handle}`, `{field_instructions}`, `{field_attributes}` for the input, `{field_has_error}` and `{field_error}`. `only=` limits the loop to the fields you name.
+
+<CapturedExample
+  name="custom-markup"
+  title="Hand-written field markup"
+  start='<div class="field">'
+  end="</form>"
+/>
+
+Two things are still Formidable's:
+
+- **`{field_attributes}`** carries the input's `id`, `name`, `type`, `value` (repopulated after a failed submission), `required`, any saved attributes, and the accessibility attributes.
+- **`aria-describedby`.** Because the field has instructions, the input points at `first_name-instructions`. When you print the instructions yourself, give that element the id `{field_handle}-instructions`, as above, so the reference resolves.
+
+For fields with choices, loop over `{field_options}`:
+
+```ee title="templates/default_site/contact.group/index.html"
+{if field_group == "options"}
+    <select {field_attributes}>
+        {field_options}
+            <option value="{value}"{if selected} selected{/if}>{label}</option>
+        {/field_options}
+    </select>
+{if:else}
+    <input {field_attributes}>
+{/if}
+```
+
+## 4. Place individual fields by hand
+
+Every field is also available outside the loop, by its handle. This suits a design where fields sit in very different places. Exclude them from the loop so they do not render twice:
+
+```ee title="templates/default_site/contact.group/index.html"
+{exp:formidable:form form_handle="contact_us" exclude="email_address"}
+    <form {form_attributes}>
+        {form_meta}
+        <div class="hero-signup">
+            <label for="email_address">Your email</label>
+            <input {field:email_address:attributes}>
+            {if error:email_address}<p class="field-error">{error:email_address}</p>{/if}
+        </div>
+        {fields}{field_template}{/fields}
+        <button type="submit">Send</button>
+    </form>
+{/exp:formidable:form}
+```
+
+See [Named fields](/docs/formidable/reference/tags/form#named-fields) for every `{field:HANDLE:…}` variable.
+
+## 5. Show errors and success
+
+After a failed submission the form renders again with errors. Every field is repopulated with what was typed. After a successful one, a form that returns to its own page shows a success notice once.
+
+```ee title="templates/default_site/contact.group/index.html"
+{exp:formidable:form form_handle="contact_us"}
+    <form {form_attributes}>
+        {form_meta}
+        {form_success_notice}
+        {form_error_summary}
+        {fields}{field_template}{/fields}
+        <button type="submit">Send</button>
+    </form>
+{/exp:formidable:form}
+```
+
+`{form_error_summary}` and `{form_success_notice}` render nothing when there is nothing to say. To write them yourself, use `{if form_has_errors}` with the `{form_errors}` loop, and `{if form_success}` with `{form_success_message}`. The [form tag reference](/docs/formidable/reference/tags/form#errors) has both in full.
+
+## Which layer to choose
+
+| You want | Use |
+| --- | --- |
+| The theme's markup, perhaps with different classes | Step 1, with classes set in the control panel or [region parameters](/docs/formidable/displaying-forms/regions-and-attributes#from-a-template-tag-parameters) |
+| Your own page structure around the theme's fields | Step 2 |
+| Complete control of every element | Step 3 or 4 |
+| The same markup for every form on the site | A [copied theme](/docs/formidable/displaying-forms/themes#changing-a-theme-copy-it-into-a-template-group) rather than per-template markup |

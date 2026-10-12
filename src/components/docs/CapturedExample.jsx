@@ -28,7 +28,7 @@ export default function CapturedExample({name, title, caption, start, end, parts
 
   const r = ex.renderedBy;
   const from =
-    `Formidable ${r.formidable} on ExpressionEngine ${r.expressionEngine}, captured ${r.capturedAt}. ` +
+    `Captured from ExpressionEngine ${r.expressionEngine} on ${r.capturedAt}. ` +
     'Signed values and the CSRF token shown as “…”, host replaced with example.com, blank lines collapsed.';
 
   return (

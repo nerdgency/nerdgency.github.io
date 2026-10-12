@@ -1,15 +1,15 @@
 /*
  * Site stylesheet. Order matters:
  *
- *   1. fonts
+ *   1. fonts: Fraunces (headings), Inter (text), JetBrains Mono (code)
  *   2. Tailwind's theme and utilities -- WITHOUT its preflight reset,
  *      which strips list bullets, heading sizes and button styles that
  *      Infima (Docusaurus' own CSS) relies on in every docs page
  *   3. the Nerdgency tokens, then the element styling built on them
  *
- * Component styles live beside their components as CSS modules.
+ * Page and component styles live beside them as CSS modules.
  */
-@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@500..800&family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..800,0..100,0..1;1,9..144,300..800,0..100,0..1&family=Inter:ital,opsz,wght@0,14..32,400..750;1,14..32,400..750&family=JetBrains+Mono:wght@400..600&display=swap');
 
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
@@ -19,43 +19,3 @@
 @import './theme/base.css';
 
 @custom-variant dark (&:is([data-theme='dark'] *));
-
-/* Homepage feature grid (src/pages/formidable.js) -------------------- */
-
-.features__container {
-  background: var(--ng-bg);
-}
-
-.features h3 {
-  color: var(--ng-text);
-  font-size: 1.1rem;
-}
-
-.features__icon {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--ng-radius-sm);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ng-orange-ink);
-  background: var(--ng-orange);
-}
-
-.features__card {
-  border: 1px solid var(--ng-border);
-  border-radius: var(--ng-radius);
-  padding: 28px 24px;
-  background: var(--ng-bg);
-  transition: border-color 150ms ease;
-}
-
-.features__card:hover {
-  border-color: var(--ng-border-strong);
-}
-
-.features__card p {
-  color: var(--ng-text-muted);
-  margin-bottom: 0;
-}

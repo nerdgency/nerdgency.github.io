@@ -1,0 +1,134 @@
+---
+title: Regions and attributes
+description: How classes and attributes reach each part of a rendered form, from the control panel and from tag parameters, and the order they merge in.
+keywords:
+  - formidable
+  - attributes
+  - classes
+  - regions
+  - accessibility
+---
+
+# Regions and attributes
+
+## Introduction
+
+[Themes](/docs/formidable/displaying-forms/themes) decide the markup. **Regions** decide the attributes on it: classes, `data-` attributes, ARIA, placeholders. Changing a class should not mean rewriting a theme, and rewriting a theme should not mean setting every class again.
+
+## Regions
+
+A region is a named part of the rendered form. Each one has an attribute variable for templates, such as `{label_attributes}` for the `label` region.
+
+| Level | Regions |
+| --- | --- |
+| Once per form | `form`, `form_content`, `meta_wrapper`, `page_progress`, the error summary (`error_wrapper`, `error_heading`, `error_list`, `error_item`) and the success notice (`success_wrapper`, `success_message`) |
+| Once per page or section | `page`, `page_heading`, `page_description`, `section`, `section_heading`, `section_description`, and each page's navigation (`page_nav`, `page_back`, `page_next`, `page_submit`) |
+| Once per field | `field_wrapper`, `field`, `label`, `instructions`, `error`, `options_wrapper` |
+| Once per choice | `option`, `option_label` |
+
+The complete list, read from the add-on's source: <RegionList />.
+
+## Where attributes come from
+
+Several layers can set attributes on a region. They apply in this order, and **later wins**:
+
+1. **Computed.** What Formidable needs: a field's `id`, `name`, `type` and `value`, a label's `for`, the `data-formidable-*` hooks the script uses, and the form's `action`, `method` and `enctype`.
+2. **Fieldtype group**, then **fieldtype**, set under **Registry**. These reach every field of that kind.
+3. **The site**, on **Configuration › Templating**: the house style.
+4. **The form**, on its **Templating** tab.
+5. **The field**, on its **Templating** tab.
+6. **Tag parameters**, for one render: first `REGION:attribute:NAME=` for every instance, then `field:HANDLE:REGION:attribute:NAME=` for one field.
+
+The closer a setting is to the one thing it affects, the later it applies. A class set on a fieldtype reaches every field of that type. The same attribute set on one field beats it for that field alone.
+
+### `class` appends. Everything else replaces.
+
+```text
+Site:   class="field"
+Form:   class="mb-4"
+Result: class="field mb-4"
+```
+
+Formidable puts classes on things too, such as a grid span on a wrapper or the selected state on an option, so adding `mb-4` should not silently drop them. To replace instead, start the value with `=`:
+
+```text
+Form:   class="=mb-4"
+Result: class="mb-4"
+```
+
+In the control panel, this is the **Replace the classes from above** checkbox. Every other attribute is simply replaced by a later layer.
+
+### Leaving a layer empty inherits
+
+A layer that sets nothing for a region contributes nothing, and the layers above show through. There is no separate "inherit" switch. The control panel's editor always shows what is inherited from above, with its source.
+
+## In the control panel: Templating
+
+Every level (Registry fieldtypes, Configuration, a form, a field) edits its regions on its **Templating** tab:
+
+- **A map of the form** on the left: form, error summary, success notice, pages, sections, a field and its parts, and the buttons, nested as they render. Click the part to style.
+- **Classes** as chips, with the inherited ones shown first and muted.
+- **Other attributes**, one row each. **Add attribute** suggests attributes that make sense for that element, such as `placeholder` and `pattern` for an input or `novalidate` for the form, and accepts any other valid name, such as `data-*` or `hx-post`.
+- **Result**: the opening tag the part will render with, so a change can be seen as you make it.
+
+## From a template: tag parameters
+
+The same layers, for one render. One grammar works everywhere:
+
+```text
+REGION:attribute:NAME="value"                  every instance of the region
+field:HANDLE:REGION:attribute:NAME="value"     one field only
+field:HANDLE:attribute:NAME="value"            one field's input (short for field:HANDLE:field:attribute:NAME)
+```
+
+<CapturedExample
+  name="region-params"
+  title="Region parameters on the tag"
+  start='<div class="formidable-form-content">'
+  end='placeholder="you@example.com" class="block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm">'
+/>
+
+Reading the output:
+
+- `label:attribute:class="form-label"` was **appended** to every label, after the label's own `formidable-field-label` class.
+- `field:email_address:attribute:placeholder=` reached only the email input.
+- `field:first_name:field_wrapper:attribute:class="=name-row"` replaced the classes the layers had set for that wrapper. The Tailwind classes after it (`col-span-1 flex …`) are still there, because the Tailwind theme writes them in its own markup, with `{field_wrapper_attributes:bag class="…"}`. A theme's own markup is applied last. To remove those classes, copy the theme's `_field` part and change it.
+
+Template **variables** use underscores (`{label_attributes}`) rather than colons, because `:` is EE's modifier separator. Tag **parameters** use colons throughout.
+
+## Values can use field variables
+
+An attribute value on a field-level region may use that field's variables, from the control panel or from a tag:
+
+```text
+field_wrapper:attribute:class="col-span-{field_columns} field--{field_handle}"
+```
+
+Each field substitutes its own values. An unknown variable is left as written, so a typo is visible instead of silently producing an empty class. Substituted values are escaped for use in an attribute.
+
+## Narrowing in the template: the `:bag` modifier
+
+Any attribute variable can be narrowed or added to where it is used. `only=` and `except=` take pipe-separated attribute names. Any other parameter is layered on as an attribute, with `class` appending as usual.
+
+<CapturedExample
+  name="bag-modifier"
+  title="The :bag modifier"
+  parts={[
+    ['<form', '>'],
+    ['<label class="formidable-field-label form-label"', '</form>'],
+  ]}
+/>
+
+`except="data-formidable-disable-submit"` dropped that attribute from the form. `class="form-label"` was appended to the label's own class. `only=` kept just the input attributes that were named.
+
+## Accessibility, computed for you
+
+Each field's instructions and error message get ids derived from the input's id (`email_address-instructions`, `email_address-error`). The input points at them with `aria-describedby`, so a screen reader reads them when the input is focused, and it carries `aria-invalid="true"` while it has an error.
+
+- No instructions means no instructions id. The error id appears only while there is an error and the theme renders the error with `{error_attributes}`.
+- An `aria-describedby` you set on the field is kept, and the computed ids are added after it. An `id` you set on the instructions or error region replaces the computed one, and the input follows it.
+- Radio buttons and checkboxes have no single input, so the options wrapper gets `role="group"` and the same attributes.
+
+:::caution Writing your own field markup
+`{field_attributes}` always includes `aria-describedby` for a field that has instructions. If your template prints the instructions itself, give that element the matching id, `{field_handle}-instructions`, as in [Write your own field markup](/docs/formidable/displaying-forms/rendering#3-write-your-own-field-markup). Otherwise the reference points at nothing.
+:::

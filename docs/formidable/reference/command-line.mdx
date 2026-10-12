@@ -1,0 +1,55 @@
+---
+title: Command line
+description: The ExpressionEngine CLI commands Formidable adds, for deploy scripts, builds and large sites.
+keywords:
+  - formidable
+  - cli
+  - eecli
+  - commands
+---
+
+# Command line
+
+## Introduction
+
+Formidable adds these commands to ExpressionEngine's command line. Run them from the site's root:
+
+```bash
+php system/ee/eecli.php formidable:forms
+```
+
+<CommandTable descriptions={{
+  'formidable:forms': 'List the forms. --json for scripts.',
+  'formidable:submissions': 'List submissions: --form=handle, --limit=20, --json.',
+  'formidable:capture-status': 'Show capture and drift state for captured forms: --form=handle, --json. See the capture tag.',
+  'formidable:seal-encrypted': 'Rewrite encrypted answers stored in the original format into the authenticated format: --form=handle, --dry-run. Optional: old answers still read correctly and are upgraded whenever a submission is next saved.',
+  'formidable:sync-fieldtypes': 'Create missing fieldtype rows and report mismatches between the Registry and the fieldtype classes: --dry-run. Also runs after every update.',
+  'formidable:recalculate': 'Work out computed answers again on stored submissions: --form=handle, --all, --batch=200, --dry-run.',
+  'formidable:drafts:prune': 'Delete save-and-resume drafts last saved more than draft_days ago, with their uploads: --limit=500. Saving a draft already clears a few; run this daily on a busy site.',
+  'formidable:drafts:remind': 'Run the Draft Reminder workflows for drafts that have waited their form\'s "Reminder after (days)", once each: --limit=200. Run from cron, hourly or daily.',
+  'formidable:workflows:work': 'Run the workflows waiting in the workflow queue and retry failed ones on their schedule: --limit=50, --status (only count what is waiting), --json. Run it from cron every minute when the queue is on.',
+  'formidable:theme:copy': 'Copy parts of a shipped theme into a template group: --theme, --group, --partials=a,b, --replace.',
+  'formidable:theme:status': 'List the themes, or where each part of one theme group comes from: --group, --json.',
+  'formidable:theme:classes': 'Write the control panel\'s classes into a theme group\'s _classes part, where a CSS build can read them: --group.',
+}} />
+
+## From the control panel
+
+Every command can also run from [Utilities](/docs/formidable/control-panel/utilities), with a plain-English name and its options as form fields. It runs the same code and prints the same report, so a job tried in the browser can move to cron unchanged.
+
+## Running the workflow queue
+
+With [Formidable's workflow queue](/docs/formidable/automation/workflow-log#the-workflow-queue) turned on, add a cron job that runs the worker every minute. Overlapping runs are safe: each queued run is reserved before it is sent. When BoldMinded's Queue add-on is installed, workflows go to Queue instead, and its `queue:work` is the worker to schedule.
+
+```bash title="crontab"
+* * * * * cd /path/to/site && php system/ee/eecli.php formidable:workflows:work >> /dev/null 2>&1
+```
+
+## In a deploy script
+
+```bash title="deploy.sh"
+# After the add-on files are in place and the update has run:
+php system/ee/eecli.php formidable:sync-fieldtypes --dry-run
+php system/ee/eecli.php formidable:theme:classes --group=forms_tailwind
+npm run build   # your site's own CSS build, which now sees every class
+```

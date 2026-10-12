@@ -1,0 +1,108 @@
+---
+title: Custom fieldtypes
+description: Add a fieldtype to Formidable from your own add-on, with a class that describes itself and the Registry row it needs.
+keywords:
+  - formidable
+  - custom fieldtype
+  - extend
+---
+
+# Custom fieldtypes
+
+## Introduction
+
+A fieldtype is two things: a **Registry row**, which an editor can see and configure, and a **PHP class**, which handles the field's answer. Formidable ships its classes in `App/Fieldtypes/Providers`. Your add-on can register its own, without editing Formidable.
+
+:::note Two kinds of "fieldtype"
+This page is about fieldtypes **inside** a Formidable form. The ExpressionEngine channel fieldtype Formidable adds is a different thing. See [Forms in entries](/docs/formidable/displaying-forms/forms-in-entries).
+:::
+
+## 1. Write the class
+
+Extend `Nerdgency\Formidable\App\Fieldtypes\Fieldtype`, the standard pipeline that reads the answer from `$_POST`, applies the required setting and the field's rules, casts the value and encrypts it if the field asks. Implement `SelfDescribingFieldtypeInterface` so the class says what it serves:
+
+```php title="system/user/addons/my_addon/Fieldtypes/Rating.php"
+<?php
+
+namespace MyAddon\Fieldtypes;
+
+use Nerdgency\Formidable\App\Fieldtypes\Fieldtype;
+use Nerdgency\Formidable\Library\Interfaces\SelfDescribingFieldtypeInterface;
+
+class Rating extends Fieldtype implements SelfDescribingFieldtypeInterface
+{
+    /** The fieldtype handle this class serves. */
+    public static function handle(): ?string
+    {
+        return 'rating';
+    }
+
+    /** The storage engine its Registry row must declare. */
+    public static function engine(): string
+    {
+        return 'inputs';
+    }
+
+    /** The Registry row to create when it is missing. */
+    public static function registryDefaults(): array
+    {
+        return [
+            'rating' => [
+                'name' => 'Rating',
+                'group' => 'inputs',
+                'data' => ['storage_engine' => 'inputs'],
+            ],
+        ];
+    }
+}
+```
+
+`handle()` can return `null` to serve **every** fieldtype on its engine, which is how Formidable's own Options class serves Select, Checkboxes and Radio Buttons. A class serving a handle wins over one serving its engine.
+
+## 2. Register it
+
+List the class in the site's config:
+
+```php title="system/user/config/config.php"
+$config['formidable_fieldtypes'] = [
+    \MyAddon\Fieldtypes\Rating::class,
+];
+```
+
+## 3. Create the Registry row
+
+```bash
+php system/ee/eecli.php formidable:sync-fieldtypes
+```
+
+The sync creates every missing row from each class's `registryDefaults()`, and reports every mismatch it finds: a listed class that does not exist, a row on a different storage engine from its class's `engine()`, or a class whose handle has no row. It never changes an existing row, because rows can be edited under **Registry › Fieldtypes**. It also runs after every Formidable update.
+
+Once the row exists, the fieldtype appears in the builder's **Add field** palette in its group.
+
+## 4. Give it markup
+
+A field is a theme's `_field` shell around a `_control`. A new fieldtype has no `_control-rating` in any shipped theme, so it gets the generic `_control`, an `<input {field_attributes}>`. To ship your own control markup, override `controlTemplate()`. It uses the same variables as a theme's control part:
+
+```php title="system/user/addons/my_addon/Fieldtypes/Rating.php"
+public function controlTemplate(mixed $field): string
+{
+    return '<input {field_attributes:bag except="type"} type="range" min="1" max="5" step="1">';
+}
+```
+
+`:bag except="type"` drops the `type` the input would otherwise get from its storage input, so the markup's own `type="range"` is the only one. This is the **last** fallback: a site can still override it by adding `_control-rating` to its theme group.
+
+## What a fieldtype can change
+
+`Fieldtype` implements `FieldtypeInterface`. Override only what differs for your fieldtype:
+
+| For | Methods |
+| --- | --- |
+| A submission | `collectValue()` reads the answer, `rule()` builds its validation rules, `validateExtra()` checks what a rule string cannot express, `store()` returns what to save |
+| Storage | `writeValue()` and its inverse, `readValue()` |
+| Display | `displayValue()`: what a stored answer means, for listings, exports and templates |
+| The control panel's submission editor | `controlFor()`, `choicesFor()` |
+| The front end | `renderContent()`, `attributes()`, `controlTemplate()` |
+| Several answers | `storesMultiple()` |
+
+Further interfaces opt into more: `DerivesValueInterface` for a value worked out from other fields (as Computed does), `FieldtypeVisibilityInterface` for a field that renders inside the hidden meta block, `QuarantinesUploadsInterface` for one that holds uploads between a failed submission and the next attempt, and `FieldtypeTabInterface` for a settings tab of its own.

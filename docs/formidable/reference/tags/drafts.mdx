@@ -1,0 +1,63 @@
+---
+title: "{exp:formidable:drafts}"
+sidebar_label: "{exp:formidable:drafts}"
+description: Lists the logged-in member's unfinished save-and-resume drafts, with a link back to each, for an account page.
+formidable_tag: drafts
+keywords:
+  - formidable
+  - drafts
+  - save and resume
+---
+
+# `{exp:formidable:drafts}`
+
+Lists the logged-in member's unfinished [save-and-resume](/docs/formidable/submissions/save-and-resume) drafts, most recently saved first, with a link back to each. Use it on an account page: "Forms you have not finished".
+
+It only ever lists the drafts of the member viewing the page. A guest gets `{if no_results}`. Drafts past their expiry are left out, since their links no longer open them.
+
+
+## Parameters
+
+<Param tag="drafts" name="form_handle" example='form_handle="application"'>
+
+Only this form's drafts. `form_id=` is also accepted.
+
+</Param>
+
+<Param tag="drafts" name="form_id" example='form_id="3"'>
+
+Only this form's drafts, by id.
+
+</Param>
+
+<Param tag="drafts" name="limit" default="10" example='limit="5"'>
+
+How many to list, at most 100.
+
+</Param>
+
+## Variables
+
+| Variable | |
+| --- | --- |
+| `{resume_url}` | The link back to the draft, on the page the form was saved from |
+| `{form_name}`, `{form_handle}` | The form |
+| `{draft_name}` | The draft's name, from the form's submission name setting, with the answers saved so far |
+| `{saved_at}` | When it was last saved. Accepts `format=` |
+| `{started_at}` | When it was first saved. Accepts `format=` |
+| `{expires_at}` | When it can no longer be resumed, or `0` if drafts never expire. Accepts `format=` |
+| `{draft_page}` | The page it was saved on |
+| `{count}`, `{total_results}` | Position and total |
+
+```ee title="templates/default_site/account.group/index.html"
+<h2>Forms you have not finished</h2>
+<ul>
+{exp:formidable:drafts}
+    <li>
+        <a href="{resume_url}">{form_name}</a>, saved {saved_at format="%M %j"}
+        {if expires_at}(kept until {expires_at format="%M %j"}){/if}
+    </li>
+    {if no_results}<li>Nothing waiting.</li>{/if}
+{/exp:formidable:drafts}
+</ul>
+```

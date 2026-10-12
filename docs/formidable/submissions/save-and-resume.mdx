@@ -1,0 +1,119 @@
+---
+title: Save and resume
+description: Add a Save and continue later button to long forms, so visitors can come back to their answers from a link or, as members, from any device.
+keywords:
+  - formidable
+  - save and resume
+  - drafts
+  - save and continue later
+---
+
+# Save and resume
+
+## Introduction
+
+Long forms lose people: job applications, grant forms, intake questionnaires. With **save and resume** on, every page gets a **Save and continue later** button. The visitor's answers are kept as a **draft**, and they are given a link back to it. A logged-in member can also pick it up again just by opening the form, on any device.
+
+A draft is not a submission until it is sent. It is not listed, counted against the form's limit or exported, and no **Submission Created** workflow runs for it.
+
+<Steps>
+  <Step title="Switch it on">
+
+Save and resume is **off by default**. Turn it on for every form in **Configuration › Forms**, or for one form on its **General** tab under **Save and resume**. A template can decide for one render:
+
+```ee title="templates/default_site/apply.group/index.html"
+{exp:formidable:form form_handle="application" drafts="yes"}
+```
+
+The form must store its submissions and their data, since a draft is its answers. On a form that stores nothing, there is no Save button.
+
+  </Step>
+  <Step title="What visitors see">
+
+Each page gets the button, between Next and Submit in the shipped themes. Saving skips the "required" checks, so a visitor can stop anywhere. An answer that is filled in is still checked: an email address that is not one is refused in a draft too.
+
+The visitor comes back to the form with a notice and the link to return to it:
+
+> Your answers are saved. To come back to them, use this link: https://example.com/apply?formidable_resume=4f9c…
+
+Opening that link fills the form with their answers, on the page they saved on. Submitting it sends it as a normal submission. Files they uploaded are kept, so they do not have to choose them again.
+
+  </Step>
+  <Step title="Email them the link">
+
+Add a workflow with the event **Draft Saved** and the action **Send an email**, to a recipient field such as the visitor's email address with **Allow as Workflow Recipient** turned on. The shipped **draft** message says the answers are saved and links back. In your own message, `{resume_url}` is the link.
+
+  </Step>
+  <Step title="Save on every page (optional)">
+
+Turn on **Save on each page** next to the save-and-resume setting, or add `draft_autosave="yes"` to the tag. The draft is then also saved quietly each time the visitor presses **Next**, so leaving part-way loses nothing even if they never press Save. Files are kept only when they press Save or send the form.
+
+A member finds an autosaved draft by opening the form again. A guest needs the link, so pair this with a **Draft Saved** email: it runs when the first autosave makes the draft, not on every page.
+
+  </Step>
+  <Step title="Remind people who did not finish (optional)">
+
+Set **Reminder after (days)** on the form, or for every form in Configuration. A draft that has not been saved again for that many days runs the **Draft Reminder** workflows, once. Add a workflow with that event and the shipped **draft-reminder** message, which includes `{resume_url}`. Saving the draft again starts the count again.
+
+Reminders are sent from cron:
+
+```bash title="crontab"
+0 * * * * cd /path/to/site && php system/ee/eecli.php formidable:drafts:remind
+```
+
+  </Step>
+  <Step title="Clear out drafts nobody came back to">
+
+Drafts are kept for 30 days after they were last saved, then they can no longer be resumed. Change that in `config.php`:
+
+```php title="system/user/config/config.php"
+$config['formidable_draft_days'] = 14; // 0 keeps drafts forever
+```
+
+Expired drafts, and the files uploaded to them, are deleted a few at a time whenever someone saves a draft. On a busy site, also run the prune command from cron once a day:
+
+```bash title="crontab"
+0 3 * * * cd /path/to/site && php system/ee/eecli.php formidable:drafts:prune
+```
+
+  </Step>
+</Steps>
+
+## Who can open a draft
+
+- **A guest's draft:** anyone with its link. The link is a long random token, but treat it like a password, and say so in your email. The shipped message does.
+- **A member's draft:** only that member, logged in. Their link handed to someone else opens nothing.
+- **A member opening the form** without a link gets their most recently saved draft of that form.
+
+## A member's drafts on an account page
+
+[`{exp:formidable:drafts}`](/docs/formidable/reference/tags/drafts) lists the logged-in member's unfinished drafts with a link back to each.
+
+## In the control panel
+
+A form's **Submissions** screen says how many unfinished drafts are waiting, with a link to **View drafts**. Exports from that view export the drafts.
+
+## Templates
+
+| Variable | |
+| --- | --- |
+| `{page_has_save}` | Whether the page renders the Save button |
+| `{page_save_label}` | Its text: **Save button label** in the settings, then "Save and continue later" |
+| `{page_save_attributes}` | Its region attributes. Keep them: they include `name`, `value` and `formnovalidate`, which make it save rather than send. |
+| `{form_draft_saved}` | Whether the previous request saved a draft. `{form_success}` stays false, because nothing was sent. |
+| `{form_resume_url}` | The link back to that draft |
+
+```ee title="A page's buttons, written by hand"
+<div {page_nav_attributes}>
+    {if page_has_back}<button type="button" {page_back_attributes}>{page_previous_label}</button>{/if}
+    {if page_has_next}<button type="button" {page_next_attributes}>{page_next_label}</button>{/if}
+    {if page_has_save}<button type="submit" {page_save_attributes}>{page_save_label}</button>{/if}
+    <button type="submit" {page_submit_attributes}>{page_submit_label}</button>
+</div>
+```
+
+:::caution Do not cache a resumable form
+
+With drafts on, what the form shows depends on the link and on who is logged in. Do not cache the form tag, or the page, with ExpressionEngine's tag or template caching, or with a static page cache.
+
+:::

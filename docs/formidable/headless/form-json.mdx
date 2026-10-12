@@ -1,0 +1,64 @@
+---
+title: Form JSON
+description: The document a form becomes as data (fields, choices, rules, conditions, templating and how to submit), for headless and JavaScript front ends.
+keywords:
+  - formidable
+  - form json
+  - headless
+  - schema
+---
+
+# Form JSON
+
+## Introduction
+
+A form as data instead of markup: its pages and fields, their choices, the rules the server will apply, the conditions, how the form is meant to look, and what a script needs to submit it.
+
+## Two ways to get it
+
+**From a template**, with `output="json"`. Put it in a template whose type is **JSON** and you have an endpoint with ExpressionEngine's own routing and caching. Field defaults can use EE variables here, because the output is parsed after the tag runs.
+
+**From the [JSON API](/docs/formidable/headless/json-api)**: `GET forms/{form}`. It is the same document, wrapped in `{"data": …}`. Defaults that use EE variables are left out there, because nothing parses them.
+
+<CapturedExample
+  name="form-json"
+  title="A form as JSON"
+  parts={[
+    ['{\n  "schema": 1,', '"pages": ['],
+    ['  "fields": [\n    {\n      "handle": "first_name"', '"handle": "last_name",'],
+    ['  "submit": {', '}\n}'],
+  ]}
+/>
+
+## What is in it
+
+| Key | |
+| --- | --- |
+| `schema` | The document version. It changes only when a published key changes meaning or is removed. New keys may appear at any time. |
+| `form` | Id, handle, name, `open`, `closed_message`, `members_only`, `success_message`, `templating`, and `pages` with their sections, navigation labels and conditions. |
+| `fields` | One entry per field in builder order: handle, label, fieldtype, whether it stores a value or several, hidden, required, instructions, default, page, section, width, `templating`, `attributes`, `options`, `rules` and `conditions`. |
+| `submit` | Where and how to submit: the API's submissions URL, the submit action URL, the signed `meta`, the session's `csrf_token`, the honeypot input names, and whether the form needs `multipart/form-data`. |
+
+- **`options`** are resolved to `{value, label}` pairs, whatever their source, and are `null` for a field without choices. A **Recipients** field publishes its values and labels only, never its addresses.
+- **`rules`** are the rules the server will apply, as `{name, value}` pairs.
+- **`attributes`** are the field's authored attributes, without `id`, `name` and `value`, which the client decides.
+- **`templating`**, on the form and on each field, is how the form is meant to look, resolved exactly as the form tag resolves it: theme, grid width, instruction position, and the attributes for each part. A field's `templating.columns` is its width in the template's grid, with `{field_columns}` already substituted.
+- A **Computed** field carries `computed`, its definition with fields named by handle, so a client can show the result as the visitor types. Whatever is posted for it is ignored: the server works it out again.
+- For a guest on a members-only form, `open` is false and `closed_message` is filled in.
+
+## Submitting it
+
+Post to `submit.url` as described in [JSON API › Submitting](/docs/formidable/headless/json-api#submitting). Or post to `submit.action_url`, the same action a rendered form posts to, with an `X-Requested-With: XMLHttpRequest` header so the answer comes back as JSON rather than a redirect:
+
+- every field under its handle;
+- `_formidable_meta` set to `submit.meta`, and `csrf_token` set to `submit.csrf_token`;
+- `submit.honeypot.name` present and **empty**. When `submit.honeypot.js_name` is not empty, send that input **non-empty**;
+- `multipart/form-data` when `submit.multipart` is true.
+
+The answer is `{"success": true, "submission_id": …}` or `{"success": false, "errors": {"handle": "message", …}}`.
+
+The CSRF token belongs to the browser session that fetched the document, so the submission has to come from the same session, in practice the same site. A front end on another domain can read the document, but should submit through the JSON API with a key.
+
+## Never published
+
+Workflows, recipients and their addresses, connections and their credentials, email templates, encryption settings, and anything from the Registry beyond a fieldtype's handle.

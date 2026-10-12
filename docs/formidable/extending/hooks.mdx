@@ -1,0 +1,280 @@
+---
+title: Extension hooks
+description: The ExpressionEngine extension hooks Formidable calls, with their arguments.
+keywords:
+  - formidable
+  - hooks
+  - extension
+---
+
+# Extension hooks
+
+## Introduction
+
+Formidable calls these ExpressionEngine extension hooks. Register for them from your own add-on's extension in the usual way. See [ExpressionEngine's extension docs](https://docs.expressionengine.com/latest/development/extensions.html).
+
+Two kinds:
+
+- **A filter** passes you something first: answers, an email, a payload. Return it, changed or not. When more than one extension uses the same hook, read the previous one's result from `ee()->extensions->last_call`.
+- **A notification** tells you something happened. Its return value is ignored.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_values(array $values, $form, $editing): array
+{
+    // Another extension may already have changed them.
+    $values = ee()->extensions->last_call ?: $values;
+
+    if ($form->handle === 'contact') {
+        $values['email'] = strtolower(trim($values['email'] ?? ''));
+    }
+
+    return $values;
+}
+```
+
+## Submitting
+
+### `formidable_submission_values`
+
+**Filter.** The answers about to be validated, by field handle, after computed fields are worked out and answers on hidden pages, sections and fields are blanked. `$editing` is the submission or draft being edited, or `null`.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_values(array $values, $form, $editing): array
+```
+
+### `formidable_submission_validate`
+
+**Filter.** Add your own checks. `$errors` holds the errors the fields found themselves, by field handle. Add a message under a field's handle to show it on that field, or under `form` to show it above the form. `$saving` is `true` when the visitor pressed Save and is keeping a draft.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_validate(
+    array $errors,
+    $form,
+    array $values,
+    bool $saving,
+): array
+{
+    if (($values['quantity'] ?? 0) > 10 && empty($values['po_number'])) {
+        $errors['po_number'] = 'Orders over 10 need a PO number.';
+    }
+
+    return $errors;
+}
+```
+
+### `formidable_submission_before_save`
+
+**Filter.** The last word before anything is stored or sent. Return the answers. Set `ee()->extensions->end_script = true` to accept the submission without storing it or running its workflows. The visitor still sees the success message.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_before_save(
+    array $values,
+    $form,
+    $editing,
+    bool $saving,
+): array
+```
+
+### `formidable_submission_complete`
+
+**Notification.** Called after a submission has passed validation and been stored (unless the form does not store submissions), and **before** workflows run. Also called when a visitor edits a submission through `submission_handle=`.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_complete($form, $submission, array $values): void
+{
+    // $submission is null when the form does not store submissions.
+}
+```
+
+### `formidable_submission_return`
+
+**Filter.** Where the visitor is sent after a successful submission: the form's `return=`, which may be empty. Return a path or URL. It is checked the same way `return=` is, so it cannot send visitors to another site unless that host is allowed, and `SUBMISSION_HANDLE` is filled in afterwards.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_return(
+    string $return,
+    $submission,
+    array $values,
+): string
+```
+
+### `formidable_draft_saved`
+
+**Notification.** A save-and-resume draft was saved, by the visitor's Save or automatically on Next. `$created` is `false` when an existing draft was updated.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_draft_saved(
+    $form,
+    $draft,
+    array $values,
+    string $resumeUrl,
+    bool $created,
+): void
+```
+
+### `formidable_spam_caught`
+
+**Notification.** Called when a submission is caught by the honeypot, the JavaScript honeypot or the rate limit, after the form's spam count is increased. It is not called for failed CAPTCHAs or duplicate submissions.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_spam_caught($form, string $caughtBy): void
+{
+    // $caughtBy is 'honeypot', 'js_honeypot' or 'rate_limit'
+}
+```
+
+Formidable keeps no log of caught spam and stores no IP addresses for it. This hook is how a site keeps its own record.
+
+## The control panel
+
+### `formidable_submission_edited`
+
+**Notification.** A submission was saved on its control panel page, whether or not its workflows were asked to run. `$changed` says whether any answer changed. Compare `$submission->status_id` with `$previousStatusId` for a status change.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_edited(
+    $form,
+    $submission,
+    bool $changed,
+    int $previousStatusId,
+): void
+```
+
+### `formidable_export_row`
+
+**Filter.** One submission's cells, by column key, before they are written to an export. Change values, not keys: the columns, and the CSV's header, are already decided. `$format` is `csv`, `json`, `xml` or `txt`.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_export_row(array $cells, object $row, string $format): array
+```
+
+## Workflows
+
+### `formidable_workflow_should_run`
+
+**Filter.** Whether a workflow runs, after its own conditions have been checked. Return `true` or `false`.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_workflow_should_run(
+    bool $runs,
+    $workflow,
+    string $event,
+    $form,
+    $submission,
+    array $values,
+): bool
+```
+
+### `formidable_workflow_email`
+
+**Filter.** A workflow's email as composed, before it is sent: `to`, `cc` and `bcc` (lists of addresses), `subject` and `html`. Addresses that are not valid are dropped, and an email left with no `to` is skipped.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_workflow_email(
+    array $message,
+    $workflow,
+    $form,
+    $submission,
+    array $values,
+): array
+{
+    $message['bcc'][] = 'archive@example.com';
+
+    return $message;
+}
+```
+
+### `formidable_webhook_payload`
+
+**Filter.** A webhook's body, before it is encoded and signed.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_webhook_payload(array $body, $workflow, $form, $submission): array
+```
+
+### `formidable_connection_payload`
+
+**Filter.** What a connection workflow sends, keyed by the provider's own fields.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_connection_payload(
+    array $payload,
+    $workflow,
+    $connection,
+    array $values,
+): array
+```
+
+### `formidable_workflow_complete`
+
+**Notification.** A workflow ran, was skipped or failed. Called for each run, and for each attempt of a queued one. `$outcome` has `status` (`success`, `failed` or `skipped`), `message`, `duration_ms` and `sent`, which is what it sent.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_workflow_complete(
+    array $outcome,
+    $workflow,
+    string $event,
+    $form,
+    $submission,
+): void
+```
+
+## Output
+
+### `formidable_form_variables`
+
+**Filter.** The variables `{exp:formidable:form}` parses its markup with. Add your own, or change Formidable's.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_form_variables(array $variables, $form): array
+```
+
+### `formidable_form_output`
+
+**Filter.** The finished form's HTML, `<form>` tag included. Leave the hidden inputs in its meta block alone: a submission without them is refused.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_form_output(string $html, $form): string
+```
+
+### `formidable_form_schema`
+
+**Filter.** The [form as JSON](/docs/formidable/headless/form-json), for `output="json"` and the JSON API. Add to it rather than renaming keys, which scripts and API callers read.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_form_schema(array $document, $form): array
+```
+
+### `formidable_api_response`
+
+**Filter.** A successful [JSON API](/docs/formidable/headless/json-api) answer's `data`, before it is sent. `$endpoint` is what was asked for, like `forms/contact/submissions`. `$caller` says who asked: an API key, the site's own page, or a member. Errors are not passed through.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_api_response($data, string $endpoint, $caller, array $params)
+```
+
+## Model hooks
+
+ExpressionEngine calls its own lifecycle hooks for Formidable's models, wherever they are saved or deleted: the control panel, the front end, the command line or the API. Each is named `before_` or `after_`, then the model's hook id, then `_insert`, `_update`, `_save` or `_delete`. Each is called with the model and its values.
+
+| Model | Hook id | For example |
+| --- | --- | --- |
+| Form | `formidable_form` | `after_formidable_form_save` |
+| Field | `formidable_field` | `before_formidable_field_delete` |
+| Submission | `formidable_submission` | `after_formidable_submission_insert` |
+| Status | `formidable_status` | `after_formidable_status_update` |
+| Workflow | `formidable_workflow` | `after_formidable_workflow_save` |
+| Connection | `formidable_connection` | `before_formidable_connection_save` |
+| API key | `formidable_api_key` | `after_formidable_api_key_delete` |
+| Registry row | `formidable_registry` | `after_formidable_registry_save` |
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function after_formidable_submission_delete($submission, array $values): void
+{
+    // Tidy up anything your add-on keeps about this submission.
+}
+```
+
+## Hooks in this version
+
+Read from the add-on's source when these docs were built: <HookList />.

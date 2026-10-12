@@ -1,0 +1,112 @@
+---
+title: Multi-page forms
+description: Split a long form into pages, skip pages based on earlier answers, and style the step indicator and navigation.
+keywords:
+  - formidable
+  - multi-page form
+  - wizard
+  - steps
+---
+
+# Multi-page forms
+
+## Introduction
+
+A long form reads better as a few short steps. In Formidable, pages are part of the form's structure: you add them in the builder, and the form tag renders them with navigation and a step indicator. Nothing changes in the template.
+
+## Adding pages
+
+<Steps>
+  <Step title="Add pages in the builder">
+
+In the form's builder, choose **Add page** at the foot of the builder, or hover between two pages to add one at that point. Drag fields and sections onto the new page. Click a page's name to give it a name, a description and, if you like, its own button labels.
+
+  </Step>
+  <Step title="Optionally, skip pages">
+
+In a page's settings, add conditions to **skip** the page depending on earlier answers. For example, skip "Company details" when **Applying as** is *Individual*. A page condition can only use fields on earlier pages. See [Conditions](/docs/formidable/building-forms/conditions#pages-and-sections).
+
+  </Step>
+  <Step title="Render the form as usual">
+
+```ee title="templates/default_site/apply.group/index.html"
+{exp:formidable:form form_handle="application"}
+```
+
+  </Step>
+</Steps>
+
+## How it behaves
+
+- **One submission at the end.** The visitor moves between pages in the browser, and the form is submitted once, from the last page. The server then checks every page that applied, so nothing can be skipped by editing the page.
+- **Next checks the current page first**, using the browser's own validation. Back always works.
+- **Skipped pages are skipped** by Next, Back and the step indicator. Their answers are blanked and never stored. The last page that applies shows **Submit** in place of **Next**.
+- **Steps are clickable.** Going back to any page always works. Going forward validates every page it would skip, and stops at the first one with a problem. Steps that can be reached get `tabindex="0"` and respond to Enter and Space. The others carry `aria-disabled="true"`.
+- **Without JavaScript**, every page shows at once and the last page's Submit sends the form.
+
+## Navigation
+
+Every page ends with its own buttons, rendered by the theme's `_nav` part as `{page_nav}`:
+
+| Page | Buttons |
+| --- | --- |
+| The only page | Submit |
+| The first of several | Next |
+| A middle page | Back, Next |
+| The last page | Back, Submit |
+
+The text comes from each page's settings. Empty labels use the defaults: Next, Previous and Submit. Every page except the last also renders a hidden Submit button. The script shows it when every later page is skipped, so that page can end the form.
+
+If you write your own markup, keep `{page_nav}` inside each page, or write the buttons yourself with their attribute variables, which carry the hooks the script binds to:
+
+```ee title="The Default theme's _nav part (comment removed, line breaks added)"
+<div {page_nav_attributes}>
+    {if page_has_back}<button type="button" {page_back_attributes}>{page_previous_label}</button>{/if}
+    {if page_has_next}<button type="button" {page_next_attributes}>{page_next_label}</button>{/if}
+    <button type="submit" {page_submit_attributes}>{page_submit_label}</button>
+</div>
+```
+
+If a rendered form has no submit control at all, for example a plain `{fields}` loop that places no pages, Formidable adds navigation after the fields.
+
+## A custom step indicator
+
+`{form_page_progress}` renders the theme's step indicator. To write your own, loop `{form_pages}` and mark each step with `data-formidable-page-step`:
+
+```ee title="templates/default_site/apply.group/index.html"
+{exp:formidable:form form_handle="application"}
+    <form {form_attributes}>
+        {form_meta}
+        {if form_page_count > 1}
+            <ol class="steps" {page_progress_attributes} data-formidable-page-progress>
+                {form_pages}
+                    <li data-formidable-page-step="{page_number}" data-formidable-page-state="{page_state}">
+                        {if page_name}{page_name}{if:else}Step {page_number}{/if}
+                    </li>
+                {/form_pages}
+            </ol>
+        {/if}
+        {form_fields}
+    </form>
+{/exp:formidable:form}
+```
+
+As the visitor moves, the script keeps `aria-current="step"` on the current step and `data-formidable-page-state` set to `complete`, `current` or `upcoming` on each. Both are also written by the server, so the first paint is right. Style them rather than inventing classes:
+
+```css title="assets/css/forms.css"
+.steps [aria-current="step"] { font-weight: 600; }
+.steps [data-formidable-page-state="complete"] { opacity: 0.6; }
+.steps [data-formidable-page-reachable="yes"] { cursor: pointer; }
+```
+
+Add `data-formidable-page-jump="no"` to a step that should not be clickable.
+
+## One page per request
+
+`page="N"` renders a single page server-side, as its own submission, with a single submit button labelled with that page's Next text (or its Submit text on the last page). Use it when your own templates do the paging, for example one URL per step:
+
+```ee title="templates/default_site/apply.group/index.html"
+{exp:formidable:form form_handle="application" page="{segment_3}"}
+```
+
+Each page submitted this way is validated and stored on its own. For a single submission built up over several steps, use the default client-side paging instead.

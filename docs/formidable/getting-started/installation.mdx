@@ -1,83 +1,79 @@
 ---
-title: Installation and updates
-sidebar_label: Installation
-sidebar_position: 1
-description: Formidable's requirements, how to install its two folders, and how updates run.
+title: Installation
+description: Formidable's requirements, how to install its two folders, how updates run, and how to uninstall.
 keywords:
   - formidable
   - install
   - update
 ---
 
-# Installation and updates
+# Installation
 
-Formidable installs like any other ExpressionEngine add-on: two folders onto your site, then one click in the control panel.
+Formidable installs like any other ExpressionEngine add-on: copy two folders onto your site, then choose **Install** in the control panel.
 
 ## Requirements
 
 | | |
 | --- | --- |
-| ExpressionEngine | 7.5 or later |
-| PHP | 8.2 or later. The installer refuses to install or update on an older PHP and says which version it found. |
-| Database | Whatever your version of ExpressionEngine requires. Formidable adds its own tables through migrations. |
+| **ExpressionEngine** | 7.5 or later |
+| **PHP** | 8.2 or later. The installer refuses to install or update on anything older, and tells you which version it found. |
+| **Database** | Whatever your version of ExpressionEngine requires. Formidable creates its own tables. |
 
-## Install
+## Installing Formidable
 
-The release zip mirrors the root of an ExpressionEngine site, so its two folders go to the same places on yours:
+The release zip mirrors the root of an ExpressionEngine site, so each folder goes to the same place on yours:
 
-```text title="Formidable-v<version>.zip"
-system/user/addons/formidable/   → your-site/system/user/addons/formidable/
-themes/user/formidable/          → your-site/themes/user/formidable/
+```text title="Formidable-v1.0.0.zip"
+system/user/addons/formidable/   →  your-site/system/user/addons/formidable/
+themes/user/formidable/          →  your-site/themes/user/formidable/
 ```
 
 <Steps>
-  <Step title="Copy the add-on folder">
+  <Step title="Copy the add-on">
     Copy `system/user/addons/formidable` into your site's `system/user/addons/` folder.
   </Step>
-  <Step title="Copy the themes folder">
-    Copy `themes/user/formidable` into your site's public `themes/user/` folder. It holds the front-end scripts (`formidable.js`, `signature.js`) and the signature pad's stylesheet.
+  <Step title="Copy the front-end assets">
+    Copy `themes/user/formidable` into your site's public `themes/user/` folder. It holds `formidable.js`, which runs conditions, pages and repeating sections in the browser, and the signature pad's script and styles.
   </Step>
   <Step title="Install from the control panel">
-    In the control panel, open **Add-Ons**, find **Formidable** and choose **Install**. The installer creates Formidable's tables, its default fieldtypes and attributes, and the **Formidable Form** channel fieldtype.
+    Open **Add-Ons**, find **Formidable** and choose **Install**. The installer creates Formidable's tables, its fieldtypes, validation rules and attributes, and the **Formidable Form** channel fieldtype.
   </Step>
   <Step title="Open Formidable">
-    Formidable now appears under **Add-Ons**. Its first screen is the **Forms** listing. Continue with the [quick start](./quick-start.mdx).
+    Formidable now appears under **Add-Ons** and opens on its [dashboard](/docs/formidable/control-panel/dashboard). You're ready to build [your first form](./your-first-form.mdx).
   </Step>
 </Steps>
 
-:::tip Permissions
-Super Admins can do everything. To let other roles build forms, read submissions or manage connections, grant them Formidable's permissions on **Formidable › Permissions**. See [Permissions](/docs/formidable/core-concepts/permissions).
+:::tip Giving your team access
+Super Admins can do everything straight away. To let other roles build forms, read submissions or manage connections, grant them Formidable's permissions on **Formidable › Permissions**. See [Permissions](/docs/formidable/control-panel/permissions).
 :::
 
-## Update
+## Updating
 
 <Steps>
   <Step title="Replace both folders">
-    Copy the new `system/user/addons/formidable` and `themes/user/formidable` over the old ones. Replace the folders rather than merging them, so no file removed in the new release is left behind.
+    Copy the new `system/user/addons/formidable` and `themes/user/formidable` over the old ones. Replace the folders rather than merging them, so no file the new release removed is left behind.
   </Step>
   <Step title="Run the update">
-    ExpressionEngine notices the new version on the **Add-Ons** screen and offers **Update**. The update runs any new database migrations.
+    ExpressionEngine notices the new version on the **Add-Ons** screen and offers **Update**. The update runs any new database migrations and adds any new fieldtypes.
   </Step>
 </Steps>
 
-Every update also adds any **fieldtypes** a new release ships that your site does not have yet. It never changes the fieldtypes you already have, because those can be edited in the control panel. The same sync can be run on its own from the command line:
+Read the [upgrade guide](/docs/formidable/prologue/upgrade-guide) before updating across a release with breaking changes.
 
-```bash
-php system/ee/eecli.php formidable:sync-fieldtypes
-```
+## Optional configuration
 
-Read the [upgrade notes](/docs/formidable/release/upgrading) before updating across a version with breaking changes.
-
-## Site configuration you may want
-
-Formidable works with no configuration. A few behaviours can be tuned from `system/user/config/config.php`. For example, to allow a form's `return=` to send visitors to another host:
+Formidable works with no configuration at all. A handful of behaviours can be tuned from your site's `config.php`. For example, to let a form's `return=` send visitors to another host:
 
 ```php title="system/user/config/config.php"
 $config['formidable_return_hosts'] = ['checkout.example.com'];
 ```
 
-Every key is listed in [Configuration](/docs/formidable/developer/configuration).
+Every key is listed under [Configuration](/docs/formidable/reference/configuration).
 
-## Uninstall
+## Uninstalling
 
-Choose **Uninstall** for Formidable on the **Add-Ons** screen. This removes Formidable's tables and **deletes every form and submission**. Export anything you want to keep first, from the **Submissions** screen of each form.
+Choose **Uninstall** for Formidable on the **Add-Ons** screen.
+
+:::danger This deletes your forms and submissions
+Uninstalling removes Formidable's tables, including every form and submission. Export anything you want to keep first, from each form's **Submissions** screen.
+:::

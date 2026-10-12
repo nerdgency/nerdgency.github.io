@@ -1,0 +1,99 @@
+.footer {
+  --nerdgency-wordmark: var(--ng-ink-text);
+  background: var(--ng-ink);
+  color: var(--ng-ink-muted);
+  padding: 4.5rem 1.5rem 2rem;
+  margin-top: 0;
+}
+
+.inner {
+  max-width: 76rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr);
+  gap: 3rem;
+}
+
+.mark {
+  display: inline-block;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.mark:hover {
+  text-decoration: none;
+}
+
+.brand p {
+  max-width: 24rem;
+  font-family: var(--ng-font-display);
+  font-size: 1.15rem;
+  line-height: 1.55;
+  color: var(--ng-ink-text);
+  margin: 0;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.title {
+  font-family: var(--ng-font-sans);
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ng-amber);
+  margin: 0 0 1rem;
+}
+
+.columns ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.columns li + li {
+  margin-top: 0.55rem;
+}
+
+.columns a {
+  color: var(--ng-ink-text);
+  font-size: 0.925rem;
+  opacity: 0.85;
+}
+
+.columns a:hover {
+  color: var(--ng-amber);
+  opacity: 1;
+  text-decoration: none;
+}
+
+.base {
+  max-width: 76rem;
+  margin: 3.5rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ng-ink-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.braces {
+  font-family: var(--ng-font-mono);
+  color: var(--ng-amber);
+  letter-spacing: 0.2em;
+}
+
+@media (max-width: 860px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

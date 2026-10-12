@@ -1,0 +1,92 @@
+---
+title: Validation
+description: Required fields, validation rules, per-render rule changes on the tag, and adding your own checks from an extension.
+keywords:
+  - formidable
+  - validation
+  - required
+  - rules
+---
+
+# Validation
+
+## Introduction
+
+Every answer is validated on the server when the form is submitted, whatever the browser did first. A field fails validation when it's **required** and empty, or when it breaks one of its **rules**. The visitor then goes back to the form with an error beside each field that failed, and everything they typed is still there.
+
+Fields that are hidden by [conditions](./conditions.md), or sit on a page or in a section that was skipped, aren't validated at all.
+
+## Required fields
+
+Turn on **Required** on a field's **Validation** tab. A field can also be required only sometimes, with **Require if** on its **Conditions** tab: "require *Phone* if *Contact me by* is *Phone*".
+
+The browser is told too: a required field gets the `required` attribute, so most browsers point at it before the form is even sent.
+
+## Rules
+
+Rules are ExpressionEngine's own validation rules, added on the same **Validation** tab. Some rules take a value, written in brackets: `minLength[8]`, `enum[red|green|blue]`.
+
+Each field also gets the rules its settings imply. A Text field's **Maximum Length**, for example, sets both `maxlength` on the input and a `maxLength` rule, and an Email field arrives with the `email` rule already added. These are the rules Formidable offers:
+
+<RuleTable descriptions={{
+  alpha: 'contains only letters',
+  alphaDash: 'contains only letters, numbers, underscores and dashes',
+  alphaDashPeriodEmoji: 'contains only letters, numbers, underscores, dashes, periods or emoji',
+  alphaNumeric: 'contains only letters and numbers',
+  boolean: 'is a true or false value',
+  email: 'is an email address',
+  enum: 'is one of the listed values: enum[a|b|c]',
+  exactLength: 'is exactly this many characters long',
+  greaterOrEqualThan: 'is a number greater than or equal to this',
+  greaterThan: 'is a number greater than this',
+  hexColor: 'is a hex colour',
+  integer: 'is a whole number',
+  ipAddress: 'is an IP address',
+  isNatural: 'contains only digits 0–9',
+  isNaturalNoZero: 'contains only digits and is not zero',
+  lessOrEqualThan: 'is a number less than or equal to this',
+  lessThan: 'is a number less than this',
+  limitHtml: 'uses only the listed HTML tags',
+  maxLength: 'is at most this many characters long',
+  minLength: 'is at least this many characters long',
+  noHtml: 'contains no HTML',
+  notNumeric: 'is not a number',
+  notStartsWith: 'does not start with this text',
+  numeric: 'is a number',
+  startsWith: 'starts with this text',
+  url: 'is a URL',
+  whenPresent: 'is only validated when the field was submitted',
+}} />
+
+More rules can be added under **Registry › Validation Rules**, as long as each is a rule ExpressionEngine knows.
+
+:::tip An input type is only a hint
+An Email field's `type="email"` asks the browser to check the address, and anyone can switch that off. The `email` rule is what rejects an invalid address on the server.
+:::
+
+## Choices are checked too
+
+For Select, Multi-select, Checkboxes and Radio Buttons whose choices are typed on the field, come from a built-in list or are **Recipients**, the answer must be one of the choices you offered. A tampered form can't post a value you never listed, or one you excluded.
+
+## Changing rules for one render
+
+A template can add, replace or remove a field's rules for one render with `field:HANDLE:rules=`. Rules merge with the field's saved rules by name; start the value with `=` to replace them:
+
+```ee title="templates/default_site/apply.group/index.html"
+{exp:formidable:form
+    form_handle="application"
+    field:phone:rules="required"
+    field:website:rules="=url"
+    field:nickname:rules="="
+}
+```
+
+Here `phone` becomes required, `website` keeps only the `url` rule, and `nickname` loses all of its rules. The changes travel to the server inside the signed form meta, so they change real validation and a visitor can't alter them. See [`field:HANDLE:rules=`](/docs/formidable/reference/tags/form#field-handle-rules).
+
+## Showing errors
+
+The shipped themes print each error beside its field, and a summary above the form. In your own markup, `{field_error}` and `{field_has_error}` give one field's error, and `{form_errors}` lists them all. See [Errors](/docs/formidable/reference/tags/form#errors).
+
+## Your own checks
+
+When a rule isn't enough, such as "orders over ten need a PO number", add the check from your own add-on with the [`formidable_submission_validate`](/docs/formidable/extending/hooks#formidable_submission_validate) hook. Return an error under a field's handle and it appears beside that field, just like Formidable's own.

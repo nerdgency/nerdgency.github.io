@@ -1,76 +1,165 @@
 /*
- * Element-level styling for the stock Docusaurus theme: typography,
- * navbar, sidebar, table of contents, code, tables, admonitions, footer.
- * Everything reads the tokens in tokens.css; no colour is set here.
+ * Element-level styling for the Docusaurus theme: typography, navbar,
+ * sidebar, table of contents, code, tables, admonitions, tabs, blog.
+ * Everything reads the tokens in tokens.css.
+ *
+ * The motif is the wordmark's braces: `{ Section }` labels in the
+ * sidebar, eyebrows above page titles, and the amber that marks where
+ * you are.
  */
 
-/* Typography --------------------------------------------------------- */
+/* Page --------------------------------------------------------------- */
+
+html {
+  scroll-padding-top: calc(var(--ifm-navbar-height) + 1rem);
+}
 
 body {
   background: var(--ng-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv11', 'ss01';
 }
 
-h1, h2, h3, h4, h5, h6 {
-  letter-spacing: -0.015em;
+::selection {
+  background: var(--ng-mark);
 }
 
-.markdown h1:first-child {
-  --ifm-h1-font-size: 2.4rem;
-  margin-bottom: 0.75rem;
+/* Typography --------------------------------------------------------- */
+
+h1, h2, h3 {
+  font-optical-sizing: auto;
+  letter-spacing: -0.012em;
+  font-variation-settings: 'SOFT' 50, 'WONK' 0;
+}
+
+h4, h5, h6 {
+  font-family: var(--ng-font-sans);
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.markdown {
+  font-size: 1.0125rem;
+}
+
+.markdown h1:first-child,
+.markdown header h1 {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 560;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin-bottom: 1rem;
 }
 
 .markdown > h2 {
-  margin-top: 2.75rem;
-  padding-top: 0.5rem;
+  margin-top: 3.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--ng-border);
+  font-weight: 560;
 }
 
 .markdown > h3 {
-  margin-top: 2rem;
+  margin-top: 2.25rem;
+  font-weight: 600;
+}
+
+.markdown h1 + h2,
+.markdown header + h2 {
+  margin-top: 1.5rem;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.markdown > h2 + h3 {
+  margin-top: 1.25rem;
+}
+
+.markdown .hash-link {
+  color: var(--ng-amber-deep);
 }
 
 /* The paragraph straight after the page title reads as a lede. */
 .markdown header + p,
 .markdown h1 + p {
-  font-size: 1.125rem;
+  font-size: 1.2rem;
+  line-height: 1.65;
   color: var(--ng-text-muted);
+  margin-bottom: 2rem;
+}
+
+.markdown strong {
+  color: var(--ng-text);
+  font-weight: 650;
 }
 
 .markdown a {
-  text-underline-offset: 0.18em;
-  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
-.markdown a:not(.card):not([class*='button']) {
+.markdown a:not([class*='button']):not([class*='card']):not(.hash-link) {
+  color: var(--ng-text);
+  font-weight: 500;
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-decoration-color: var(--ng-amber);
+  text-decoration-thickness: 2px;
 }
 
-.markdown a:not(.card):not([class*='button']):hover {
+.markdown a:not([class*='button']):not([class*='card']):not(.hash-link):hover {
+  color: var(--ng-link);
   text-decoration-color: currentColor;
+}
+
+.markdown ul,
+.markdown ol {
+  padding-left: 1.4rem;
+}
+
+.markdown li + li {
+  margin-top: 0.3rem;
+}
+
+.markdown ul > li::marker {
+  color: var(--ng-amber-deep);
+}
+
+.markdown ol > li::marker {
+  color: var(--ng-text-faint);
+  font-family: var(--ng-font-mono);
+  font-size: 0.85em;
+}
+
+.markdown blockquote {
+  border-left: 3px solid var(--ng-amber);
+  background: var(--ng-surface);
+  border-radius: 0 var(--ng-radius-sm) var(--ng-radius-sm) 0;
+  padding: 0.75rem 1.25rem;
+  color: var(--ng-text-muted);
+}
+
+.markdown hr {
+  margin: 3rem 0;
 }
 
 .markdown kbd {
   font-family: var(--ng-font-mono);
-  font-size: 0.85em;
-  border-radius: 4px;
+  font-size: 0.8em;
+  border-radius: 5px;
   border: 1px solid var(--ng-border-strong);
-  box-shadow: inset 0 -1px 0 var(--ng-border-strong);
-  background: var(--ng-surface);
-  padding: 0.05rem 0.35rem;
+  box-shadow: inset 0 -2px 0 var(--ng-border-strong);
+  background: var(--ng-bg-raised);
+  padding: 0.1rem 0.4rem;
 }
 
 /* Focus -------------------------------------------------------------- */
 
 :focus-visible {
-  outline: 2px solid var(--ng-link);
+  outline: 2px solid var(--ng-amber-deep);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Skip link (rendered by Docusaurus) stays visible when focused. */
 [class*='skipToContent']:focus {
   background: var(--ng-bg);
   color: var(--ng-text);
@@ -81,34 +170,84 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar {
   border-bottom: 1px solid var(--ng-border);
-  backdrop-filter: saturate(160%) blur(10px);
-  -webkit-backdrop-filter: saturate(160%) blur(10px);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
 }
 
-.navbar__title {
-  font-family: var(--ng-font-display);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+.navbar__brand {
+  margin-right: 1.75rem;
+  color: var(--ng-text);
 }
 
-.navbar__logo {
-  height: 1.9rem;
+.navbar__brand:hover {
+  color: var(--ng-text);
+  text-decoration: none;
 }
 
 .navbar__link {
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.925rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  transition: color 120ms ease, background 120ms ease;
+}
+
+.navbar__link:hover {
+  background: var(--ng-surface);
 }
 
 .navbar__link--active {
   color: var(--ng-text);
-  box-shadow: inset 0 -2px 0 var(--ng-orange);
+  background: var(--ng-surface);
 }
 
 .navbar .dropdown__menu {
   border: 1px solid var(--ng-border);
-  box-shadow: var(--ng-shadow);
+  background: var(--ng-bg-raised);
+  box-shadow: var(--ng-shadow-lg);
   border-radius: var(--ng-radius);
+  padding: 0.4rem;
+  min-width: 14rem;
+}
+
+.navbar .dropdown__link {
+  border-radius: var(--ng-radius-sm);
+  font-size: 0.9rem;
+  padding: 0.45rem 0.75rem;
+}
+
+.navbar .dropdown__link--active {
+  background: var(--ng-accent-soft);
+  color: var(--ng-text);
+}
+
+/* The docs call to action on the right of the navbar. */
+.navbar a.navbar-cta {
+  margin-left: 0.5rem;
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  background: var(--ng-text);
+  color: var(--ng-bg);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.navbar a.navbar-cta:hover {
+  background: var(--ng-link);
+  color: var(--ng-bg);
+}
+
+.navbar__search-input,
+.navbar [class*='searchBox'] input {
+  background: var(--ng-surface) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: 999px !important;
+  font-size: 0.85rem;
+}
+
+.navbar-sidebar,
+.navbar-sidebar__brand {
+  background: var(--ng-bg);
 }
 
 /* Sidebar ------------------------------------------------------------ */
@@ -118,102 +257,399 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .menu {
-  font-size: 0.925rem;
-  padding: 1rem 0.75rem !important;
+  font-size: 0.9rem;
+  padding: 1.5rem 1rem 3rem !important;
 }
 
 .menu__link {
-  border-radius: var(--ng-radius-sm);
-  padding: 0.35rem 0.75rem;
-  line-height: 1.35;
+  border-radius: 0;
+  padding: 0.28rem 0.85rem;
+  line-height: 1.4;
+  border-left: 1px solid var(--ng-border);
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.menu__link:hover {
+  color: var(--ng-text);
+  border-left-color: var(--ng-text-faint);
 }
 
 .menu__link--active:not(.menu__link--sublist) {
-  font-weight: 600;
-  box-shadow: inset 3px 0 0 var(--ng-orange);
-}
-
-/* Top-level categories read as section headings. */
-.theme-doc-sidebar-menu > .theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link {
-  font-family: var(--ng-font-display);
-  font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
   color: var(--ng-text);
+  font-weight: 600;
+  border-left: 2px solid var(--ng-amber);
+  padding-left: calc(0.85rem - 1px);
 }
 
+/* Top-level categories are section labels in braces, always open
+   (sidebars.js marks them non-collapsible). */
 .theme-doc-sidebar-item-category-level-1 {
-  margin-top: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible,
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible:hover {
+  background: none;
+}
+
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link {
+  justify-content: flex-start;
+  border-left: 0;
+  padding: 0 0 0.55rem;
+  color: var(--ng-text);
+  font-family: var(--ng-font-sans);
+  font-weight: 650;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: default;
+}
+
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link::before,
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link::after {
+  color: var(--ng-amber-deep);
+  font-family: var(--ng-font-mono);
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0;
+}
+
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link::before {
+  content: '{';
+  margin-right: 0.4em;
+}
+
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link::after {
+  content: '}';
+  margin-left: 0.4em !important;
+  /* Infima draws a category's caret in ::after; this one is a brace. */
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  background: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.theme-doc-sidebar-item-category-level-1 > .menu__list {
+  padding-left: 0;
+  margin-top: 0 !important;
+}
+
+/* A nested group (Template tags, under Reference) is a quiet sub-label
+   with its pages indented beneath it -- no caret; it stays open. */
+.theme-doc-sidebar-item-category-level-2 > .menu__list-item-collapsible,
+.theme-doc-sidebar-item-category-level-2 > .menu__list-item-collapsible:hover {
+  background: none;
+}
+
+.theme-doc-sidebar-item-category-level-2 > .menu__list-item-collapsible > .menu__link {
+  color: var(--ng-text-faint);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: default;
+}
+
+.theme-doc-sidebar-item-category-level-2 > .menu__list-item-collapsible > .menu__link::after,
+.theme-doc-sidebar-item-category-level-2 .menu__caret {
+  display: none !important;
+}
+
+.theme-doc-sidebar-item-category-level-2 > .menu__list {
+  margin-top: 0 !important;
+  padding-left: 0.85rem;
+}
+
+.theme-doc-sidebar-item-category-level-2 > .menu__list .menu__link {
+  font-family: var(--ng-font-mono);
+  font-size: 0.78rem;
+}
+
+/* The product card at the top of the docs sidebar (sidebars.js). */
+.sidebar-product {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  margin-bottom: 0.25rem;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius);
+  background: var(--ng-bg-raised);
+  color: var(--ng-text) !important;
+  text-decoration: none !important;
+  transition: border-color 120ms ease;
+}
+
+.sidebar-product:hover {
+  border-color: var(--ng-amber);
+}
+
+.sidebar-product img {
+  width: 34px;
+  height: 34px;
+  flex: none;
+}
+
+.sidebar-product strong {
+  display: block;
+  font-family: var(--ng-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.sidebar-product small {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--ng-text-muted);
 }
 
 /* Table of contents -------------------------------------------------- */
 
 .table-of-contents {
-  font-size: 0.85rem;
+  font-size: 0.825rem;
+}
+
+.theme-doc-toc-desktop {
+  padding-top: 0.5rem;
+}
+
+.theme-doc-toc-desktop::before {
+  content: 'On this page';
+  display: block;
+  margin: 0 0 0.6rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ng-text);
+}
+
+.table-of-contents__left-border {
+  border-left: 1px solid var(--ng-border);
+}
+
+.table-of-contents__link {
+  color: var(--ng-text-muted);
+}
+
+.table-of-contents__link:hover,
+.table-of-contents__link--active {
+  color: var(--ng-text);
 }
 
 .table-of-contents__link--active {
   font-weight: 600;
 }
 
-/* Breadcrumbs and pagination ----------------------------------------- */
+/* The current heading is marked ON the border between the content and
+   the table of contents, not beside its text. The top-level list is the
+   positioned box; the marker takes its static (line) position vertically
+   and sits over the list's 1px left border. */
+.theme-doc-toc-desktop > .table-of-contents {
+  position: relative;
+}
+
+.theme-doc-toc-desktop .table-of-contents li,
+.theme-doc-toc-desktop .table-of-contents ul {
+  position: static;
+}
+
+.table-of-contents__link--active::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  width: 2px;
+  height: 1.35em;
+  margin-top: 0.1em;
+  border-radius: 2px;
+  background: var(--ng-amber);
+}
+
+/* Doc page ----------------------------------------------------------- */
+
+.theme-doc-markdown {
+  max-width: none;
+}
+
+/* The article column keeps its reading width and sits centred between
+   the sidebar and the table of contents -- breadcrumbs, content and the
+   previous / next links together. */
+@media (min-width: 997px) {
+  [class*='docItemContainer'] {
+    max-width: var(--ng-content-width);
+    margin: 0 auto;
+  }
+}
+
+.theme-doc-breadcrumbs {
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumbs__link {
+  font-size: 0.8rem;
+  color: var(--ng-text-faint);
+  padding: 0;
+  background: none !important;
+}
+
+.breadcrumbs__item:not(:last-child)::after {
+  opacity: 0.4;
+}
 
 .breadcrumbs__item--active .breadcrumbs__link {
-  background: var(--ng-accent-soft);
-  color: var(--ng-text);
+  color: var(--ng-amber-deep);
+  font-weight: 600;
+}
+
+.pagination-nav {
+  margin-top: 4rem;
+  gap: 1rem;
 }
 
 .pagination-nav__link {
-  border-color: var(--ng-border);
+  border: 1px solid var(--ng-border);
   border-radius: var(--ng-radius);
-  transition: border-color 120ms ease;
+  background: var(--ng-bg-raised);
+  padding: 1rem 1.25rem;
+  transition: border-color 120ms ease, transform 120ms ease;
 }
 
 .pagination-nav__link:hover {
-  border-color: var(--ng-link);
+  border-color: var(--ng-amber);
+  transform: translateY(-1px);
+}
+
+.pagination-nav__sublabel {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ng-text-faint);
+}
+
+.pagination-nav__label {
+  font-family: var(--ng-font-display);
+  font-weight: 560;
+  font-size: 1.1rem;
+}
+
+.theme-doc-footer {
+  margin-top: 3rem;
+  font-size: 0.85rem;
 }
 
 /* Inline code -------------------------------------------------------- */
 
 .markdown :not(pre) > code {
-  border: 1px solid var(--ng-border);
-  padding: 0.1em 0.35em;
+  border: 0;
+  color: var(--ng-code-inline-text);
   word-break: break-word;
 }
 
-/* Code blocks -------------------------------------------------------- */
+.markdown a code {
+  color: inherit;
+}
+
+/* Code blocks: always ink ------------------------------------------- */
 
 .theme-code-block {
-  border: 1px solid var(--ng-border);
+  position: relative;
+  background: var(--ng-ink) !important;
+  border: 1px solid var(--ng-ink-border);
   border-radius: var(--ng-radius) !important;
-  box-shadow: none !important;
+  box-shadow: var(--ng-shadow) !important;
+  margin-bottom: 1.75rem;
+  overflow: hidden;
+}
+
+.theme-code-block pre,
+.theme-code-block pre code {
+  background: var(--ng-ink) !important;
+  color: var(--ng-ink-text);
 }
 
 .theme-code-block pre {
-  font-size: 0.85rem;
-  line-height: 1.6;
+  font-size: 0.84rem;
+  line-height: 1.75;
 }
 
-/* The filename bar from ```lang title="file.html". */
+/* A block with a filename bar shows no language badge. */
+.theme-code-block:has([class*='codeBlockTitle'])::after {
+  display: none;
+}
+
+/* The bar above a block with a ```lang title="file.html". */
 [class*='codeBlockTitle'] {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   font-family: var(--ng-font-mono);
-  font-size: 0.8rem !important;
+  font-size: 0.75rem !important;
   font-weight: 500;
-  color: var(--ng-text-muted) !important;
-  background: var(--ng-surface) !important;
-  border-bottom: 1px solid var(--ng-border) !important;
-  padding: 0.55rem 1rem !important;
+  color: var(--ng-ink-muted) !important;
+  background: var(--ng-ink-2) !important;
+  border-bottom: 1px solid var(--ng-ink-border) !important;
+  padding: 0.6rem 1.1rem !important;
 }
 
-[data-theme='dark'] [class*='codeBlockTitle'] {
-  background: var(--ng-surface-2) !important;
+[class*='codeBlockTitle']::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ng-amber);
+  flex: none;
 }
 
-/* Copy / wrap buttons: visible to keyboard users, not only on hover. */
+.theme-code-block-highlighted-line {
+  box-shadow: inset 3px 0 0 var(--ng-amber);
+}
+
+.theme-code-block button {
+  background: var(--ng-ink-2) !important;
+  border: 1px solid var(--ng-ink-border) !important;
+  color: var(--ng-ink-muted) !important;
+  border-radius: 8px !important;
+}
+
+.theme-code-block button:hover {
+  color: var(--ng-ink-text) !important;
+}
+
 .theme-code-block button:focus-visible {
   opacity: 1 !important;
 }
+
+/* The language, top-right of a block that has no title bar. */
+.theme-code-block[class*='language-']:not(:has([class*='codeBlockTitle']))::after {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.9rem;
+  font-family: var(--ng-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ng-ink-muted);
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.theme-code-block[class*='language-']:not(:has([class*='codeBlockTitle'])):hover::after {
+  opacity: 0;
+}
+
+.theme-code-block.language-html::after,
+.theme-code-block.language-ee::after { content: 'Template'; }
+.theme-code-block.language-php::after { content: 'PHP'; }
+.theme-code-block.language-bash::after,
+.theme-code-block.language-shell::after,
+.theme-code-block.language-sh::after { content: 'Terminal'; }
+.theme-code-block.language-json::after { content: 'JSON'; }
+.theme-code-block.language-js::after,
+.theme-code-block.language-javascript::after { content: 'JavaScript'; }
+.theme-code-block.language-css::after { content: 'CSS'; }
+.theme-code-block.language-http::after { content: 'HTTP'; }
 
 /* Tables ------------------------------------------------------------- */
 
@@ -225,16 +661,23 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--ng-border);
   border-radius: var(--ng-radius);
   overflow: hidden;
-  font-size: 0.925rem;
+  font-size: 0.9rem;
+  background: var(--ng-bg-raised);
+  margin-bottom: 1.75rem;
 }
 
 .markdown table thead tr {
   background: var(--ng-surface);
+  border: 0;
 }
 
 .markdown table th {
-  font-family: var(--ng-font-display);
-  font-weight: 600;
+  font-family: var(--ng-font-sans);
+  font-weight: 650;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ng-text-muted);
   text-align: left;
   white-space: nowrap;
 }
@@ -243,19 +686,23 @@ h1, h2, h3, h4, h5, h6 {
 .markdown table td {
   border: 0;
   border-bottom: 1px solid var(--ng-border);
-  padding: 0.6rem 0.85rem;
+  padding: 0.7rem 1rem;
   vertical-align: top;
+}
+
+.markdown table tr {
+  border: 0;
+  background: none;
 }
 
 .markdown table tr:last-child td {
   border-bottom: 0;
 }
 
-.markdown table tr:nth-child(2n) {
-  background: var(--ifm-table-stripe-background);
+.markdown table td:first-child code {
+  white-space: nowrap;
 }
 
-/* Wide tables scroll inside their own box rather than the page. */
 @media (max-width: 996px) {
   .markdown table {
     display: block;
@@ -267,67 +714,120 @@ h1, h2, h3, h4, h5, h6 {
 
 .theme-admonition {
   border-radius: var(--ng-radius);
-  border: 1px solid;
-  border-left-width: 4px;
+  border: 1px solid var(--ifm-alert-border-color);
   box-shadow: none;
   font-size: 0.95rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
 }
 
 .theme-admonition [class*='admonitionHeading'] {
-  font-family: var(--ng-font-display);
-  text-transform: none;
-  font-size: 0.95rem;
-  letter-spacing: 0;
+  font-family: var(--ng-font-sans);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
 }
 
-.alert--secondary { --ifm-alert-background-color: var(--ng-surface); --ifm-alert-border-color: var(--ng-border-strong); }
-.alert--info { --ifm-alert-background-color: #eff6ff; --ifm-alert-border-color: #93c5fd; --ifm-alert-foreground-color: #1e3a8a; }
-.alert--success { --ifm-alert-background-color: #ecfdf5; --ifm-alert-border-color: #6ee7b7; --ifm-alert-foreground-color: #064e3b; }
-.alert--warning { --ifm-alert-background-color: #fff7e6; --ifm-alert-border-color: #f7c26b; --ifm-alert-foreground-color: #5c3200; }
-.alert--danger { --ifm-alert-background-color: #fef2f2; --ifm-alert-border-color: #fca5a5; --ifm-alert-foreground-color: #7f1d1d; }
+.theme-admonition [class*='admonitionIcon'] svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.alert--secondary { --ifm-alert-background-color: var(--ng-surface); --ifm-alert-border-color: var(--ng-border); --ifm-alert-foreground-color: var(--ng-text); }
+.alert--info { --ifm-alert-background-color: #eef3fb; --ifm-alert-border-color: #c7d6ef; --ifm-alert-foreground-color: #1d335c; }
+.alert--success { --ifm-alert-background-color: #edf7f0; --ifm-alert-border-color: #c3e3cd; --ifm-alert-foreground-color: #133d23; }
+.alert--warning { --ifm-alert-background-color: #fdf3df; --ifm-alert-border-color: #f2d49a; --ifm-alert-foreground-color: #4f2c00; }
+.alert--danger { --ifm-alert-background-color: #fcefec; --ifm-alert-border-color: #f1c7bf; --ifm-alert-foreground-color: #5f1a10; }
 
 [data-theme='dark'] .alert--secondary { --ifm-alert-background-color: var(--ng-surface); }
-[data-theme='dark'] .alert--info { --ifm-alert-background-color: rgb(59 130 246 / 0.1); --ifm-alert-border-color: rgb(96 165 250 / 0.5); --ifm-alert-foreground-color: #dbeafe; }
-[data-theme='dark'] .alert--success { --ifm-alert-background-color: rgb(16 185 129 / 0.1); --ifm-alert-border-color: rgb(52 211 153 / 0.45); --ifm-alert-foreground-color: #d1fae5; }
-[data-theme='dark'] .alert--warning { --ifm-alert-background-color: rgb(250 175 64 / 0.1); --ifm-alert-border-color: rgb(250 175 64 / 0.5); --ifm-alert-foreground-color: #fdecc8; }
-[data-theme='dark'] .alert--danger { --ifm-alert-background-color: rgb(239 68 68 / 0.1); --ifm-alert-border-color: rgb(248 113 113 / 0.5); --ifm-alert-foreground-color: #fee2e2; }
+[data-theme='dark'] .alert--info { --ifm-alert-background-color: rgb(96 140 220 / 0.09); --ifm-alert-border-color: rgb(96 140 220 / 0.3); --ifm-alert-foreground-color: #dbe6fa; }
+[data-theme='dark'] .alert--success { --ifm-alert-background-color: rgb(80 180 120 / 0.09); --ifm-alert-border-color: rgb(80 180 120 / 0.3); --ifm-alert-foreground-color: #d6f2e0; }
+[data-theme='dark'] .alert--warning { --ifm-alert-background-color: rgb(250 175 64 / 0.09); --ifm-alert-border-color: rgb(250 175 64 / 0.32); --ifm-alert-foreground-color: #fbe8c4; }
+[data-theme='dark'] .alert--danger { --ifm-alert-background-color: rgb(240 100 80 / 0.09); --ifm-alert-border-color: rgb(240 100 80 / 0.3); --ifm-alert-foreground-color: #fadcd6; }
 
 .theme-admonition a {
-  color: inherit;
-  text-decoration-color: currentColor;
+  color: inherit !important;
+}
+
+.theme-admonition code {
+  background: color-mix(in srgb, currentColor 9%, transparent) !important;
+  color: inherit !important;
 }
 
 /* Tabs --------------------------------------------------------------- */
 
 .tabs {
   border-bottom: 1px solid var(--ng-border);
+  gap: 0.25rem;
 }
 
 .tabs__item {
-  border-radius: var(--ng-radius-sm) var(--ng-radius-sm) 0 0;
-  padding: 0.5rem 0.9rem;
-  font-weight: 500;
-  font-size: 0.9rem;
+  border-radius: 0;
+  padding: 0.55rem 0.85rem;
+  font-weight: 550;
+  font-size: 0.875rem;
+  color: var(--ng-text-muted);
+  border-bottom: 2px solid transparent;
+}
+
+.tabs__item:hover {
+  background: none;
+  color: var(--ng-text);
 }
 
 .tabs__item--active {
-  border-bottom-color: var(--ng-orange);
+  border-bottom-color: var(--ng-amber);
   color: var(--ng-text);
+}
+
+/* Details ------------------------------------------------------------ */
+
+.markdown details {
+  --ifm-alert-background-color: var(--ng-bg-raised);
+  --ifm-alert-border-color: var(--ng-border);
+  --ifm-alert-foreground-color: var(--ng-text);
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius);
+  box-shadow: none;
+}
+
+.markdown details summary {
+  font-weight: 600;
 }
 
 /* Buttons ------------------------------------------------------------ */
 
+.button {
+  font-family: var(--ng-font-sans);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
 .button.button--primary {
-  --ifm-button-background-color: var(--ng-orange);
-  --ifm-button-border-color: var(--ng-orange);
-  --ifm-button-color: var(--ng-orange-ink);
-  color: var(--ng-orange-ink);
+  --ifm-button-background-color: var(--ng-text);
+  --ifm-button-border-color: var(--ng-text);
+  --ifm-button-color: var(--ng-bg);
+  color: var(--ng-bg);
 }
 
 .button.button--primary:hover {
-  --ifm-button-background-color: #f5a12a;
-  --ifm-button-border-color: #f5a12a;
-  color: var(--ng-orange-ink);
+  --ifm-button-background-color: var(--ng-link);
+  --ifm-button-border-color: var(--ng-link);
+  color: var(--ng-bg);
+}
+
+.button.button--amber {
+  --ifm-button-background-color: var(--ng-amber);
+  --ifm-button-border-color: var(--ng-amber);
+  color: var(--ng-amber-ink);
+}
+
+.button.button--amber:hover {
+  --ifm-button-background-color: var(--ng-amber-deep);
+  --ifm-button-border-color: var(--ng-amber-deep);
+  color: var(--ng-amber-ink);
 }
 
 .button.button--secondary {
@@ -338,36 +838,51 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .button.button--secondary:hover {
-  --ifm-button-background-color: var(--ng-surface-2);
+  --ifm-button-background-color: var(--ng-surface);
   color: var(--ng-text);
-}
-
-/* Footer ------------------------------------------------------------- */
-
-.footer {
-  border-top: 1px solid var(--ng-border);
-}
-
-.footer__title {
-  font-family: var(--ng-font-display);
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.footer__link-item {
-  font-size: 0.925rem;
-}
-
-.footer__copyright {
-  font-size: 0.85rem;
 }
 
 /* Blog --------------------------------------------------------------- */
 
+.blog-wrapper {
+  padding-top: 1.5rem;
+}
+
+.blog-wrapper article {
+  margin-bottom: 4rem !important;
+}
+
 .blog-wrapper article header h1,
 .blog-wrapper article header h2 {
   font-family: var(--ng-font-display);
+  font-weight: 560;
+  letter-spacing: -0.02em;
+}
+
+.blog-wrapper article header h2 a {
+  color: var(--ng-text);
+}
+
+.blog-wrapper article header h2 a:hover {
+  color: var(--ng-link);
+  text-decoration: none;
+}
+
+[class*='sidebarItemTitle'] {
+  font-family: var(--ng-font-sans) !important;
+  font-size: 0.7rem !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+[class*='sidebarItemLink'] {
+  font-size: 0.9rem;
+  color: var(--ng-text-muted);
+}
+
+[class*='sidebarItemLinkActive'] {
+  color: var(--ng-text) !important;
 }
 
 /* Images ------------------------------------------------------------- */
@@ -386,38 +901,54 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* GitHub link in the navbar: an icon with an accessible name (aria-label). */
+/* GitHub link in the navbar: an icon with an accessible name. */
 .navbar-github-link {
   width: 2.25rem;
   height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--ng-radius-sm);
+  border-radius: 999px;
+  padding: 0 !important;
 }
 
 .navbar-github-link::before {
   content: '';
-  width: 22px;
-  height: 22px;
-  background-color: var(--ng-text);
+  width: 20px;
+  height: 20px;
+  background-color: var(--ng-text-muted);
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8 0 3.2.9.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1 .9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
+.navbar-github-link:hover {
+  background: var(--ng-surface);
+}
+
 .navbar-github-link:hover::before {
-  background-color: var(--ng-link);
+  background-color: var(--ng-text);
 }
 
 .navbar-github-link::after {
   display: none;
 }
 
-/* A tag name as a page title (# `{exp:formidable:form}`): keep the
-   monospace, drop the inline-code box. */
+/* A tag name as a page title (# `{exp:formidable:form}`). */
 .markdown h1 code {
   border: 0 !important;
   background: none;
   padding: 0;
-  font-size: 0.85em;
+  font-size: 0.7em;
+  font-weight: 500;
   letter-spacing: -0.02em;
+  color: var(--ng-text) !important;
+}
+
+/* The category label span fills its row by default; a section label
+   keeps its brace beside the words instead. */
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link > [class*='categoryLinkLabel'] {
+  flex: 0 1 auto;
+}
+
+.menu__list .theme-doc-sidebar-item-category-level-1:not(:first-child) {
+  margin-top: 1.9rem !important;
 }

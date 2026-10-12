@@ -1,0 +1,313 @@
+/* Marketing page building blocks -- see index.jsx. */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0 0 1rem;
+  font-family: var(--ng-font-sans);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ng-text-muted);
+}
+
+.eyebrow span {
+  font-family: var(--ng-font-mono);
+  font-size: 1rem;
+  letter-spacing: 0;
+  color: var(--ng-amber-deep);
+}
+
+/* Sections ---------------------------------------------------------- */
+
+.section {
+  padding: 6rem 1.5rem;
+}
+
+.paper {
+  background: var(--ng-bg);
+}
+
+.raised {
+  background: var(--ng-surface);
+  border-top: 1px solid var(--ng-border);
+  border-bottom: 1px solid var(--ng-border);
+}
+
+.ink {
+  --ng-text: var(--ng-ink-text);
+  --ng-text-muted: var(--ng-ink-muted);
+  --ng-border: var(--ng-ink-border);
+  --ng-bg-raised: var(--ng-ink-2);
+  background: var(--ng-ink);
+  color: var(--ng-ink-text);
+}
+
+.inner {
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.narrow {
+  max-width: 52rem;
+}
+
+.sectionHead {
+  max-width: 44rem;
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-family: var(--ng-font-display);
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+  font-weight: 520;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--ng-text);
+  margin: 0 0 1rem;
+}
+
+.sectionLede {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--ng-text-muted);
+  margin: 0;
+}
+
+/* Code window ------------------------------------------------------- */
+
+.window {
+  border: 1px solid var(--ng-ink-border);
+  border-radius: var(--ng-radius-lg);
+  background: var(--ng-ink);
+  box-shadow: var(--ng-shadow-lg);
+  overflow: hidden;
+}
+
+.windowBar {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--ng-ink-border);
+  background: var(--ng-ink-2);
+}
+
+.dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3a3e48;
+}
+
+.dots i:first-child {
+  background: var(--ng-amber);
+}
+
+.windowTitle {
+  font-family: var(--ng-font-mono);
+  font-size: 0.75rem;
+  color: var(--ng-ink-muted);
+}
+
+.window :global(.theme-code-block) {
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.window :global(.theme-code-block)::after {
+  display: none;
+}
+
+.window pre {
+  font-size: 0.82rem !important;
+}
+
+/* Form preview ------------------------------------------------------ */
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.75rem;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius-lg);
+  background: var(--ng-bg-raised);
+  box-shadow: var(--ng-shadow-lg);
+  font-size: 0.85rem;
+  color: var(--ng-text);
+}
+
+.preview label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.previewRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.previewSteps {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--ng-border);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ng-text-faint);
+}
+
+.stepDone {
+  color: var(--ng-text-muted);
+}
+
+.stepNow {
+  color: var(--ng-text);
+  box-shadow: 0 2px 0 var(--ng-amber);
+}
+
+.input {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--ng-border-strong);
+  border-radius: 8px;
+  background: var(--ng-bg);
+  font-weight: 400;
+  color: var(--ng-text-muted);
+}
+
+.inputError {
+  border-color: #d9654b;
+  box-shadow: 0 0 0 3px rgb(217 101 75 / 0.12);
+}
+
+.error {
+  color: #c2492f;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.textarea {
+  min-height: 4.5rem;
+}
+
+.previewNav {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.25rem;
+}
+
+.ghost,
+.submit {
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.ghost {
+  border: 1px solid var(--ng-border-strong);
+  color: var(--ng-text-muted);
+}
+
+.submit {
+  background: var(--ng-text);
+  color: var(--ng-bg);
+}
+
+/* Features ---------------------------------------------------------- */
+
+.features {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius-lg);
+  background: var(--ng-border);
+  overflow: hidden;
+}
+
+.cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cols4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.75rem 1.6rem 1.9rem;
+  background: var(--ng-bg-raised);
+  color: inherit;
+}
+
+.featureLink {
+  text-decoration: none !important;
+  transition: background 140ms ease;
+}
+
+.featureLink:hover {
+  background: var(--ng-surface);
+  color: inherit;
+}
+
+.featureIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 0.35rem;
+  border-radius: 12px;
+  background: var(--ng-accent-soft);
+  color: var(--ng-link);
+}
+
+.featureTitle {
+  font-family: var(--ng-font-display);
+  font-size: 1.2rem;
+  font-weight: 560;
+  letter-spacing: -0.01em;
+  color: var(--ng-text);
+  margin: 0;
+}
+
+.featureBody {
+  font-size: 0.925rem;
+  line-height: 1.6;
+  color: var(--ng-text-muted);
+  margin: 0;
+}
+
+@media (max-width: 996px) {
+  .section {
+    padding: 4.5rem 1.25rem;
+  }
+
+  .cols3,
+  .cols4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .cols2,
+  .cols3,
+  .cols4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .previewRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
