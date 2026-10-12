@@ -25,6 +25,13 @@ Formidable is made of a small number of pieces. Once you know what each one is f
 | **Workflow** | Something that happens after a submission: an email, a webhook, or a push to a connection. | The form's **Workflows** tab |
 | **Connection** | Saved credentials for a third-party service, used by workflows and the CAPTCHA fieldtypes. | **Formidable › Connections** |
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/registry.png')}
+  alt="The Registry: fieldtypes by group with how many fields use each, and cards for validation rules, lists, attributes and themes"
+  caption="Formidable › Registry"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 ## Two ways to put a form on a page
 
 **Build it, then render it.** Build the form in the control panel, then place [`{exp:formidable:form}`](/docs/formidable/reference/tags/form) in a template. The tag renders the form from its [theme](/docs/formidable/displaying-forms/themes), and you can replace any part of that markup with your own.

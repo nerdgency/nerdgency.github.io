@@ -106,6 +106,13 @@ Every run is recorded, with what it sent and what came back. A form's **Workflow
 
 To run workflows in the background with retries, add a queue. Both are covered in [The workflow log and queue](/docs/formidable/automation/workflow-log).
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/workflows.png')}
+  alt="The Simple view of a form’s workflows: an email and a webhook, each with its last run and whether it is on"
+  caption="Workflows › Simple"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 ## For developers
 
 Formidable calls hooks at each step: [`formidable_workflow_should_run`](/docs/formidable/extending/hooks#formidable_workflow_should_run) to veto a workflow, [`formidable_workflow_email`](/docs/formidable/extending/hooks#formidable_workflow_email), [`formidable_webhook_payload`](/docs/formidable/extending/hooks#formidable_webhook_payload) and [`formidable_connection_payload`](/docs/formidable/extending/hooks#formidable_connection_payload) to change what's sent, and [`formidable_workflow_complete`](/docs/formidable/extending/hooks#formidable_workflow_complete) after each run.

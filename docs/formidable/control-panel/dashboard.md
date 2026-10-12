@@ -15,6 +15,13 @@ The dashboard is Formidable's front page in the control panel. It answers the qu
 
 It opens for anyone with any of Formidable's [permissions](./permissions.md), and each part of it appears only for those who may open the screen it summarises.
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/dashboard.png')}
+  alt="The Formidable dashboard: totals across the top, a fourteen-day chart, workflow results, the latest submissions and links to the documentation"
+  caption="Formidable › Dashboard"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 ## At a glance
 
 Across the top: how many forms you have, how many submissions they've collected, how many arrived in the last seven days (with the change on the week before), and how many save-and-resume drafts are still in progress. The submission figures need **View submissions**.

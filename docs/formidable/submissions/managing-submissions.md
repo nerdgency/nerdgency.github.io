@@ -23,6 +23,13 @@ Every stored submission belongs to one form and has a status. The [dashboard](/d
 
 Answers are shown the way they read, with an option's label rather than its stored value, and a file's name. Encrypted answers are not decrypted in the listing, so a glance at the list never discloses them in bulk.
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/submissions-listing.png')}
+  alt="The submissions listing for a contact form, with a filter bar, columns and four submissions"
+  caption="A form’s submissions"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 ## One submission
 
 Opening a submission shows every answer, decrypted, and lets you change its status and edit its answers.
@@ -32,6 +39,13 @@ Opening a submission shows every answer, decrypted, and lets you change its stat
 - **Saving can run workflows.** A changed answer raises **Submission Updated**, and a new status raises **Submission Status Changed**. The **Run workflows** switch decides whether they run for this save. Saving without changing anything runs nothing.
 
 The submission's page also shows the form's workflows, read-only, as **Simple**, **Detailed** and **Recent runs**. It opens on the runs for this submission: what each workflow did, whether it succeeded, and a link to this submission in the full log.
+
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/submission-rows.png')}
+  alt="A repeating section on a submission page, edited as a table of rows with an Add another employer button"
+  caption="Editing repeating rows on a submission"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
 
 ## Export
 

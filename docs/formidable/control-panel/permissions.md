@@ -32,6 +32,13 @@ Open **Formidable › Permissions** and tick the roles that should hold each per
 
 A member also needs ExpressionEngine's own permission to reach add-ons in the control panel.
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/permissions.png')}
+  alt="The Permissions screen, with each of Formidable's permissions and the roles that hold it"
+  caption="Formidable › Permissions"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 ## What members see
 
 Formidable's sidebar shows each member only the screens their permissions open, so nobody is shown a link that ends in "not allowed":

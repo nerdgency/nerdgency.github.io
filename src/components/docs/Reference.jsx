@@ -211,3 +211,79 @@ export function HookList() {
     </>
   );
 }
+
+/*
+ * A directory of every fieldtype, like Statamic's "All fieldtypes": a card
+ * each, by group, linking to its section on the Fieldtypes page. The list
+ * comes from the source map; the words are here, and the build fails if a
+ * shipped fieldtype has none -- so a new fieldtype cannot go unlisted.
+ */
+const FIELDTYPE_BLURBS = {
+  text: ['Aa', 'A single line of text.'],
+  textarea: ['¶', 'Several lines of text.'],
+  email: ['@', 'An email address, checked on the server.'],
+  tel: ['☏', 'A phone number, with the phone keypad on mobile.'],
+  url: ['↗', 'A web address.'],
+  password: ['••', 'Masked as it is typed.'],
+  number: ['12', 'A number, stored as one.'],
+  range: ['⟷', 'A slider between two numbers.'],
+  color: ['◐', 'A colour picker, stored as hex.'],
+  checkbox: ['✓', 'One tick box: "I agree".'],
+  datalist: ['⌕', 'Free text with suggestions.'],
+  hidden: ['◌', 'A value the visitor never sees.'],
+  file: ['⇪', 'Uploads into the file manager.'],
+  date: ['31', 'A calendar date.'],
+  datetime: ['31:', 'A date and a time.'],
+  time: ['⏲', 'A time of day.'],
+  month: ['Mo', 'A month of a year.'],
+  week: ['Wk', 'A week of a year.'],
+  select: ['▾', 'One choice from a dropdown.'],
+  multiselect: ['▾▾', 'Several choices from a list.'],
+  checkboxes: ['☑', 'Tick as many as apply.'],
+  radio: ['◉', 'Exactly one, all visible.'],
+  html: ['</>', 'Content between the fields.'],
+  captcha: ['?!', "ExpressionEngine's CAPTCHA."],
+  turnstile: ['☁', 'Cloudflare Turnstile.'],
+  hcaptcha: ['h', 'hCaptcha.'],
+  signature: ['✍', 'Signed with a finger or mouse.'],
+  computed: ['ƒx', 'Worked out from other answers.'],
+};
+
+export function FieldtypeDirectory() {
+  const missing = map.fieldtypes.filter((f) => !FIELDTYPE_BLURBS[f.handle]).map((f) => f.handle);
+  if (missing.length) {
+    throw new Error(`[docs] <FieldtypeDirectory> has no description for: ${missing.join(', ')}`);
+  }
+
+  return (
+    <div className={styles.ftDirectory}>
+      {map.fieldtypeGroups.map((group) => {
+        // In the order the Fieldtypes page describes them.
+        const order = Object.keys(FIELDTYPE_BLURBS);
+        const types = map.fieldtypes
+          .filter((f) => f.group === group.handle)
+          .sort((a, b) => order.indexOf(a.handle) - order.indexOf(b.handle));
+        if (!types.length) return null;
+        return (
+          <section key={group.handle} className={styles.ftGroup}>
+            <h3 className={styles.ftGroupTitle}>{group.name}</h3>
+            <div className={styles.ftGrid}>
+              {types.map((f) => {
+                const [glyph, blurb] = FIELDTYPE_BLURBS[f.handle];
+                return (
+                  <a key={f.handle} href={`#${f.handle}`} className={styles.ftCard}>
+                    <span className={styles.ftGlyph} aria-hidden="true">{glyph}</span>
+                    <span>
+                      <span className={styles.ftName}>{f.name}</span>
+                      <span className={styles.ftBlurb}>{blurb}</span>
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  );
+}

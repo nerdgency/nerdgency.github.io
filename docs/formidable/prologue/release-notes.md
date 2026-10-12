@@ -74,6 +74,5 @@ Signed and encrypted form meta, CSRF protection on every submission (AJAX includ
 
 ## Known limitations
 
-- **Uploads go to local destinations.** Files are uploaded to upload destinations on your own server; cloud-backed destinations aren't supported for uploads yet.
 - **Multi-page forms submit once.** Pages step in the browser and the whole form is submitted at the end. With `page=`, each page renders in its own request as its own submission.
 - **One level of repeating.** A repeating section can't contain another, and can't span pages.

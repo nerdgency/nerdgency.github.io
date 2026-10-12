@@ -1,5 +1,6 @@
 ---
 title: Fieldtypes
+toc_max_heading_level: 2
 description: Every kind of field a Formidable form can have, what each stores, and the settings particular to each.
 keywords:
   - formidable
@@ -15,68 +16,181 @@ keywords:
 
 A fieldtype is the kind of field: a text box, a dropdown, a file upload, a signature pad. It decides what the field looks like, which settings it offers, and what happens to the answer.
 
-Formidable ships <FieldtypeCount /> fieldtypes in four groups: **Inputs**, **Dates & Times**, **Options** and **Special**. They live in the Registry (**Registry › Fieldtypes**), so your site can rename them, change their defaults or add more. Here they are as the installer creates them:
+Formidable ships <FieldtypeCount /> fieldtypes in four groups. They live in the Registry (**Registry › Fieldtypes**), so your site can rename them, change their defaults or add more. Pick one to read about it:
 
-<FieldtypeTable storage />
-
-"Rules added to new fields" are pre-filled on a new field's **Validation Rules** tab and can be removed. An Email field's `type="email"` is only a hint to the browser. The `email` rule is what rejects an invalid address on the server.
+<FieldtypeDirectory />
 
 :::note Fieldtypes from other add-ons
-These are Formidable's own fieldtypes, the fields inside a form. Formidable also adds one ExpressionEngine **channel** fieldtype, [Formidable Form](/docs/formidable/displaying-forms/forms-in-entries), which puts a whole form on an entry. Developers can register more fieldtypes. See [Custom fieldtypes](/docs/formidable/extending/custom-fieldtypes).
+These are the fields inside a form. Formidable also adds one ExpressionEngine **channel** fieldtype, [Formidable Form](/docs/formidable/displaying-forms/forms-in-entries), which puts a whole form on an entry. Developers can register their own fieldtypes too. See [Custom fieldtypes](/docs/formidable/extending/custom-fieldtypes).
 :::
 
 ## Inputs
 
 One native control, one answer.
 
-- **Text, Email, Telephone, URL, Password, Textarea.** Text answers. Password masks what is typed, but only on screen. Turn on **Encrypt Stored Value** (Advanced tab, when creating the field) when the answer is sensitive.
-- **Number, Range.** Stored as decimal numbers, so they sort and compare as numbers. Set `min`, `max` and `step` on the field's input attributes. A browser's Range defaults to 0–100.
-- **Color.** A colour picker, stored as a hex value. The `hexColor` rule checks it.
-- **Hidden.** A value the visitor does not see, such as a campaign code or a value from the URL (`{segment_3}` as its default). It renders no label or instructions.
+### Text {#text}
 
-  :::caution A hidden field is not a trusted field
-  It is an ordinary input in the page, and anyone can change it before submitting. Never use one for anything a visitor must not be able to alter.
-  :::
+A single line of text. Set a **Maximum Length** to add both `maxlength` on the input and a matching `maxLength` rule.
 
-- **Checkbox.** A single tick box, such as "I agree to the terms". Its label follows the box.
-- **Datalist.** A text box with suggestions. The suggestions come from an option list, but the visitor can type anything, and what they type is stored.
-- **File.** An upload. Its **File** tab chooses the ExpressionEngine **upload destination**, an optional subfolder, and whether several files are allowed. The file types and maximum size come from the upload destination (**Files › Upload Directories**), so they are set once where ExpressionEngine already enforces them. Uploads become ordinary files in ExpressionEngine's file manager, and the submission stores a reference to them. If a submission fails validation, its uploads are held for up to 15 minutes so the visitor does not have to choose them again.
+### Textarea {#textarea}
 
-  :::note Local destinations only
-  Files can currently be uploaded only to upload destinations on your own server.
-  :::
+Several lines of text, for messages and comments.
 
-## Dates & Times
+### Email {#email}
 
-One fieldtype per kind of value: **Date**, **Date & Time**, **Time**, **Month** and **Week**, each using the matching native input. Each compares its own kind of value in conditions and in the submissions filter. Date operators work by the day, so "on or after the 3rd" includes 3 pm on the 3rd.
+An email address. New Email fields arrive with the `email` rule, which is what rejects an invalid address on the server; the input's `type="email"` is only a hint to the browser. Turn on **Allow as Workflow Recipient** to let a workflow email the address, for a "send me a copy" box.
+
+### Telephone {#tel}
+
+A phone number, with `type="tel"` so phones show their number pad. Formats vary too much around the world for Formidable to impose one; add a `startsWith` or pattern rule if yours needs it.
+
+### URL {#url}
+
+A web address. Pair it with the `url` rule to require a valid one.
+
+### Password {#password}
+
+Masks what's typed, but only on screen. Turn on **Encrypt Stored Value** (Advanced tab, when creating the field) when the answer is sensitive.
+
+### Number {#number}
+
+A number, stored as a decimal so it sorts and compares as one. Set `min`, `max` and `step` on the field's input attributes.
+
+### Range {#range}
+
+A slider, stored as a number. A browser's range runs from 0 to 100 unless you set `min`, `max` and `step`.
+
+### Color {#color}
+
+A colour picker, stored as a hex value. The `hexColor` rule checks it.
+
+### Checkbox {#checkbox}
+
+A single tick box, such as "I agree to the terms". Its label follows the box.
+
+### Datalist {#datalist}
+
+A text box with suggestions. The suggestions come from an option list, but the visitor can type anything, and what they type is stored.
+
+### Hidden {#hidden}
+
+A value the visitor doesn't see, such as a campaign code or a value from the URL (`{segment_3}` as its [default](/docs/formidable/building-forms/fields#default-values)). It renders no label or instructions.
+
+:::caution A hidden field is not a trusted field
+It's an ordinary input in the page, and anyone can change it before submitting. Never use one for anything a visitor mustn't be able to alter.
+:::
+
+### File {#file}
+
+An upload. Its **File** tab chooses the ExpressionEngine **upload destination**, an optional subfolder, and whether several files are allowed. Any upload destination works, including destinations on cloud storage through an ExpressionEngine file adapter.
+
+- **Allowed types and sizes** come from the upload destination (**Files › Upload Directories**), so they're set once, where ExpressionEngine already enforces them.
+- **Uploads become ordinary files** in ExpressionEngine's file manager, and the submission stores a reference to them.
+- **A failed submission keeps its uploads** for up to 15 minutes, so the visitor doesn't have to choose them again.
+- **Workflows can attach them** to the emails they send.
+
+## Dates and times
+
+One fieldtype per kind of value, each using the matching native input, and each comparing its own kind of value in [conditions](/docs/formidable/building-forms/conditions) and the submissions filter. Date operators work by the day, so "on or after the 3rd" includes 3 pm on the 3rd. Default any of them to now with `{current_time}`.
+
+### Date {#date}
+
+A calendar date: `2026-10-12`.
+
+### Date & Time {#datetime}
+
+A date and a time together: `2026-10-12T14:30`.
+
+### Time {#time}
+
+A time of day: `14:30`.
+
+### Month {#month}
+
+A month of a year: `2026-10`.
+
+### Week {#week}
+
+A week of a year, numbered as ISO 8601 numbers them: `2026-W42`.
 
 ## Options
 
-**Select**, **Multi-select**, **Checkboxes** and **Radio Buttons** share one **Options** tab. Multi-select (a dropdown that takes several answers) and Checkboxes accept several answers, and always store a list, even when only one was chosen.
+**Select**, **Multi-select**, **Checkboxes** and **Radio Buttons** share one **Options** tab, so moving a question from a dropdown to radio buttons keeps its choices.
 
-The choices can come from:
+### Select {#select}
+
+One choice from a dropdown.
+
+### Multi-select {#multiselect}
+
+Several choices from a list. Always stores a list, even when only one was chosen.
+
+### Checkboxes {#checkboxes}
+
+A tick box per choice; visitors tick as many as apply. Stores a list.
+
+### Radio Buttons {#radio}
+
+Every choice visible, exactly one chosen.
+
+### Where choices come from
 
 | Source | Choices are |
 | --- | --- |
 | **Manual** | Typed on the field, each with a value and a label. |
 | **Number Range** | A run of numbers. |
-| **Built-in list** | Countries, languages, U.S. states, Canadian provinces and territories, days of the week, weeks of the year or months, shipped with Formidable. Choose what is stored and what visitors see: a country's ISO code or its name, a state's two-letter abbreviation or its name, a month's number or name. |
+| **Built-in list** | Countries, languages, U.S. states, Canadian provinces and territories, days of the week, weeks of the year or months, shipped with Formidable. Choose what's stored and what visitors see: a country's ISO code or its name, a state's two-letter abbreviation or its name, a month's number or name. |
 | **Your lists** | A list you made under **Registry › Lists**, shared between forms. |
-| **Entries**, **Categories**, **Members**, **Roles** | Built from content already on the site, so they stay current. |
+| **Entries**, **Categories**, **Members**, **Roles** | Built from content already on your site, so they stay current. |
 | **Recipients** | Labels the visitor picks from, each with email addresses that stay on the server. See [Let visitors choose the recipient](/docs/formidable/automation/email-notifications#let-visitors-choose-the-recipient). |
 
-To preselect choices, tick them in the **Default** column of the Options tab. Choice fields have no separate Default Value box.
+To preselect choices, tick them in the **Default** column of the Options tab. Choice fields have no separate default value box.
 
-Manual, Recipients and built-in choices are checked when the form is submitted: a value that is not one of them, or one you excluded, fails validation, so a tampered form cannot send an answer you never offered. Individual choices can be excluded from a dynamic source.
+Manual, Recipients and built-in choices are checked on submit: a value that isn't one of them, or one you excluded, fails validation, so a tampered form can't send an answer you never offered.
 
 ## Special
 
-- **HTML.** A block of content in the middle of the form: a heading, a paragraph, a link to your privacy policy. Nothing is collected. The content is output exactly as written, scripts included, so give this field only to people you would trust to edit a template.
-- **Captcha.** ExpressionEngine's own CAPTCHA, following **Settings › CAPTCHA**, including its option to exempt logged-in members. Nothing is stored.
-- **Turnstile** and **hCaptcha.** Cloudflare Turnstile or hCaptcha, using the site and secret keys saved as a [connection](/docs/formidable/automation/connections). Create the connection first: a field with no connection selected rejects every submission. Nothing is stored.
-- **Signature.** A pad signed with a mouse, trackpad or finger. Its settings control the pad's size, pen and colours, and where the signature goes: inside the submission as an image, or written to an upload destination as a file. Signing needs JavaScript. Without it, visitors see a short message instead of the pad.
-- **Computed.** A value worked out from other fields and never typed: a full name, a total, an age. It updates as the visitor types, and the server works it out again when the form is submitted, whatever the browser sent. See [Computed fields](/docs/formidable/building-forms/computed-fields).
+### HTML {#html}
 
-## Which fields can be encrypted
+A block of content in the middle of the form: a heading, a paragraph, a link to your privacy policy. Nothing is collected. The content is output exactly as written, scripts included, so give this field only to people you'd trust to edit a template.
 
-The **Can be encrypted** column above lists them. Encryption is chosen when a field is **created** and cannot be turned on later. Existing answers would already be stored in the clear, and switching the setting on afterwards would suggest otherwise.
+### Captcha {#captcha}
+
+ExpressionEngine's own CAPTCHA, following **Settings › CAPTCHA**, including its option to exempt logged-in members. Nothing is stored.
+
+### Turnstile {#turnstile}
+
+Cloudflare Turnstile, using the site and secret keys saved as a [connection](/docs/formidable/automation/connections). Create the connection first: a field with no connection selected rejects every submission. Different forms can use different connections, such as separate staging and production keys. Nothing is stored.
+
+### hCaptcha {#hcaptcha}
+
+hCaptcha, set up the same way as Turnstile, with its keys saved as a connection. Nothing is stored.
+
+### Signature {#signature}
+
+A pad signed with a mouse, trackpad or finger, for consent forms, waivers and sign-offs.
+
+- **The pad**: its size, pen width and colours.
+- **Where it goes**: stored inside the submission as an image, or written to an upload destination as a file.
+- **Without JavaScript**, visitors see a short message instead of the pad, because signing needs a script.
+
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/front-signature.png')}
+  alt="A waiver form on the Tailwind theme, with a drawn signature on the signature pad"
+  caption="A Signature field on the front end"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
+### Computed {#computed}
+
+A value worked out from other fields and never typed: a full name, a total, an age. It updates as the visitor types, and the server works it out again on submit, whatever the browser sent. See [Computed fields](/docs/formidable/building-forms/computed-fields).
+
+## At a glance
+
+How each fieldtype stores its answer, as the installer creates it. "Rules added to new fields" are pre-filled on a new field's **Validation** tab and can be removed.
+
+<FieldtypeTable storage />
+
+### Which fields can be encrypted
+
+The **Can be encrypted** column above lists them. Encryption is chosen when a field is **created** and can't be turned on later: existing answers would already be stored in the clear, and switching it on afterwards would suggest otherwise.

@@ -24,7 +24,7 @@ const sidebars = {
       value:
         '<a class="sidebar-product" href="/formidable"><img src="/img/icons/formidable.svg" alt="" width="34" height="34"><span><strong>Formidable</strong><small>Forms for ExpressionEngine</small></span></a>',
     },
-    section('Prologue', [f('index'), f('prologue/release-notes'), f('prologue/upgrade-guide'), f('prologue/roadmap')]),
+    section('Prologue', [f('index'), f('prologue/release-notes'), f('prologue/upgrade-guide')]),
     section('Getting started', [
       f('getting-started/installation'),
       f('getting-started/your-first-form'),

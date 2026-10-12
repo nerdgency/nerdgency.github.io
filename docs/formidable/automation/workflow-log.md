@@ -20,6 +20,13 @@ By default, workflows run inside the visitor's request. A queue moves them into 
 
 Every run is recorded on **Formidable › Workflow Log**, with its result, action, time, duration and message. The same runs appear on each form's **Workflows** tab under **Recent runs**, and on each submission's page, opening on that submission's runs.
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/workflow-log.png')}
+  alt="The workflow log listing runs with their result, workflow, form and time"
+  caption="Formidable › Workflow Log"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 | A run records | |
 | --- | --- |
 | **Result** | **Succeeded**, **Failed** (the mail server, API or URL refused), **Nothing to do** (it ran, but there was no recipient, no URL or no mapped field), or **Queued**. |
@@ -27,6 +34,13 @@ Every run is recorded on **Formidable › Workflow Log**, with its result, actio
 | **Conditions** | The workflow's conditions at the time, each marked as held or not for the answers given. |
 | **Answers** | The values the conditions were checked against. |
 | **What was sent** | Email: recipients, from, reply-to, subject, attachments and the plain-text body. Webhook: the URL, whether it was signed, the body, and the response. Connection: the mapped payload and the provider's request and response. Credentials are never recorded. |
+
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/workflow-run.png')}
+  alt="One workflow run in the log: a failed webhook with its conditions, the answers it was given and what it sent"
+  caption="One run in the log"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
 
 Run data is visitor data, so it is **encrypted at rest**.
 
