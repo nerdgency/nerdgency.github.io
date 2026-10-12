@@ -79,5 +79,6 @@ To keep Queue installed but not use it for workflows, set `$config['formidable_w
 - **The workflow is read when the run happens.** A workflow switched off or deleted while its run waited is not sent.
 - **Run again** is not offered on a run that is still queued, so nothing is sent twice.
 - If a run cannot be queued, for example before the add-on update has run, it runs straight away as before.
+- **Commands can use the queue too.** On **Formidable › Utilities**, the commands that update many records offer [Run in the background](/docs/formidable/control-panel/utilities#running-in-the-background). They show in the log as **Command** runs, with their options and output. They aren't retried automatically, and they're left out of the dashboard's workflow figures.
 
 Without a worker nothing is sent. Install Queue, or turn on Formidable's queue, only once its cron job is in place. `formidable:workflows:work --status` counts what is waiting for Formidable's worker.

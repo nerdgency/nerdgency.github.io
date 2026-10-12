@@ -22,7 +22,7 @@ Choose **Add Workflow** on the form's **Workflows** tab. A workflow has:
 | --- | --- |
 | **Name** | For you. Shown in the log. |
 | **Enabled** | A switched-off workflow does not run. |
-| **Event** | **Submission Created**, **Submission Updated** (an edit from the control panel, or a visitor editing through `submission_handle=`), **Submission Created or Updated**, **Submission Status Changed** (see below), **Draft Saved** (a visitor saved the form to finish later) or **Draft Reminder** (a saved draft has waited the form's reminder days). See [Save and resume](/docs/formidable/submissions/save-and-resume). |
+| **Event** | **Submission Created**, **Submission Updated** (an edit from the control panel, or a visitor editing through `submission_handle=`), **Submission Created or Updated**, **Submission Status Changed** (see below), **Draft Saved** (a visitor saved the form to finish later) or **Draft Reminder** (a saved draft has waited the form's reminder days) or **Submission Action** (someone ran one of the form's [submission actions](/docs/formidable/submissions/submission-actions#with-workflows)). See [Save and resume](/docs/formidable/submissions/save-and-resume). |
 | **Action** | **Send an email**, **Call a webhook** or **Send to a connection**. |
 | **Conditions** | Optional. The workflow runs only when they hold for the submitted answers, using the same [condition builder](/docs/formidable/building-forms/conditions) as fields. |
 
@@ -30,7 +30,7 @@ Workflows receive every answer, including real file ids for uploads, even when t
 
 ## When a status changes
 
-**Submission Status Changed** runs when someone moves a submission to another status on its control panel page. Use it to tell the person who submitted that their application was approved, or to push an accepted lead to a CRM.
+**Submission Status Changed** runs when someone moves a submission to another status on its control panel page, or a [submission action](/docs/formidable/submissions/submission-actions) moves it. Use it to tell the person who submitted that their application was approved, or to push an accepted lead to a CRM.
 
 Pick which move with conditions: **Status** is the status it has now, and **Previous status** is the one it had. "Status is Approved" runs on any move to Approved; add "Previous status is Pending" to run only from Pending.
 

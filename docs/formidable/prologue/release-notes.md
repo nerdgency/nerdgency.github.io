@@ -19,7 +19,7 @@ Formidable 1.0 needs **ExpressionEngine 7.5** or later and **PHP 8.2** or later.
 ## Building forms
 
 - **A visual builder** with pages, sections and a twelve-column grid. Every drag has a keyboard equivalent, and an **Overview** draws the form's conditions as sentences, with lines to the fields they read. See [Forms](/docs/formidable/building-forms/forms).
-- **28 fieldtypes** in four groups: inputs, dates and times, options, and special fields such as file uploads, a signature pad, computed values, ExpressionEngine's CAPTCHA, Cloudflare Turnstile and hCaptcha. See [Fieldtypes](/docs/formidable/building-forms/fieldtypes).
+- **38 fieldtypes** in four groups: inputs, dates and times, options, and special fields. Among them: name and address fields in parts, consent with a record of what was agreed, ratings, scales, image choices and a Likert matrix, a toggle, attribution, file uploads, a signature pad, computed values, ExpressionEngine's CAPTCHA, Cloudflare Turnstile and hCaptcha. See [Fieldtypes](/docs/formidable/building-forms/fieldtypes).
 - **Conditions** that show, hide or require fields, skip pages and hide sections, evaluated the same way in the browser and on the server. See [Conditions](/docs/formidable/building-forms/conditions).
 - **Repeating sections**: "Add another" rows, conditions within a row or across rows, and `sum()`, `count()` and `average()` for totals. See [Repeating sections](/docs/formidable/building-forms/repeating-sections).
 - **Computed fields** that work out a value from other answers as the visitor types, and again on the server. See [Computed fields](/docs/formidable/building-forms/computed-fields).

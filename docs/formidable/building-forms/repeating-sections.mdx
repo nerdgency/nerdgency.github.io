@@ -37,9 +37,11 @@ A repeating section can hold text and number inputs, dates and times, choices (S
   </Step>
   <Step title="What visitors see">
 
-The section shows its minimum number of rows, each with its fields and a **Remove** button, followed by **Add another**. Remove is hidden while the section is at its minimum, and Add another once it reaches its maximum. A row added and left completely blank is ignored when the form is sent.
+The section shows its minimum number of rows, each with its fields, **↑** and **↓** buttons to move it up or down, and a **Remove** button, followed by **Add another**. Remove is hidden while the section is at its minimum, and Add another once it reaches its maximum. A row added and left completely blank is ignored when the form is sent.
 
-Without JavaScript, the minimum number of rows still shows and sends. Only adding and removing rows needs the script.
+Rows are saved in the order the visitor leaves them, and the submission's page in the control panel shows them in that same order.
+
+Without JavaScript, the minimum number of rows still shows and sends. Only adding, removing and moving rows needs the script.
 
   </Step>
 </Steps>
@@ -73,14 +75,14 @@ A repeated field's answer is a list, one entry per row:
 | --- | --- |
 | **Submissions** listing and exports | The rows in one column, separated by `; ` |
 | **Export as CSV, one line per row** | Each row on its own line, with the submission's other answers repeated on each. Offered on the Submissions screen of a form with a repeating section. |
-| A submission's page in the control panel | A table of rows. Edit them, add rows and remove them, within the section's minimum and maximum. |
+| A submission's page in the control panel | A table of rows. Edit them, move them up and down, add rows and remove them, within the section's minimum and maximum. |
 | Emails | `{field:handle}` is the rows separated by commas |
 | Connections | A mapped field is sent as its rows separated by commas |
 | [JSON API](/docs/formidable/headless/json-api) | A list. In the form's JSON, the section has `repeat` with its bounds and labels, and each of its fields has `repeated: true`. |
 
 ## In your own markup
 
-Each row's inputs are named `handle[0]`, `handle[1]` and so on. The theme's `repeat` and `repeat-row` parts render a repeating section. To change its markup, copy those parts into your template group, and keep their attribute variables (`{repeat_attributes}`, `{repeat_row_attributes}`, `{repeat_add_attributes}` and `{repeat_remove_attributes}`), which are what the script finds. See [Themes](/docs/formidable/displaying-forms/themes).
+Each row's inputs are named `handle[0]`, `handle[1]` and so on. The theme's `repeat` and `repeat-row` parts render a repeating section. To change its markup, copy those parts into your template group, and keep their attribute variables (`{repeat_attributes}`, `{repeat_row_attributes}`, `{repeat_add_attributes}`, `{repeat_remove_attributes}`, `{repeat_up_attributes}` and `{repeat_down_attributes}`), which are what the script finds. `{repeat_up_label}` and `{repeat_down_label}` are the move buttons' accessible names. A copied `repeat-row` part without the move buttons still works; its rows just can't be reordered. See [Themes](/docs/formidable/displaying-forms/themes).
 
 A template that loops `{fields}` itself gets each repeating section as **one item**: its first field has `{field_repeats}` set and `{repeat_markup}` holding the whole section, with its rows and buttons. The section's other fields are not listed again. Output the markup for that item and render the rest as usual:
 

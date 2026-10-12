@@ -51,6 +51,7 @@ const sidebars = {
     ]),
     section('Submissions', [
       f('submissions/managing-submissions'),
+      f('submissions/submission-actions'),
       f('submissions/front-end-editing'),
       f('submissions/save-and-resume'),
       f('submissions/spam-and-security'),
@@ -63,6 +64,7 @@ const sidebars = {
     ]),
     section('Control panel', [
       f('control-panel/dashboard'),
+      f('control-panel/configuration'),
       f('control-panel/utilities'),
       f('control-panel/permissions'),
     ]),

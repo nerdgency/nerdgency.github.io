@@ -24,6 +24,7 @@ Super Admins can do everything in Formidable, straight away. Every other role st
 | **Manage connections** | Create and edit connections to third-party services, which hold their credentials. |
 | **View workflow log** | Read the log of workflow runs, including the answers each was given and what it sent. Running a workflow again also needs **Manage forms**. |
 | **Manage API keys** | Issue, change and revoke [JSON API](/docs/formidable/headless/json-api) keys, on **Formidable › Utilities**. |
+| **Manage submission actions** | Add and change a form's [submission actions](/docs/formidable/submissions/submission-actions) on its **Actions** tab: what each does and who may run it. The tab is hidden without it. Running an action needs **Manage submissions**. |
 | **Run commands** | Run Formidable's commands from [Utilities](/docs/formidable/control-panel/utilities). Each command also needs the permission for what it touches: deleting drafts needs **Manage submissions**, copying a theme needs **Manage registry** and ExpressionEngine's template permissions. |
 
 ## Granting permissions

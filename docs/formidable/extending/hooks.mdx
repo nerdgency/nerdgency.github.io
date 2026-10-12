@@ -148,6 +148,37 @@ public function formidable_submission_edited(
 public function formidable_export_row(array $cells, object $row, string $format): array
 ```
 
+## Submission actions
+
+### `formidable_submission_action_run`
+
+**Filter.** What a [submission action](/docs/formidable/submissions/submission-actions) is about to change, after its own checks and before anything is written: `status_id` (0 leaves the status) and `values` (field handle => value). Return them, changed or not. Return `false` to stop the action; the person running it is told an extension stopped it.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_action_run(
+    array $changes,
+    $action,
+    $form,
+    $submission,
+    string $note,
+): array|false
+```
+
+### `formidable_submission_action_complete`
+
+**Notification.** A submission action ran: the submission is saved and the run is in its activity. Called before the action's workflows. `$source` is `cp` (the submission's page), `bulk` (the listing) or `api`.
+
+```php title="system/user/addons/my_addon/ext.my_addon.php"
+public function formidable_submission_action_complete(
+    $action,
+    $form,
+    $submission,
+    array $changes,
+    string $note,
+    string $source,
+): void
+```
+
 ## Workflows
 
 ### `formidable_workflow_should_run`
@@ -264,6 +295,7 @@ ExpressionEngine calls its own lifecycle hooks for Formidable's models, wherever
 | Submission | `formidable_submission` | `after_formidable_submission_insert` |
 | Status | `formidable_status` | `after_formidable_status_update` |
 | Workflow | `formidable_workflow` | `after_formidable_workflow_save` |
+| Submission action | `formidable_submission_action` | `after_formidable_submission_action_save` |
 | Connection | `formidable_connection` | `before_formidable_connection_save` |
 | API key | `formidable_api_key` | `after_formidable_api_key_delete` |
 | Registry row | `formidable_registry` | `after_formidable_registry_save` |

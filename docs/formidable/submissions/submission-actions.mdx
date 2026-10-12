@@ -1,0 +1,130 @@
+---
+title: Submission actions
+description: Add your own buttons to a form's submissions, such as Approve, Reject or Mark as paid, that change the status, set answers and run workflows, for the people and submissions you choose.
+keywords:
+  - formidable
+  - submission actions
+  - approval
+  - status
+  - bulk actions
+---
+
+# Submission actions
+
+## Introduction
+
+[Workflows](/docs/formidable/automation/workflows) run by themselves when something happens. **Submission actions** are what someone does to a submission: buttons such as **Approve**, **Reject**, **Mark as paid** or **Escalate** on the submission's page. Each action can:
+
+- move the submission to a status;
+- set answers, such as who approved it and when;
+- ask for a note first, such as the reason for a rejection;
+- run the form's workflows, so approving can email the applicant.
+
+You decide who may press each button and on which submissions it appears. Every press is recorded on the submission's **Activity** tab.
+
+## Creating an action
+
+<Steps>
+  <Step title="Open the form's Actions tab">
+
+Edit the form and open **Actions**, then choose **New action**. The action opens in a window over the form, and the list updates when you save it. Defining actions needs the **Manage submission actions** permission; without it the tab isn't shown.
+
+  </Step>
+  <Step title="Name it">
+
+| Setting | What it does |
+| --- | --- |
+| **Name** | The button's text, such as *Approve*. |
+| **Handle** | How templates, the API and workflow conditions refer to it, such as `approve`. Unique within the form. |
+| **Button style** | **Plain**, **Prominent** or **Warning**. |
+| **Icon** | Optional. A Font Awesome icon name without `fa-`, such as `circle-check`. |
+
+  </Step>
+  <Step title="Say what it does">
+
+| Setting | What it does |
+| --- | --- |
+| **Move to status** | The status the submission moves to, or leave it. |
+| **Set answers** | Answers to fill in. Pick a field and type its value. A value can use `{now}`, `{today}`, `{member_id}`, `{member_name}`, `{member_email}` and `{note}`. A field that holds a list, like checkboxes, takes a comma-separated list. |
+| **Run workflows** | Run the form's **Submission Action** workflows afterwards. On by default. |
+
+  </Step>
+  <Step title="Say what it asks">
+
+| Setting | What it does |
+| --- | --- |
+| **Ask first** | Ask "Are you sure?" before it runs. **Question** changes the wording. |
+| **Note** | **Don't ask**, **Ask, optional** or **Ask, required**. **Note label** names the box, such as *Reason for rejection*. |
+
+  </Step>
+  <Step title="Say who, and when">
+
+| Setting | What it does |
+| --- | --- |
+| **Offered when** | Conditions on the submission, such as *Status is Pending*, built with the same [condition builder](/docs/formidable/building-forms/conditions) as everywhere else. The button only appears while they hold, and they're checked again when it runs. |
+| **Roles** | Who may run it, among those with **Manage submissions**. Tick none to allow all of them. Super Admins always may. |
+| **Offer in bulk** | Offer it in the Submissions listing's **With selected** menu. On by default. |
+| **Allow through the API** | Let an API key run it. Off by default. See [Through the API](#through-the-api). |
+
+  </Step>
+</Steps>
+
+The **Actions** tab lists each action as its button will look, with a summary of what it does.
+
+## Running an action
+
+Open a submission. The actions you may run on it appear above its details. An action that asks nothing runs as soon as you press it. One that asks first opens a small panel with its question and note box.
+
+Running an action needs **Manage submissions**, plus one of the action's roles if it has any. It saves straight away: you don't need to press the page's **Save**. A banner says it's done, or why it couldn't run.
+
+When an action runs, Formidable:
+
+1. checks again that you may run it, that it still applies to the submission, and that a required note was given;
+2. moves the status and sets the answers, working out computed answers again;
+3. records it on the submission's **Activity** tab;
+4. runs the form's **Submission Action** workflows if **Run workflows** is on. A status it moved also runs the **Submission Status Changed** workflows, as saving the page would.
+
+### In bulk
+
+On a form's **Submissions** listing, tick submissions and choose an action from **With selected**. Formidable asks the action's question and note once, then runs it on each submission on its own. A submission it doesn't apply to, for example one already approved, is skipped. The banner counts what was done and what was skipped, and why.
+
+## Activity
+
+A submission's **Activity** tab appears once an action has run on it. Newest first, it shows each action with who ran it, when, and whether from the submission's page, in bulk or through the API. It also shows the status it moved between, the note, and each answer it changed, before and after.
+
+Activity is kept for as long as the submission is. It isn't pruned like the [workflow log](/docs/formidable/automation/workflow-log), because it's the record of decisions made about the submission. Notes and changed answers are encrypted in the database.
+
+## With workflows
+
+Choose the **Submission Action** event for a workflow that should run when an action does. Add the **Submission action** condition to run it only for some actions, such as *Submission action is Reject*.
+
+In the email, `{action_name}` is the action's name, `{action_by}` is who ran it and `{action_note}` is their note:
+
+```text title="Email body"
+Your application has been {status}.
+
+{action_note}
+```
+
+## Through the API
+
+An action with **Allow through the API** on can be run by an API key that's allowed to **Run submission actions** (`submissions:act`):
+
+```js title="hiring-system.js"
+const response = await fetch(apiUrl + `&endpoint=forms/job_application/submissions/${handle}/actions/approve`, {
+  method: 'POST',
+  headers: {'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json'},
+  body: JSON.stringify({note: 'Approved by the hiring system'}),
+});
+```
+
+`handle` is the submission's public handle. The response is the submission as it is afterwards. An action that isn't allowed through the API answers 404. One whose checks fail, such as conditions that no longer hold or a missing required note, answers 422 `not_run` with the reason. The activity records the key's name. See the [JSON API](/docs/formidable/headless/json-api).
+
+## For developers
+
+Two [extension hooks](/docs/formidable/extending/hooks#submission-actions) run with every action:
+
+- `formidable_submission_action_run` can change what it's about to do, or stop it;
+- `formidable_submission_action_complete` runs after it's saved.
+
+The model's own hooks, such as `after_formidable_submission_action_save`, cover the actions themselves.
