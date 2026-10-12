@@ -198,7 +198,7 @@ Each answer is stored as `Statement: Choice`, so the field's answer is a list su
 | --- | --- |
 | **Manual** | Typed on the field, each with a value and a label. |
 | **Number Range** | A run of numbers. |
-| **Built-in list** | Countries, languages, U.S. states, Canadian provinces and territories, days of the week, weeks of the year or months, shipped with Formidable. Choose what's stored and what visitors see: a country's ISO code or its name, a state's two-letter abbreviation or its name, a month's number or name. |
+| **Built-in list** | Countries, languages, U.S. states, Canadian provinces and territories, states and provinces of the U.S., Canada and Australia together, days of the week, weeks of the year or months, shipped with Formidable. Choose what's stored and what visitors see: a country's ISO code or its name, a state's two-letter abbreviation or its name, a month's number or name. |
 | **Your lists** | A list you made under **Registry › Lists**, shared between forms. |
 | **Entries**, **Categories**, **Members**, **Roles** | Built from content already on your site, so they stay current. |
 | **Recipients** | Labels the visitor picks from, each with email addresses that stay on the server. See [Let visitors choose the recipient](/docs/formidable/automation/email-notifications#let-visitors-choose-the-recipient). |
@@ -206,6 +206,17 @@ Each answer is stored as `Statement: Choice`, so the field's answer is a list su
 To preselect choices, tick them in the **Default** column of the Options tab. Choice fields have no separate default value box.
 
 Manual, Recipients, built-in and number-range choices are checked on submit: a value that isn't one of them, or one you excluded, fails validation, so a tampered form can't send an answer you never offered.
+
+### Choices that depend on another field
+
+Two separate fields can work as a pair: pick a country, and a second dropdown offers only that country's states. Set **Depends On** on the second field's Options tab to the first field. Then:
+
+- With **Manual** choices, fill in each choice's **Parent** column with the value of the other field it belongs to. Separate several with commas. A choice with no parent is always offered.
+- With the **States & Provinces** built-in list, nothing to fill in: each state already knows its country, by ISO code (`CA`) and by name (`Canada`), so the country field can store either.
+
+While the visitor fills in the form, the choices that don't fit are hidden, and a choice that stops fitting is cleared. Until the first field is answered, only the choices with no parent are offered. On submit, a value that doesn't belong to the other field's answer fails validation.
+
+The two fields stay ordinary fields: each has its own label, required setting, conditions and column in exports. A field can depend on one that itself depends on a third, such as region → country → state.
 
 ## Special
 

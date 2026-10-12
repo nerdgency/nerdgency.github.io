@@ -43,6 +43,7 @@ A form as data instead of markup: its pages and fields, their choices, the rules
 - **`rules`** are the rules the server will apply, as `{name, value}` pairs.
 - **`attributes`** are the field's authored attributes, without `id`, `name` and `value`, which the client decides.
 - **`templating`**, on the form and on each field, is how the form is meant to look, resolved exactly as the form tag resolves it: theme, grid width, instruction position, and the attributes for each part. A field's `templating.columns` is its width in the template's grid, with `{field_columns}` already substituted.
+- A field whose choices **depend on another field** carries `depends_on`, the other field's handle, and each of its options a `parent` list of that field's values it belongs to. Offer only the options whose `parent` includes the other field's answer, plus those without `parent`. The server refuses any other pairing.
 - A **Computed** field carries `computed`, its definition with fields named by handle, so a client can show the result as the visitor types. Whatever is posted for it is ignored: the server works it out again.
 - For a guest on a members-only form, `open` is false and `closed_message` is filled in.
 
