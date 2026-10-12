@@ -68,6 +68,43 @@ A colour picker, stored as a hex value. The `hexColor` rule checks it.
 
 A single tick box, such as "I agree to the terms". Its label follows the box.
 
+### Toggle {#toggle}
+
+A single yes/no answer drawn as a switch. It works exactly like a [Checkbox](#checkbox): the same **Checkbox** tab sets what is stored when it's on and when it's off, and leaving it off stores the "off" value. Screen readers announce it as a switch. Bootstrap draws it with its own `form-switch`; Default and Tailwind draw their own.
+
+### Consent {#consent}
+
+A tick box beside a statement, such as "I agree to the [privacy policy](https://example.com/privacy)", that keeps a record of the consent, not just a tick.
+
+| Setting (**Consent** tab) | What it does |
+| --- | --- |
+| **Statement** | What the visitor agrees to, shown as the box's label. HTML is allowed, so it can link to your policy. Blank uses the field's name. |
+| **Agreed value**, **Not agreed value** | What's stored when it's ticked and when it isn't: `Agreed` and `Not agreed` unless you change them. |
+| **Record IP address** | Also keep the visitor's IP address with the record. Off by default, because an IP address is personal data. |
+
+When the box is ticked, Formidable keeps the statement as it read at that moment, with a fingerprint of it and the time. Changing the wording later never changes what earlier visitors agreed to. The submission's page in the control panel shows the record under the answer.
+
+A consent field is never pre-ticked, because a box someone else ticked isn't consent. Mark it **Required** to insist on it, or leave it optional for something like a newsletter opt-in. Conditions, filters and exports read its answer like any checkbox's.
+
+### Name {#name}
+
+First and last name, each in its own box, labelled and filled in by the browser's autocomplete. A field's **Name** tab can also show **Title**, **Middle name** and **Suffix**, relabel any part, and choose its **Required parts**: which boxes must be filled in when the field is **Required**. First and last name unless you change it.
+
+The answer is the name as it reads, such as `Ada Lovelace`, so listings, exports and conditions treat it like any text. Each part is also kept:
+
+- In an email, `{field:HANDLE:first}`, `{field:HANDLE:last}` and so on.
+- In a connection's mapping, each part is a choice of its own, so first name can go to `FNAME` and last name to `LNAME`.
+- On the submission's page in the control panel, under the answer.
+- Reopening a draft or a submission fills each box again.
+
+### Address {#address}
+
+A postal address in parts: **Street address**, **Address line 2**, **City**, **State / Province**, **Postal code** and **Country**, each autocompleted by the browser. The **Address** tab chooses which to show, relabels them, and sets **Required parts**: street, city and postal code unless you change it, so a second address line can stay optional.
+
+The answer is the address on one line, such as `1 Main St, Springfield, IL 62701, United States`. Its parts are kept as a Name's are: `{field:HANDLE:city}` in an email, a mapping choice each, and shown in the control panel.
+
+Neither can go in a repeating section. Each theme draws the boxes its own way, so they match the rest of the form, and classes you give the field's label and input reach every part. A required part's label is marked as a required field's is. In your own theme, the `control-name` and `control-address` parts loop over `{field_parts}`, with `{part_label}`, `{part_id}`, `{part_name}`, `{part_value}`, `{part_autocomplete}`, `{if part_required}` and the part's width as `{part_span}` (quarters of the row) or `{part_columns}` (twelfths).
+
 ### Datalist {#datalist}
 
 A text box with suggestions. The suggestions come from an option list, but the visitor can type anything, and what they type is stored.
@@ -115,7 +152,7 @@ A week of a year, numbered as ISO 8601 numbers them: `2026-W42`.
 
 ## Options
 
-**Select**, **Multi-select**, **Checkboxes** and **Radio Buttons** share one **Options** tab, so moving a question from a dropdown to radio buttons keeps its choices.
+**Select**, **Multi-select**, **Checkboxes**, **Radio Buttons**, **Rating**, **Scale**, **Image Choice** and **Image Choices** share one **Options** tab, so moving a question from a dropdown to radio buttons keeps its choices.
 
 ### Select {#select}
 
@@ -133,6 +170,28 @@ A tick box per choice; visitors tick as many as apply. Stores a list.
 
 Every choice visible, exactly one chosen.
 
+### Rating {#rating}
+
+Stars to click, such as "How was your stay?". It's one choice from a **Number Range**, 1 to 5 unless you change it on the **Options** tab. Each star keeps its number for screen readers. The answer is filtered as a number, so a condition or a filter can ask for *4 or more*. Restyle the stars with the `--formidable-rating-on` and `--formidable-rating-off` CSS properties.
+
+### Scale {#scale}
+
+A row of numbered buttons, starting at 0 to 10: a Net Promoter Score ("How likely are you to recommend us?"), or any agree-disagree scale. Like Rating, it's one choice from a number range, filtered as a number. Say what the ends mean in the field's instructions. `--formidable-scale-accent` sets the colour of the chosen button.
+
+### Image Choice {#image_choice}
+
+One choice from picture cards: a room, a product, a style. A new Image Choice field opens its **Options** tab on **Manual** choices. Type each choice's value and label, then use **Choose image** in its **Image** column to pick the picture from the file manager, or upload one there. The thumbnail appears straight away, and the builder shows the cards. Pictures come only with Manual choices. A choice without a picture shows its label alone. `--formidable-image-choice-accent` colours the chosen card, and `--formidable-image-choice-size` sets the cards' width. In your own markup, each option's `{image}` is its picture's address.
+
+### Image Choices {#image_choices}
+
+Image Choice with as many picks as apply, like Checkboxes. It stores a list.
+
+### Matrix {#matrix}
+
+Several statements answered on the same scale, a Likert grid: "The staff were friendly", "The room was clean", each from *Strongly disagree* to *Strongly agree*. Its **Matrix** tab takes the **Statements** and the **Choices**, one per line. The choices start as that five-point scale.
+
+Each answer is stored as `Statement: Choice`, so the field's answer is a list such as `Staff: Agree; Room: Neutral`. Exports, conditions and filters read it like a Checkboxes answer, and a condition can ask for *Matrix is any of "Room: Strongly disagree"*. **Required** means every statement has to be answered. On a phone, each statement stacks with its choices under it. A matrix can't go in a repeating section.
+
 ### Where choices come from
 
 | Source | Choices are |
@@ -146,7 +205,7 @@ Every choice visible, exactly one chosen.
 
 To preselect choices, tick them in the **Default** column of the Options tab. Choice fields have no separate default value box.
 
-Manual, Recipients and built-in choices are checked on submit: a value that isn't one of them, or one you excluded, fails validation, so a tampered form can't send an answer you never offered.
+Manual, Recipients, built-in and number-range choices are checked on submit: a value that isn't one of them, or one you excluded, fails validation, so a tampered form can't send an answer you never offered.
 
 ## Special
 
@@ -165,6 +224,22 @@ Cloudflare Turnstile, using the site and secret keys saved as a [connection](/do
 ### hCaptcha {#hcaptcha}
 
 hCaptcha, set up the same way as Turnstile, with its keys saved as a connection. Nothing is stored.
+
+### Attribution {#attribution}
+
+Records where the visitor came from, without asking them: the page they landed on, the site that sent them, and the link's UTM tags (`utm_source`, `utm_medium`, `utm_campaign`, `utm_term` and `utm_content`). Add it once to a form. Visitors never see it.
+
+- **The answer** is a short line you can filter, export and use in conditions: `google / cpc / spring_sale` from the UTM tags, otherwise the site that sent them, such as `news.ycombinator.com`, otherwise `(direct)`. It's blank if JavaScript didn't run.
+- **The full record** is kept beside the answer and shown on the submission's page in the control panel.
+- **It's the first page of the visit.** Formidable's script remembers the first page it sees in the visitor's session, in the browser's session storage rather than a cookie, and only for that visit. Load the script on every page of your site and that's the true landing page. Otherwise it's the first page with a form. A referrer from your own site is just a click between pages, so it's ignored.
+
+To load the script on every page, add it to your site's main layout:
+
+```html title="templates/default_site/_layouts.group/main.html"
+<script src="{theme_folder_url}user/formidable/js/formidable.js" defer></script>
+```
+
+On those pages, add `include_js="no"` to the form tag so Formidable doesn't add the script again. If it's added twice anyway, the second copy does nothing. The record comes from the visitor's browser, so Formidable keeps only those keys, as short plain text, and only `http` and `https` addresses.
 
 ### Signature {#signature}
 

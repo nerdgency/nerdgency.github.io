@@ -51,6 +51,10 @@ Appears only when something does, for members with **Manage forms**:
 - **A captured form whose template markup has changed** since it was captured. Open the form to see what changed. See [Capturing forms](/docs/formidable/displaying-forms/capturing-forms).
 - **A form whose computed answers are out of date**, because a calculation changed after submissions were stored. The link opens its **Recalculate** page, which needs **Manage submissions**. See [Computed fields](/docs/formidable/building-forms/computed-fields#when-the-calculation-changes).
 
+## Set-up needs attention
+
+For members with **Manage registry**, any [health check](./configuration.md#health-checks) that isn't passing appears here, such as a missing table, an unregistered fieldtype or a queue worker that has stopped. Each links to **Configuration**, where the check says how to fix it.
+
 ## Workflows, last 7 days
 
 For members with **View workflow log**: how many runs succeeded, failed or had nothing to do, what's waiting in the [workflow queue](/docs/formidable/automation/workflow-log#the-workflow-queue) when it's on, and the three latest failures, each linking to its run in the log.
@@ -58,3 +62,9 @@ For members with **View workflow log**: how many runs succeeded, failed or had n
 ## Documentation
 
 Links into these docs for the things people most often look up. The address comes from the `FORMIDABLE_DOCS_URL` constant in the add-on's `addon.setup.php`.
+
+## Guided tours
+
+The dashboard, a form's builder, its **Workflows** tab and its submissions each have a short guided tour. It points at one part of the screen at a time and says what it's for. Each tour starts by itself the first time you open its screen, once, and on any browser. The dashboard's waits until the [setup wizard](./configuration.md#the-setup-wizard) is finished or set aside.
+
+**Take the tour**, below the page's panels, runs it again whenever you like, with **Docs for this page** beside it. Step through with **Next** and **Back** or the arrow keys, and close it with Esc or **Skip the tour**. A step about something you can't see, such as a card your permissions don't open, is skipped.

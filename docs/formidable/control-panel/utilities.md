@@ -52,12 +52,18 @@ Every one of Formidable's [command-line commands](/docs/formidable/reference/com
 | | Write classes for a CSS build | `formidable:theme:classes` |
 | **Registry** | Add missing fieldtypes | `formidable:sync-fieldtypes` |
 
-Fill in any options and choose **Run**. The output appears at the top of the page, exactly as the command line would print it. Each card shows its command-line equivalent, so you can move a job to cron later.
+Commands are listed one per row, with their name, a short description and badges: **Changes data**, **Runs in the queue**, and how many options they take. Open a row to fill in any options and choose **Run**. The output appears at the top of the page, exactly as the command line would print it. Each open row also shows its command-line equivalent, so you can move a job to cron later, and the permissions it needs.
 
 - **Same code, same rules.** A command runs identically from here and from the terminal: the same checks, the same limits, the same messages.
 - **Commands that change things ask first.** Recalculating, pruning, sending reminders and copying themes all confirm before they run.
 - **No questions.** A command that would ask something on the command line, such as which template group to copy into, needs that field filled in instead.
-- **Long jobs suit the command line.** A browser request has time limits a terminal doesn't. On a large site, run long recalculations from the command line, or use the form's **Recalculate** page, which works in chunks.
+- **Long jobs suit the command line or the queue.** A browser request has time limits a terminal doesn't. On a large site, run long jobs from the command line, in the background (below), or use the form's **Recalculate** page, which works in chunks.
+
+### Running in the background
+
+With the [workflow queue](/docs/formidable/automation/workflow-log#the-workflow-queue) turned on, the commands that work through many records (Recalculate computed answers, Upgrade encrypted answers, Delete expired drafts and Send draft reminders) offer **Run in the background** beside **Run now**.
+
+A background command is handed to the same queue as your workflows, so the page comes back straight away with a link to the run. It appears in the [Workflow Log](/docs/formidable/automation/workflow-log) as a **Command** run, with the options it was given, who queued it, and its output once it finishes. A command that fails isn't retried automatically: run it again from Utilities once you've looked at why.
 
 ### Who may run what
 

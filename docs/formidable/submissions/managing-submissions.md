@@ -19,7 +19,7 @@ Every stored submission belongs to one form and has a status. The [dashboard](/d
 - **Filter** with the same condition builder used everywhere in Formidable. A field's operators match its kind of answer. See [Conditions](/docs/formidable/building-forms/conditions#operators).
 - **Choose columns**: the submission's own details (name, status, member, dates) and any of the form's fields.
 - **Save a view.** A saved view is a named filter, set of columns, page size and sort, stored for one form and one member. Switch between views from the listing. A view can also be used from a template: `view=` on [`{exp:formidable:submissions}`](/docs/formidable/reference/tags/submissions) applies its filter, page size and sort.
-- **Delete** submissions in bulk.
+- **Delete** submissions in bulk, or run one of the form's [submission actions](/docs/formidable/submissions/submission-actions#in-bulk) on them.
 
 Answers are shown the way they read, with an option's label rather than its stored value, and a file's name. Encrypted answers are not decrypted in the listing, so a glance at the list never discloses them in bulk.
 
@@ -32,13 +32,14 @@ Answers are shown the way they read, with an option's label rather than its stor
 
 ## One submission
 
-Opening a submission shows every answer, decrypted, and lets you change its status and edit its answers.
+Opening a submission shows every answer, decrypted, and lets you change its status and edit its answers. The page has two tabs: the submission, with its details and every answer (headed by page on a multi-page form), and its workflow runs. The form's [submission actions](/docs/formidable/submissions/submission-actions) you may run appear above the details, and an **Activity** tab lists the ones that have run. Each answer is as wide as its field is in the form builder, so the page reads like the form.
 
-- **Repeating sections** appear as a table of rows. Edit any row, add rows and remove them, within the section's minimum and maximum.
+- **Repeating sections** appear as a table of rows. Edit any row, move rows up and down, add rows and remove them, within the section's minimum and maximum. Rows keep the order the visitor gave them.
+- **File uploads** appear as cards with the file's name, type and size. Choose a different file from ExpressionEngine's file picker, or mark one to remove when you save.
 - **Saving works out computed answers again**, so correcting a quantity corrects its total.
 - **Saving can run workflows.** A changed answer raises **Submission Updated**, and a new status raises **Submission Status Changed**. The **Run workflows** switch decides whether they run for this save. Saving without changing anything runs nothing.
 
-The submission's page also shows the form's workflows, read-only, as **Simple**, **Detailed** and **Recent runs**. It opens on the runs for this submission: what each workflow did, whether it succeeded, and a link to this submission in the full log.
+The **Workflow runs** tab shows the form's workflows, read-only, as **Simple**, **Detailed** and **Recent runs**. It opens on the runs for this submission: what each workflow did, whether it succeeded, and a link to this submission in the full log.
 
 <Screenshot
   img={require('@site/static/img/screenshots/formidable/submission-rows.png')}

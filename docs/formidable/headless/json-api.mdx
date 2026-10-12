@@ -30,6 +30,7 @@ The action id differs between installs, so let [`{exp:formidable:api_url}`](/doc
   'GET forms/{form}/submissions': 'A page of submissions',
   'POST forms/{form}/submissions': 'The new submission',
   'GET forms/{form}/submissions/{submission}': 'One submission',
+  'POST forms/{form}/submissions/{submission}/actions/{action}': 'Runs a submission action that allows the API; the submission after it',
 }} />
 
 `{form}` is a form's handle. `{submission}` is a submission's public handle, never its sequential id.
@@ -71,7 +72,7 @@ The origin check is a courtesy, not the protection: any non-browser client can c
 
 Keys are issued on **Formidable › Utilities**, under **API Keys**, which needs the **Manage API keys** permission. Each key has:
 
-- **Allowed to:** any of *Read forms* (`forms:read`), *Read submissions* (`submissions:read`) and *Submit forms* (`submissions:create`).
+- **Allowed to:** any of *Read forms* (`forms:read`), *Read submissions* (`submissions:read`), *Submit forms* (`submissions:create`) and *Run submission actions* (`submissions:act`). The last runs only the [submission actions](/docs/formidable/submissions/submission-actions#through-the-api) that allow the API, and only with a key: this site's own pages don't get it.
 - **Forms:** the forms it reaches. Tick none for every form.
 - **Allowed browser origins:** the websites whose pages may use it from a visitor's browser. Leave it empty for a key used only from a server, and browsers are then refused, because a key in a web page is a published key.
 
