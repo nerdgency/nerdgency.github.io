@@ -17,7 +17,8 @@
     "check:docs": "node scripts/check-docs.mjs",
     "sync:source": "node scripts/sync-formidable-source.mjs",
     "capture:examples": "node scripts/capture-examples.mjs",
-    "brand:assets": "node scripts/build-brand-assets.mjs"
+    "brand:assets": "node scripts/build-brand-assets.mjs",
+    "capture:screens": "node scripts/capture-screens.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.2",
@@ -37,6 +38,7 @@
     "@docusaurus/types": "3.10.2",
     "@tailwindcss/postcss": "^4.3.3",
     "autoprefixer": "^10.5.4",
+    "playwright": "^1.48.2",
     "postcss": "^8.5.25",
     "tailwindcss": "^4.3.3",
     "typescript": "~7.0.2"

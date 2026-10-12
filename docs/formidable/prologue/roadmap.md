@@ -1,5 +1,7 @@
 ---
 title: Roadmap
+# Hidden from the sidebar, search and the sitemap; the URL still works.
+unlisted: true
 description: What's being worked on, what may come next, and what isn't planned.
 keywords:
   - formidable

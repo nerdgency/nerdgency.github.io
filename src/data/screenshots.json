@@ -1,0 +1,78 @@
+{
+  "dashboard": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "forms-listing": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "workflow-log": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "themes": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "registry": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "utilities": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "permissions": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "builder": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "builder-overview": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "submissions-listing": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "submission": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "workflows": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "workflows-runs": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "workflow-run": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "front-contact": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "front-repeating": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "front-signature": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "field-editor": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  },
+  "submission-rows": {
+    "capturedAt": "2026-10-12",
+    "expressionEngine": "ExpressionEngine 7.5.26"
+  }
+}

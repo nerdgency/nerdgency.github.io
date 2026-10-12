@@ -16,6 +16,13 @@ keywords:
 
 Each half has its own permission. The page opens for **Manage API keys** or **Run commands**, and shows only what you may use.
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/utilities.png')}
+  alt="The Utilities page, with the output of List every form at the top, the API keys card and the commands below"
+  caption="Formidable › Utilities"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 ## API keys
 
 The **API Keys** card lists your site's latest keys: each one's name, the first characters of the key (so you can recognise it), what it's allowed to do, which forms it reaches, when it was last used, and whether it's on.

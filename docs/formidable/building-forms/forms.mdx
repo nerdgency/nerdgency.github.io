@@ -17,6 +17,13 @@ A form is a named set of fields, laid out in pages and sections, with its own se
 
 Every form has a **name**, for you, and a **handle**, for templates: `{exp:formidable:form form_handle="contact_us"}`. Pick a handle you won't want to change, because every template that shows the form uses it.
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/forms-listing.png')}
+  alt="The Forms listing with three forms, each with its handle, type, submission count and actions"
+  caption="Formidable › Forms"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 ## Pages, sections and fields
 
 A form is built from three nested pieces:
@@ -44,6 +51,13 @@ There's no "submit button" field and no "group" field. Every page draws its own 
 
 A form's edit screen shows the whole form at once: each page is a panel, each section a box inside it, and each field a tile on its section's grid.
 
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/builder.png')}
+  alt="The builder showing the first page of a job application: a section of fields on a grid, with the Add field palette beside it"
+  caption="The builder"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
+
 ### Adding fields
 
 Drag a field from the **Add field** palette to where it should go, or click it to add it to the end of the section you're looking at. Each section also ends with its own **Add field** picker, which you can search from the keyboard.
@@ -63,6 +77,13 @@ Every drag has a keyboard route too. A field's menu offers **Width**, **Move up*
 ### Overview
 
 The **Builder | Overview** switch above the builder shows a map of the form: every page and section, its conditions written out as sentences, and lines linking each condition to the fields it reads. It's the quickest way to understand a form someone else built.
+
+<Screenshot
+  img={require('@site/static/img/screenshots/formidable/builder-overview.png')}
+  alt="The builder's Overview: each page and section, with the Previous employers section shown only when Have you worked before? is yes"
+  caption="Builder › Overview"
+  captured="ExpressionEngine 7.5.26, demo data"
+/>
 
 ## Duplicating a form
 
