@@ -60,3 +60,18 @@ To switch to the real Proxima Nova once you have a license:
 - **Self-hosted files:** drop the licensed `.woff2`/`.woff` files in
   `static/fonts/`, add `@font-face` declarations for them in
   `src/css/custom.css`, and update `--ifm-font-family-base` the same way.
+
+## Keeping the Formidable docs accurate
+
+The docs are checked against the add-on's source on every build (`prebuild`
+runs `scripts/check-docs.mjs`). When Formidable changes:
+
+```
+npm run sync:source        # regenerate src/data/formidable-source.json from the add-on checkout
+npm run capture:examples   # re-render examples/templates on a local EE install
+npm run build
+```
+
+See `DOCS-NOTES.md` for the source-of-truth map, open questions and the MDX
+components available to docs (`<Example>`, `<Output>`, `<CapturedExample>`,
+`<Param>`, `<Steps>`, `<VersionNotice>`, `<Screenshot>` and the reference tables).

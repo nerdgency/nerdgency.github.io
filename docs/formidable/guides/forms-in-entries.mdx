@@ -1,0 +1,101 @@
+---
+title: Let editors put a form on an entry
+sidebar_label: Forms in entries
+sidebar_position: 7
+description: Use the Formidable Form channel field so the person writing an entry chooses which form appears on it.
+keywords:
+  - formidable
+  - channel field
+  - fieldtype
+  - fluid
+  - grid
+  - bloqs
+---
+
+# Let editors put a form on an entry
+
+When a form belongs to the **content** rather than the template, such as a campaign landing page with its own sign-up form or an event with its own registration form, add the **Formidable Form** channel field. Editors choose a form on each entry, and the template prints it.
+
+If every page of a template always shows the same form, you do not need the field. Put `{exp:formidable:form form_handle="contact_us"}` in the template instead.
+
+<Steps>
+  <Step title="Create the field">
+
+In **Developer › Fields**, create a field of type **Formidable Form**, for example named *Form* with the short name `form`. Optionally tick **Forms to offer** to limit the choice. With none ticked, every form on the site is offered, including forms created later. Add the field to a channel's field group.
+
+  </Step>
+  <Step title="Choose a form on an entry">
+
+The field lists the site's forms with their handle, field and submission counts, and a **Closed** badge for a form that has stopped accepting submissions. Click one to choose it. **No form** clears the choice. With more than six forms, a search box appears.
+
+  </Step>
+  <Step title="Print it in the template">
+
+```ee title="templates/default_site/events.group/entry.html"
+{exp:channel:entries channel="events" limit="1"}
+    <h1>{title}</h1>
+    {form}
+{/exp:channel:entries}
+```
+
+With no form chosen, `{form}` prints nothing.
+
+  </Step>
+</Steps>
+
+## Passing parameters
+
+The field tag accepts the [form tag's parameters](/docs/formidable/developer/tags/form#parameters) and passes them on. The exception is `form_id=` and `form_handle=`, which are ignored, because the entry chose the form.
+
+```ee title="templates/default_site/events.group/entry.html"
+{form return="events/thanks/{url_title}" theme="bootstrap"}
+```
+
+## Markup around the form
+
+| Variable | |
+| --- | --- |
+| `{form:id}`, `{form:handle}`, `{form:name}` | The chosen form |
+
+As a pair, `{form}…{/form}` prints nothing when no form is chosen, and inside it `{form_id}`, `{form_handle}`, `{form_name}`, `{form_closed}` and the rendered `{form}` are available:
+
+```ee title="templates/default_site/events.group/entry.html"
+{form}
+    <section class="form-panel">
+        <h2>{form_name}</h2>
+        {if form_closed}<p class="note">Registration has closed.</p>{/if}
+        {form}
+    </section>
+{/form}
+```
+
+To write the form's markup yourself, use the form tag with the chosen id. ExpressionEngine fills in `{form:id}` before the inner tag runs, which is its default order, so do not add `parse="inward"`:
+
+```ee title="templates/default_site/events.group/entry.html"
+{exp:channel:entries channel="events" limit="1"}
+    {exp:formidable:form form_id="{form:id}"}
+        {fields}{field_template}{/fields}
+    {/exp:formidable:form}
+{/exp:channel:entries}
+```
+
+## Grid, Fluid, Bloqs and Pro Variables
+
+The field also works as a **Grid** column, inside **Fluid**, as a **Bloqs** atom, and as a **Pro Variables** variable, with the same picker and tags. A Grid column and a Bloqs atom have their own **Forms to offer** setting. In Bloqs, print the atom inside its bloq's tag pair like any other atom:
+
+```ee title="templates/default_site/pages.group/index.html"
+{exp:channel:entries channel="pages" limit="1"}
+    {page_bloqs}
+        {form_bloq}
+            <section class="form-panel">{form return="thanks"}</section>
+        {/form_bloq}
+    {/page_bloqs}
+{/exp:channel:entries}
+```
+
+## Good to know
+
+- **The form's id is stored**, not its handle, so renaming a handle does not break entries.
+- **Captured forms are not offered**, because their markup lives in the template that captured them. Convert one to a regular form to offer it.
+- **Avoid full-page caching** on templates that show a form, as for any form: each render carries a single-use CSRF token.
+- A form deleted after it was chosen is reported when the entry is opened. The editor must choose another, or **No form**, before saving.

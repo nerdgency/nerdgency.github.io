@@ -1,0 +1,159 @@
+/*
+ * Nerdgency design tokens.
+ *
+ * Two layers:
+ *   --ng-*   the brand and semantic tokens, set once per colour mode
+ *   --ifm-*  Infima's variables (Docusaurus' CSS framework), mapped onto
+ *            the --ng-* tokens so every stock theme component follows
+ *
+ * Change a colour here, not in a component. Contrast notes are WCAG 2.2
+ * ratios against the background they are used on.
+ */
+
+:root {
+  /* Brand ------------------------------------------------------------ */
+  --ng-orange: #faaf40;          /* brand fill: buttons, accents, focus */
+  --ng-orange-ink: #2b1200;      /* text on --ng-orange (9.5:1) */
+  --ng-slate: #374654;           /* the wordmark's grey */
+
+  /* Type ------------------------------------------------------------- */
+  --ng-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --ng-font-display: 'Figtree', var(--ng-font-sans);
+  --ng-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+    monospace;
+
+  /* Shape ------------------------------------------------------------ */
+  --ng-radius-sm: 6px;
+  --ng-radius: 10px;
+  --ng-radius-lg: 16px;
+  --ng-focus-ring: 0 0 0 3px color-mix(in srgb, var(--ng-orange) 55%, transparent);
+
+  /* Light mode ------------------------------------------------------- */
+  --ng-bg: #ffffff;
+  --ng-surface: #f8fafc;
+  --ng-surface-2: #f1f5f9;
+  --ng-border: #e2e8f0;
+  --ng-border-strong: #cbd5e1;
+  --ng-text: #0f172a;
+  --ng-text-muted: #475569;      /* 7.6:1 on white */
+  --ng-link: #a85d00;            /* 5.0:1 on white; the brand orange is 1.9:1 */
+  --ng-link-hover: #7c4400;
+  --ng-accent-soft: #fff4e0;     /* tint behind the active sidebar item */
+  --ng-code-bg: #f6f8fa;
+  --ng-code-inline-bg: #f1f5f9;
+  --ng-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 8px 24px rgb(15 23 42 / 0.06);
+
+  /* Labels for template / output examples */
+  --ng-label-template: #1d4ed8;
+  --ng-label-output: #047857;
+  --ng-label-illustrative: #7c3aed;
+
+  /* Infima mapping --------------------------------------------------- */
+  --ifm-color-primary: var(--ng-link);
+  --ifm-color-primary-dark: #975400;
+  --ifm-color-primary-darker: #8f4f00;
+  --ifm-color-primary-darkest: #7c4400;
+  --ifm-color-primary-light: #b96600;
+  --ifm-color-primary-lighter: #c16b00;
+  --ifm-color-primary-lightest: #d67700;
+
+  --ifm-font-family-base: var(--ng-font-sans);
+  --ifm-heading-font-family: var(--ng-font-display);
+  --ifm-font-family-monospace: var(--ng-font-mono);
+  --ifm-font-size-base: 100%;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 700;
+  --ifm-h1-font-size: 2.25rem;
+  --ifm-h2-font-size: 1.6rem;
+  --ifm-h3-font-size: 1.25rem;
+  --ifm-h4-font-size: 1.05rem;
+
+  --ifm-background-color: var(--ng-bg);
+  --ifm-background-surface-color: var(--ng-surface);
+  --ifm-font-color-base: var(--ng-text);
+  --ifm-heading-color: var(--ng-text);
+  --ifm-color-content-secondary: var(--ng-text-muted);
+  --ifm-link-color: var(--ng-link);
+  --ifm-link-hover-color: var(--ng-link-hover);
+  --ifm-toc-border-color: var(--ng-border);
+  --ifm-hr-background-color: var(--ng-border);
+  --ifm-color-emphasis-200: var(--ng-border);
+  --ifm-color-emphasis-300: var(--ng-border-strong);
+
+  --ifm-navbar-background-color: color-mix(in srgb, var(--ng-bg) 88%, transparent);
+  --ifm-navbar-height: 4rem;
+  --ifm-navbar-shadow: none;
+  --ifm-navbar-link-color: var(--ng-text);
+  --ifm-navbar-link-hover-color: var(--ng-link);
+
+  --ifm-menu-color: var(--ng-text-muted);
+  --ifm-menu-color-active: var(--ng-text);
+  --ifm-menu-color-background-active: var(--ng-accent-soft);
+  --ifm-menu-color-background-hover: var(--ng-surface-2);
+
+  --ifm-code-font-size: 88%;
+  --ifm-code-background: var(--ng-code-inline-bg);
+  --ifm-code-border-radius: var(--ng-radius-sm);
+  --ifm-pre-background: var(--ng-code-bg);
+  --ifm-pre-padding: 1.1rem;
+
+  --ifm-table-border-color: var(--ng-border);
+  --ifm-table-head-background: var(--ng-surface);
+  --ifm-table-stripe-background: color-mix(in srgb, var(--ng-surface) 60%, transparent);
+
+  --ifm-global-radius: var(--ng-radius);
+  --ifm-card-border-radius: var(--ng-radius);
+  --ifm-button-border-radius: var(--ng-radius-sm);
+  --ifm-global-shadow-lw: var(--ng-shadow);
+
+  --ifm-hero-background-color: var(--ng-surface);
+  --ifm-hero-text-color: var(--ng-text);
+
+  --ifm-footer-background-color: var(--ng-surface);
+  --ifm-footer-color: var(--ng-text-muted);
+  --ifm-footer-link-color: var(--ng-text);
+  --ifm-footer-title-color: var(--ng-text);
+
+  --docusaurus-highlighted-code-line-bg: rgb(250 175 64 / 0.16);
+  --docsearch-primary-color: var(--ng-link);
+
+  /* Legacy names the homepage components still read. */
+  --nerdgency-wordmark-bracket: var(--ng-orange);
+  --nerdgency-wordmark: var(--ng-slate);
+  --nerdgency-card-border: var(--ng-border-strong);
+  --nerdgency-card-icon-background: var(--ng-surface-2);
+}
+
+/* Dark mode ---------------------------------------------------------- */
+[data-theme='dark'] {
+  --ng-bg: #0b1120;
+  --ng-surface: #111a2e;
+  --ng-surface-2: #17223b;
+  --ng-border: #233150;
+  --ng-border-strong: #2f4066;
+  --ng-text: #e6edf7;            /* 16:1 on --ng-bg */
+  --ng-text-muted: #9aa8bd;      /* 7.8:1 */
+  --ng-link: #fbbf5a;            /* 11.4:1 */
+  --ng-link-hover: #ffd58f;
+  --ng-accent-soft: rgb(250 175 64 / 0.12);
+  --ng-code-bg: #0d1526;
+  --ng-code-inline-bg: #17223b;
+  --ng-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.3);
+
+  --ng-label-template: #93c5fd;
+  --ng-label-output: #6ee7b7;
+  --ng-label-illustrative: #c4b5fd;
+
+  --ifm-color-primary: var(--ng-link);
+  --ifm-color-primary-dark: #fab23c;
+  --ifm-color-primary-darker: #f9ab2d;
+  --ifm-color-primary-darkest: #f19a07;
+  --ifm-color-primary-light: #fccc78;
+  --ifm-color-primary-lighter: #fcd287;
+  --ifm-color-primary-lightest: #fde3b4;
+
+  --nerdgency-wordmark: #ffffff;
+  --nerdgency-card-border: var(--ng-border-strong);
+  --nerdgency-card-icon-background: var(--ng-orange);
+}

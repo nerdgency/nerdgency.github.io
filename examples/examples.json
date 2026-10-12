@@ -1,0 +1,37 @@
+{
+  "$comment": "Template examples rendered by scripts/capture-examples.mjs. `file` is where the template would live on a site; `wrap` puts the template inside a minimal HTML page before capture.",
+  "minimal": {
+    "file": "templates/default_site/contact.group/index.html"
+  },
+  "fields-loop": {
+    "file": "templates/default_site/contact.group/index.html"
+  },
+  "custom-markup": {
+    "file": "templates/default_site/contact.group/index.html"
+  },
+  "region-params": {
+    "file": "templates/default_site/contact.group/index.html"
+  },
+  "bag-modifier": {
+    "file": "templates/default_site/contact.group/index.html"
+  },
+  "theme-bootstrap": {
+    "file": "templates/default_site/contact.group/index.html"
+  },
+  "api-url": {
+    "file": "templates/default_site/app.group/index.html"
+  },
+  "form-json": {
+    "file": "templates/default_site/api.group/contact.html",
+    "json": true
+  },
+  "api-forms": {
+    "api": "forms"
+  },
+  "api-form": {
+    "api": "forms/contact_us"
+  },
+  "api-unauthorised": {
+    "api": "forms/contact_us/submissions"
+  }
+}

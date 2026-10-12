@@ -1,0 +1,60 @@
+---
+title: Formidable documentation
+sidebar_label: Overview
+sidebar_position: 1
+slug: /formidable
+description: Formidable is a forms add-on for ExpressionEngine. Build forms in the control panel or capture them from your own markup, then store, review and act on every submission.
+keywords:
+  - formidable
+  - expressionengine forms
+  - expressionengine add-on
+---
+
+# Formidable
+
+Formidable is a forms add-on for ExpressionEngine 7.5 and later. You build a form in the control panel, or wrap a form you already wrote, and Formidable takes care of the rest: rendering, validation, spam protection, storage, notifications, and handing submissions on to other services.
+
+<VersionNotice />
+
+## Where to start
+
+<Cards>
+  <CardLink to="/docs/formidable/getting-started/installation" title="Install Formidable">
+    Requirements, installing the two folders, and updating.
+  </CardLink>
+  <CardLink to="/docs/formidable/getting-started/quick-start" title="Quick start">
+    Build a contact form and put it on a page in a few minutes.
+  </CardLink>
+  <CardLink to="/docs/formidable/core-concepts/how-formidable-works" title="How Formidable works">
+    The pieces, and how a submission moves through them.
+  </CardLink>
+  <CardLink to="/docs/formidable/developer/tags/form" title="Form tag reference">
+    Every parameter and variable of <code>{'{exp:formidable:form}'}</code>.
+  </CardLink>
+</Cards>
+
+## What it does
+
+**Build forms.** A drag-and-drop builder lays fields out on a grid, in sections and across pages. It ships with <FieldtypeCount /> fieldtypes: text inputs, dates, choices, file uploads, signatures, calculated values, CAPTCHA, Cloudflare Turnstile and hCaptcha. Fields can show, hide or become required based on other answers. Reusable fields live in a [Field Library](/docs/formidable/core-concepts/forms-and-fields#the-field-library).
+
+**Use your own markup.** A single tag renders a complete form from a [theme](/docs/formidable/core-concepts/themes). Every part of that output can be taken over one piece at a time, down to individual attributes. If you already have hand-written forms, [`{exp:formidable:capture}`](/docs/formidable/guides/capture-existing-forms) builds the form from them and leaves your markup untouched.
+
+**Keep and review submissions.** Submissions are listed in the control panel with filters, saved views, custom statuses and exports to CSV, JSON, XML and plain text. Fields can be encrypted at rest. Templates can [list submissions](/docs/formidable/developer/tags/submissions) or let a visitor [edit their own](/docs/formidable/guides/edit-a-submission).
+
+**Act on them.** [Workflows](/docs/formidable/core-concepts/workflows) send email, call webhooks and push to [connections](/docs/formidable/core-concepts/connections) such as Mailchimp, HubSpot or Salesforce, each with its own conditions. Every run is recorded in a log you can replay.
+
+**Work headless.** A [JSON API](/docs/formidable/developer/json-api) serves forms and submissions and accepts new submissions, using the same validation as a posted form.
+
+## How these docs are organised
+
+| Section | For |
+| --- | --- |
+| [Getting started](/docs/formidable/getting-started) | Installing, a first form, and fixing the common problems. |
+| [Core concepts](/docs/formidable/core-concepts) | How the pieces fit together. Read these once and the rest makes sense. |
+| [Guides and recipes](/docs/formidable/guides) | One task each, from start to a working template. |
+| [Developer reference](/docs/formidable/developer) | Every tag, parameter, variable, endpoint, hook and setting. |
+| [Release information](/docs/formidable/release) | Release notes, changelog, upgrade notes and the roadmap. |
+
+:::note About the examples
+Template examples name the file they belong in. Where a page shows the HTML Formidable produces, it is labelled either as **rendered output**, copied from a real install with the source named, or as **illustrative**, written by hand to show a shape. Tag parameters in every example are checked against the add-on's source code each time the site builds.
+:::

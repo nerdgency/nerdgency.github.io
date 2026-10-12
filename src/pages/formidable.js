@@ -38,7 +38,7 @@ const icons = {
     </svg>
   ),
   // package
-  blueprints: (
+  api: (
     <svg width="24" height="24" aria-hidden="true" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M20 5.99999L20 18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V6C4 4.89543 4.89543 4 6 4H18C19.1045 4 19.9999 4.89543 20 5.99999Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M12 9V4" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
@@ -102,7 +102,7 @@ function HomepageFeatures()
         <div className="features__card">
           <div className="features__icon">{icons.formBuilder}</div>
           <Heading as="h3">Form Builder</Heading>
-          <p>Drag fields onto a four-column grid, gather them into groups, and set the conditions that decide when each one appears.</p>
+          <p>Drag fields onto a grid, organise them into pages and sections, and set the conditions that decide when each one appears.</p>
         </div>
         <div className="features__card">
           <div className="features__icon">{icons.formCapture}</div>
@@ -110,9 +110,9 @@ function HomepageFeatures()
           <p>Already have a form in your templates? Capture it where it stands and start collecting submissions without rebuilding it.</p>
         </div>
         <div className="features__card">
-          <div className="features__icon">{icons.blueprints}</div>
-          <Heading as="h3">Blueprints</Heading>
-          <p>Pre-configured common forms to get you building faster.</p>
+          <div className="features__icon">{icons.api}</div>
+          <Heading as="h3">JSON API</Heading>
+          <p>Read forms and submissions and submit forms as JSON, from your own pages or from other systems with scoped API keys.</p>
         </div>
         <div className="features__card">
           <div className="features__icon">{icons.connections}</div>
@@ -127,7 +127,7 @@ function HomepageFeatures()
         <div className="features__card">
           <div className="features__icon">{icons.reports}</div>
           <Heading as="h3">Reports</Heading>
-          <p>Review and search every submission in the control panel, track progress with custom statuses, and export to CSV.</p>
+          <p>Review and filter every submission in the control panel, save views, track progress with statuses, and export to CSV, JSON, XML or plain text.</p>
         </div>
         <div className="features__card">
           <div className="features__icon">{icons.multiPage}</div>
@@ -136,13 +136,13 @@ function HomepageFeatures()
         </div>
         <div className="features__card">
           <div className="features__icon">{icons.templates}</div>
-          <Heading as="h3">Templates</Heading>
-          <p>Every wrapper, label and input is yours to shape. Start from Bootstrap, Tailwind, Material, plain HTML — or take full control.</p>
+          <Heading as="h3">Themes</Heading>
+          <p>Every wrapper, label and input is yours to shape. Start from the Default, Tailwind or Bootstrap 5 theme, copy any part into your templates, or take full control.</p>
         </div>
         <div className="features__card">
           <div className="features__icon">{icons.security}</div>
           <Heading as="h3">Security</Heading>
-          <p>Signed payloads, CSRF protection, honeypots and Cloudflare Turnstile — on by default, not bolted on later.</p>
+          <p>Signed form data, CSRF protection, honeypots and rate limiting on by default, with Cloudflare Turnstile, hCaptcha and encrypted fields when you need them.</p>
         </div>
       </div>
     </section>
@@ -152,8 +152,8 @@ function HomepageFeatures()
 export default function Home() {
   return (
     <Layout
-      title="Home"
-      description="Documentation for ExpressionEngine addons built by Nerdgency."
+      title="Formidable"
+      description="Formidable is a forms add-on for ExpressionEngine 7.5+: a form builder, themes you can change part by part, submissions, workflows and a JSON API."
     >
       <Hero
         icon="/img/icons/formidable.svg"
@@ -175,16 +175,14 @@ export default function Home() {
             <Link className="button button--primary button--lg" to="/docs/formidable">
               Get started with Formidable
             </Link>
-            <Link className="button button--secondary button--lg" to="https://github.com/nerdgency">
-              View on GitHub
+            <Link className="button button--secondary button--lg" to="/blog/introducing-formidable-1-0">
+              Read the 1.0 announcement
             </Link>
           </>
         }
       />
       <HomepageFeatures />
-      <main className="container" style={{ paddingBottom: '3rem' }}>
-        
-      </main>
+
     </Layout>
   );
 }

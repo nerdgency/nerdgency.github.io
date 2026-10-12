@@ -12,10 +12,16 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "prebuild": "node scripts/check-docs.mjs",
+    "check:docs": "node scripts/check-docs.mjs",
+    "sync:source": "node scripts/sync-formidable-source.mjs",
+    "capture:examples": "node scripts/capture-examples.mjs",
+    "brand:assets": "node scripts/build-brand-assets.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.2",
+    "@docusaurus/plugin-ideal-image": "^3.10.2",
     "@docusaurus/preset-classic": "3.10.2",
     "@easyops-cn/docusaurus-search-local": "^0.55.3",
     "@mdx-js/react": "^3.1.1",

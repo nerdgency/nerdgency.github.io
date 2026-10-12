@@ -1,107 +1,61 @@
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import "tailwindcss";
+/*
+ * Site stylesheet. Order matters:
+ *
+ *   1. fonts
+ *   2. Tailwind's theme and utilities -- WITHOUT its preflight reset,
+ *      which strips list bullets, heading sizes and button styles that
+ *      Infima (Docusaurus' own CSS) relies on in every docs page
+ *   3. the Nerdgency tokens, then the element styling built on them
+ *
+ * Component styles live beside their components as CSS modules.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@500..800&family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap');
 
-@custom-variant dark (&:is([data-theme="dark"] *));
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
-:root {
-  /* Brand */
-  --nerdgency-orange: #faaf40; /* primary accent */
-  --nerdgency-orange-ink: #2b1200; /* dark ink for use on brand backgrounds */
-  --nerdgency-orange-strong: #c9821a; /* stronger contrast variant */
+@import './theme/tokens.css';
+@import './theme/base.css';
 
-  /* Light palette */
-  --nerdgency-light-bg: #ffffff;
-  --nerdgency-light-surface: #fbfbfd; /* subtle surface */
-  --nerdgency-light-muted: #57697a; /* secondary text */
-  --nerdgency-light-text: #0f1720; /* high-contrast body text */
-  --nerdgency-light-border: #e6ebef;
+@custom-variant dark (&:is([data-theme='dark'] *));
 
-  /* Dark palette (requested background #172554) */
-  --nerdgency-dark-bg: #020617; /* page background for dark theme */
-  --nerdgency-dark-surface: #172554; /* cards, surfaces */
-  --nerdgency-dark-muted: #9fb0db; /* secondary text */
-  --nerdgency-dark-text: #eaf4ff; /* primary text on dark */
-  --nerdgency-dark-border: rgba(255,255,255,0.06);
-
-  --nerdgency-wordmark-bracket: var(--nerdgency-orange);
-  --nerdgency-wordmark: #374654;
-
-  /* Common tokens */
-  --ifm-color-primary: var(--nerdgency-orange);
-  --ifm-color-primary-dark: var(--nerdgency-orange-strong);
-  --ifm-font-family-base: 'Inter', system-ui, -apple-system,
-    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    sans-serif, 'Segoe UI Emoji';
-
-  /* Light-mode defaults */
-  --ifm-navbar-background-color: var(--nerdgency-light-bg);
-  --ifm-hero-background-color: #ddd;
-  --ifm-background-color: var(--nerdgency-light-bg);
-  --ifm-background-surface-color: var(--nerdgency-light-surface);
-  --ifm-font-color-base: var(--nerdgency-light-text);
-  --ifm-heading-color: var(--nerdgency-light-text);
-  --ifm-link-color: var(--nerdgency-orange-strong);
-  --ifm-link-hover-color: color-mix(in srgb, var(--ifm-link-color) 85%, black 15%);
-  --ifm-navbar-link-hover-color: var(--nerdgency-orange-ink);
-  --ifm-code-background: #f6f7fb;
-  --ifm-code-font-size: 95%;
-
-  --nerdgency-focus-ring: 3px solid rgba(250,175,64,0.22);
-  --nerdgency-focus-outline-offset: 3px;
-  
-  --nerdgency-card-border: #cbd5e1;
-  --nerdgency-card-icon-background: #e2e8f0;
-}
-
-/* Dark theme overrides — used when docusaurus sets data-theme='dark' on <html> */
-:root[data-theme='dark'] {
-  --ifm-navbar-background-color: var(--nerdgency-dark-bg);
-  --ifm-hero-background-color: #0f172a;
-  --ifm-background-color: var(--nerdgency-dark-bg);
-  --ifm-background-surface-color: var(--nerdgency-dark-surface);
-  --ifm-font-color-base: var(--nerdgency-dark-text);
-  --ifm-heading-color: var(--nerdgency-dark-text);
-  --ifm-link-color: #ffd089; /* slightly lighter brand for links on dark */
-  --ifm-link-hover-color: rgba(255,208,137,0.9);
-  --ifm-code-background: #0b1730;
-  --ifm-code-font-size: 95%;
-  --ifm-navbar-link-hover-color: var(--nerdgency-orange);
-
-  --nerdgency-focus-ring: 3px solid rgba(250,175,64,0.26);
-  --nerdgency-card-border: var(--nerdgency-orange);
-  
-  --nerdgency-card-icon-background: var(--nerdgency-orange);
-  
-  --nerdgency-wordmark-bracket: var(--nerdgency-orange);
-  --nerdgency-wordmark: #ffffff;
-}
+/* Homepage feature grid (src/pages/formidable.js) -------------------- */
 
 .features__container {
-  background: var(--ifm-background-color);
-}
-
-.features {
-
+  background: var(--ng-bg);
 }
 
 .features h3 {
-  color: var(--ifm-heading-color);
+  color: var(--ng-text);
+  font-size: 1.1rem;
 }
 
 .features__icon {
-
-  width: 50px;
-  height: 50px;
-  border-radius: 6px;
-  margin-bottom: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--ng-radius-sm);
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--nerdgency-orange-ink);
+  color: var(--ng-orange-ink);
+  background: var(--ng-orange);
 }
 
 .features__card {
-  border: 1px var(--nerdgency-card-border) solid;
-  border-radius: 8px;
-  padding: 32px 24px;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius);
+  padding: 28px 24px;
+  background: var(--ng-bg);
+  transition: border-color 150ms ease;
+}
+
+.features__card:hover {
+  border-color: var(--ng-border-strong);
+}
+
+.features__card p {
+  color: var(--ng-text-muted);
+  margin-bottom: 0;
 }

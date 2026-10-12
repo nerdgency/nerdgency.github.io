@@ -1,0 +1,112 @@
+---
+title: Render and submit a form with JavaScript
+sidebar_label: Forms with JavaScript
+sidebar_position: 8
+description: Fetch a form as JSON, render it in your own front end, and submit it through the JSON API without a page reload.
+keywords:
+  - formidable
+  - ajax
+  - javascript
+  - headless
+  - json
+---
+
+# Render and submit a form with JavaScript
+
+When a page renders forms itself, in a component framework or a single-page app, fetch the form as JSON and submit it through the [JSON API](/docs/formidable/developer/json-api). Validation, spam protection, storage and workflows behave exactly as they do for a posted form.
+
+This recipe is for scripts running on **your own site**, which need no API key. For another site or a server, issue an [API key](/docs/formidable/developer/json-api#anyone-else-with-an-api-key).
+
+<Steps>
+  <Step title="Print the API address">
+
+Let the template print the endpoint, so the script never hard-codes the install's action id:
+
+```ee title="templates/default_site/contact.group/index.html"
+<div id="contact-form" data-src="{exp:formidable:api_url form_handle="contact_us"}"></div>
+<script src="/assets/js/contact.js" defer></script>
+```
+
+  </Step>
+  <Step title="Fetch the form">
+
+`GET forms/{form}` returns the [form JSON](/docs/formidable/developer/form-json): fields, choices, rules, conditions and a `submit` block with the URLs, the signed meta and this session's CSRF token.
+
+```js title="assets/js/contact.js"
+const mount = document.getElementById('contact-form');
+const {data: form} = await fetch(mount.dataset.src, {credentials: 'same-origin'}).then((r) => r.json());
+```
+
+  </Step>
+  <Step title="Render it">
+
+Render the fields however you like. Use each field's `handle` as the input's `name`, its `attributes`, its `options` for choices, and `form.templating` and each field's `templating` for the classes the site's theme would use.
+
+```js title="assets/js/contact.js"
+const el = document.createElement('form');
+el.noValidate = true;
+
+const make = (tag, props = {}) => Object.assign(document.createElement(tag), props);
+
+for (const field of form.fields) {
+  // Hidden and other invisible fields still post their value.
+  if (field.hidden) {
+    if (field.stores_value) el.append(make('input', {type: 'hidden', name: field.handle, value: field.default}));
+    continue;
+  }
+  const id = `f-${field.handle}`;
+  const error = make('p', {className: 'error', hidden: true});
+  error.dataset.errorFor = field.handle;
+  el.append(
+    make('label', {htmlFor: id, textContent: field.label}),
+    make('input', {id, name: field.handle, type: field.attributes.type ?? 'text', required: field.required}),
+    error,
+  );
+}
+el.append(make('button', {type: 'submit', textContent: 'Send'}));
+mount.replaceChildren(el);
+```
+
+This sketch renders every visible field as an `<input>`. A real form would render a `<select>` or a group of checkboxes for fields with `options`, and a `<textarea>` for Textarea fields.
+
+Setting `textContent` rather than writing HTML keeps labels typed in the control panel from being read as markup.
+
+  </Step>
+  <Step title="Submit it">
+
+Post the answers to `submit.url`, with the CSRF token and the signed meta, which carries the form's honeypot settings:
+
+```js title="assets/js/contact.js"
+el.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const answers = Object.fromEntries(new FormData(el));
+  const response = await fetch(form.submit.url, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {'Content-Type': 'application/json', 'X-CSRF-Token': form.submit.csrf_token},
+    body: JSON.stringify({answers, _formidable_meta: form.submit.meta}),
+  });
+  const result = await response.json();
+
+  el.querySelectorAll('[data-error-for]').forEach((p) => (p.hidden = true));
+  if (response.status === 201) {
+    mount.textContent = result.data.message;
+  } else if (result.error?.code === 'invalid') {
+    for (const [handle, message] of Object.entries(result.error.details)) {
+      const p = el.querySelector(`[data-error-for="${handle}"]`);
+      if (p) Object.assign(p, {textContent: message, hidden: false});
+    }
+  }
+});
+```
+
+  </Step>
+</Steps>
+
+## Things to know
+
+- **A refused CSRF token** answers `403` with the code `csrf`, for example after the session expired. Fetch the form again for a fresh token.
+- **File uploads** need `multipart/form-data`: send a `FormData` body instead of JSON when `form.submit.multipart` is true.
+- **Conditions and pages** are in the JSON (`conditions` on each field, page and section), but this recipe does not apply them in the browser. The server applies them on every submission either way. A field hidden by its conditions is blanked and not validated.
+- **Computed fields** carry their definition in `computed`. Whatever the browser posts for them is ignored.
+- **The rendered form tag does all of this already.** If you only need submission without a page reload, keep the tag's markup and post the form yourself. See [Form JSON › Submitting](/docs/formidable/developer/form-json#submitting-it).

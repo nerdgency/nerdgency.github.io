@@ -1,0 +1,177 @@
+---
+title: "{exp:formidable:submissions}"
+sidebar_label: Submissions
+sidebar_position: 2
+description: Every parameter and variable of the submissions tag, which lists a form's stored submissions, or one of them, in a template.
+formidable_tag: submissions
+keywords:
+  - formidable
+  - submissions tag
+  - pagination
+---
+
+# `{exp:formidable:submissions}`
+
+Lists the submissions a form has stored, or one of them.
+
+<VersionNotice />
+
+```ee title="templates/default_site/support.group/index.html"
+{exp:formidable:submissions form_handle="support" member_id="{logged_in_member_id}" limit="10"}
+    <article>
+        <h3>{name}</h3>
+        <p>{message}</p>
+        <time>{created_at format="%Y-%m-%d"}</time>
+    </article>
+    {if no_results}<p>Nothing yet.</p>{/if}
+{/exp:formidable:submissions}
+```
+
+Each answer is available under **its field's handle**. Renaming a field renames its variable. The stored answers are untouched.
+
+## The tag trusts your template
+
+A template is written by a developer, so this tag does exactly what its parameters say, including when they say nothing. **Without `member_id=`, it lists every member's submissions.** That is right for a staff dashboard and wrong for a member area, and only your template knows which it is.
+
+For a guest, `{logged_in_member_id}` is `0`. A `member_id=` that names no member (`0`, empty, not a number) **matches no submissions**. It never falls back to everyone's. Leaving the parameter off is the only way to list everyone's.
+
+## Parameters
+
+<Param tag="submissions" name="form_handle" required="One of these" example='form_handle="support"'>
+
+The form whose submissions to list. An unknown handle lists nothing, never everything.
+
+</Param>
+
+<Param tag="submissions" name="form_id" required="One of these" example='form_id="3"'>
+
+The form, by id.
+
+</Param>
+
+<Param tag="submissions" name="submission_handle" example='submission_handle="{segment_3}"'>
+
+One submission, by its public handle.
+
+</Param>
+
+<Param tag="submissions" name="member_id" example='member_id="{logged_in_member_id}"'>
+
+Only this member's submissions. Present but not a member id, as for a guest, matches nothing.
+
+</Param>
+
+<Param tag="submissions" name="status" example='status="new|read"'>
+
+Pipe-separated status handles.
+
+</Param>
+
+<Param tag="submissions" name="view" example='view="3"'>
+
+A [saved view's](/docs/formidable/core-concepts/submissions#the-listing) id: its filter, page size and sort. A view belonging to another form is ignored. Parameters win over the view, so `view="3" limit="5"` shows five rows. The view's columns do not apply, because your template decides the markup.
+
+</Param>
+
+<Param tag="submissions" name="limit" default="25" example='limit="10"'>
+
+How many to show, up to 500.
+
+</Param>
+
+<Param tag="submissions" name="offset" example='offset="10"'>
+
+How many to skip. Added to the page offset when paginating.
+
+</Param>
+
+<Param tag="submissions" name="orderby" default="created_at" values={<><code>created_at</code>, <code>updated_at</code>, <code>name</code>, <code>status</code>, <code>id</code></>}>
+
+What to sort by.
+
+</Param>
+
+<Param tag="submissions" name="sort" default="desc" values={<><code>asc</code>, <code>desc</code></>}>
+
+The sort direction.
+
+</Param>
+
+<Param tag="submissions" name="paginate" values={<><code>top</code>, <code>bottom</code>, <code>both</code></>}>
+
+Where to place the `{paginate}` pair's output. ExpressionEngine's own pagination, as in `{exp:channel:entries}`. See [Pagination](#pagination).
+
+</Param>
+
+<Param tag="submissions" name="paginate_base" example='paginate_base="support/archive"'>
+
+The base path for pagination links, as in ExpressionEngine's own pagination.
+
+</Param>
+
+## Variables
+
+| Variable | |
+| --- | --- |
+| `{id}` | Sequential id. Prefer `{handle}` anywhere public. |
+| `{handle}` | The submission's public handle. |
+| `{name}` | Its display name. |
+| `{status}`, `{status_handle}`, `{status_color}` | Its status and that status's colour. |
+| `{member_id}` | Who submitted it, or 0 for a guest. |
+| `{member_username}`, `{member_screen_name}`, `{member_email}` | That member's details. Empty for a guest. |
+| `{form_id}`, `{form_name}`, `{form_handle}` | The form it belongs to. |
+| `{created_at}`, `{updated_at}` | Dates. Use `format=`. |
+| `{count}`, `{absolute_count}` | Position on this page, and overall. |
+| `{total_results}` | How many match, ignoring the limit. |
+
+### Answers
+
+Every field that stores an answer gives four variables. For a field with the handle `colour`:
+
+| Variable | |
+| --- | --- |
+| `{colour}` | The answer. Several answers are joined with `, `. |
+| `{colour:label}` | What it means: an option's label rather than its stored value, or a file's name. |
+| `{colour:name}` | The field's name, such as "Favourite colour". |
+| `{colour:values}…{/colour:values}` | One row per answer, with `{value}` and `{label}`. |
+
+Answers are read the way the control panel reads them. An encrypted answer is decrypted.
+
+To print every answer without naming each field, loop `{answers}`, with `{answer_handle}`, `{answer_name}`, `{answer_value}` and `{answer_label}`:
+
+```ee title="templates/default_site/contact.group/review.html"
+<dl>
+    {answers}
+        <dt>{answer_name}</dt>
+        <dd>{answer_label}</dd>
+    {/answers}
+</dl>
+```
+
+A **file field** behaves like ExpressionEngine's own file field: `{cv}` for the URL, `{cv wrap="link"}`, `{cv:resize width="200"}`, or a pair `{cv}{url} ({file_size:human}){/cv}`. `{cv:label}` is the file's name.
+
+### Escaping
+
+Answers are what visitors typed, so every answer variable, and `{name}`, which is built from answers, is HTML-escaped. `{` and `}` are encoded too, because ExpressionEngine parses tag output again, and a stored `{exp:…}` would otherwise run in your template.
+
+## Pagination
+
+```ee title="templates/default_site/support.group/archive.html"
+{exp:formidable:submissions form_handle="support" limit="20" paginate="bottom"}
+    <p>{name}</p>
+    {paginate}
+        <p>Page {current_page} of {total_pages}</p>
+        {pagination_links}
+    {/paginate}
+{/exp:formidable:submissions}
+```
+
+The page comes from the URL's `P` segment (`/support/archive/P20`).
+
+## The same data as JSON
+
+The [JSON API](/docs/formidable/developer/json-api) serves the same submissions, read the same way: `GET forms/{form}/submissions`. [`{exp:formidable:api_url}`](./api-url.mdx) prints its address.
+
+:::note Illustrative output
+The output of this tag depends entirely on your template. None is shown here, because the only stored submissions on the install used for these docs contain personal details.
+:::
