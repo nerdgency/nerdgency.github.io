@@ -1,0 +1,166 @@
+---
+title: "{exp:formidable:capture}"
+sidebar_label: Capture
+sidebar_position: 3
+description: Every parameter and variable of the capture tag, which builds a Formidable form from hand-written HTML form markup.
+formidable_tag: capture
+keywords:
+  - formidable
+  - capture tag
+---
+
+# `{exp:formidable:capture}`
+
+Wraps a hand-written HTML form. Formidable reads the form controls, creates or updates a form to match, and outputs the markup as written, with the capture variables filled in. For a walkthrough, see [Capture an existing form](/docs/formidable/guides/capture-existing-forms).
+
+<VersionNotice />
+
+## Making it submit through Formidable
+
+| Variable | Where it goes |
+| --- | --- |
+| `{captured_action_url}` | The `<form>` element's `action` |
+| `{captured_meta}` | Inside the `<form>`: the signed meta, CSRF token and honeypots |
+
+Without them the markup still renders and is still captured, but it posts wherever it did before.
+
+## Parameters
+
+<Param tag="capture" name="form_handle" required example='form_handle="contact"'>
+
+The handle of the form to create or update.
+
+</Param>
+
+<Param tag="capture" name="form_name" default="derived from the handle" example='form_name="Contact"'>
+
+The form's name, used only when the form is created.
+
+</Param>
+
+<Param tag="capture" name="sync" default="report" values={<><code>report</code>, <code>update</code>, <code>off</code></>}>
+
+| Value | Behaviour |
+| --- | --- |
+| `report` | Read the markup and report differences, without changing the form. |
+| `update` | Also create fields that were added and update fields that changed. |
+| `off` | Do not read the markup at all. Look the form up and render. Use this in production. |
+
+Markup identical to the last capture skips parsing anyway, because a checksum is compared first.
+
+</Param>
+
+<Param tag="capture" name="fallback_fieldtype" default="text" example='fallback_fieldtype="text"'>
+
+The fieldtype handle used for a control nothing else matches. If that fieldtype does not exist either, the control is skipped and reported.
+
+</Param>
+
+<Param tag="capture" name="field:HANDLE:fieldtype" example='field:phone:fieldtype="tel"'>
+
+Forces the fieldtype for one control, instead of the best match.
+
+</Param>
+
+<Param tag="capture" name="ignore" example='ignore="newsletter|hp_check"'>
+
+Pipe-separated names of inputs never turned into fields. They still render and submit.
+
+</Param>
+
+<Param tag="capture" name="return" default="the page the form was submitted from" example='return="contact/thanks"'>
+
+Where to send the visitor after a successful submission. Same as the form tag's [`return=`](/docs/formidable/developer/tags/form#return).
+
+</Param>
+
+<Param tag="capture" name="return_on_error" default="the page the form was submitted from" example='return_on_error="contact"'>
+
+Where to send the visitor when validation fails.
+
+</Param>
+
+<Param tag="capture" name="success_message" example='success_message="Thanks!"'>
+
+The success message for this form, as on the form tag.
+
+</Param>
+
+<Param tag="capture" name="success_values" default="no" values={<><code>yes</code>, <code>no</code></>}>
+
+As on the form tag.
+
+</Param>
+
+<Param tag="capture" name="members_only" values={<><code>yes</code>, <code>no</code></>}>
+
+As on the form tag. A guest's submission is refused.
+
+</Param>
+
+<Param tag="capture" name="honeypot" default="formidable_hp">
+
+The honeypot input's name, as on the form tag.
+
+</Param>
+
+<Param tag="capture" name="honeypot_js" default="_formidable_js_ok">
+
+The JavaScript honeypot input's name, as on the form tag.
+
+</Param>
+
+<Param tag="capture" name="prefix" example='prefix="contact_"'>
+
+Prefixes every variable the tag publishes.
+
+</Param>
+
+<Param tag="capture" name="debug" default="off" values={<><code>on</code>, <code>yes</code>, <code>y</code>, <code>true</code>, <code>1</code></>}>
+
+Turns a missing `form_handle=`, and controls no fieldtype matched, into errors.
+
+</Param>
+
+The error summary's regions can be styled with the same `REGION:attribute:NAME=` parameters as the form tag.
+
+## Variables
+
+| Variable | Contains |
+| --- | --- |
+| `{captured_form_id}`, `{captured_form_handle}`, `{captured_form_name}` | The form |
+| `{captured_created}` | The form did not exist and was created by this capture |
+| `{captured_changed}` | Anything differs between the markup and the form |
+| `{captured_added}` | Handles in the markup but not in the form |
+| `{captured_removed}` | Handles in the form but not in the markup |
+| `{captured_modified}` | Handles whose type or attributes changed |
+| `{captured_skipped}` | Handles no fieldtype could be matched to |
+| `{captured_synced}` | Handles written, under `sync="update"` |
+| `{captured_action_url}`, `{captured_meta}` | See above |
+| `{form_has_errors}`, `{form_error_count}`, `{form_errors}…{/form_errors}` | Errors after a failed submission, as on the form tag |
+| `{error:HANDLE}`, `{value:HANDLE}` | One field's error and submitted value |
+
+The handle lists are pipe-separated, and all of them work in conditionals. **Removed fields are reported, never deleted**, even under `sync="update"`, because they may have submissions.
+
+## How a control is matched
+
+Each control is scored against **every fieldtype in the Registry**, including ones you added. The strongest signals are a fieldtype whose handle matches the input's type or tag name, and one whose storage input equals the input's type. A `<select>` prefers fieldtypes that store options, and a file input prefers the file engine. The highest score wins. When nothing scores, `fallback_fieldtype=` is used.
+
+HTML validation attributes such as `required`, `minlength` and `pattern` become the matching rules where the Registry has them. Attributes matching a registered field attribute go into the field's attributes. The rest are kept as extras.
+
+## Who captures
+
+Capture writes to the database, so it only reads markup for a **signed-in Super Admin**. Everyone else gets the `sync="off"` behaviour: the form is looked up, and the markup renders and submits. A staging environment can allow capture without a session:
+
+```php title="system/user/config/config.php"
+$config['formidable_capture_public'] = 'y';
+```
+
+Do not set this in production.
+
+## Command line
+
+```bash
+php system/ee/eecli.php formidable:capture-status --form=contact
+php system/ee/eecli.php formidable:capture-status --json
+```

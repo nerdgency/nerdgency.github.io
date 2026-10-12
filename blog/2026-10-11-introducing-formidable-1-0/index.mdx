@@ -1,0 +1,68 @@
+---
+slug: introducing-formidable-1-0
+title: Introducing Formidable 1.0
+description: Formidable 1.0 is a forms add-on for ExpressionEngine 7.5+. Build forms in the control panel or capture your own markup, render them through themes you can change part by part, and act on every submission with workflows.
+authors: [nerdgency]
+tags: [formidable, release]
+keywords:
+  - formidable
+  - expressionengine forms
+  - expressionengine add-on
+  - form builder
+image: /img/social/nerdgency-docs.png
+---
+
+Formidable 1.0 is out: a forms add-on for ExpressionEngine 7.5 and later. It covers the whole life of a form, from building it and getting it onto a page in your own markup, to storing, reviewing and acting on what people send.
+
+{/* truncate */}
+
+## One tag, then as much markup as you want
+
+A form built in the control panel renders with a single tag:
+
+```ee title="templates/default_site/contact.group/index.html"
+{exp:formidable:form form_handle="contact_us"}
+```
+
+That renders the complete form from a theme: the form element, the hidden processing inputs, pages, sections, fields, errors and buttons. Formidable ships three themes (Default, Tailwind and Bootstrap 5), and any of them can be copied into an ExpressionEngine template group, where each part is an ordinary hidden template you can edit, version and deploy.
+
+When a template needs to own the markup, it can take over one layer at a time: its own `<form>` element around the theme's fields, its own markup for every field, or individual fields placed by hand. Here is a hand-written field loop, and what it rendered on a real install:
+
+<CapturedExample
+  name="custom-markup"
+  title="Your markup, Formidable's attributes"
+  start='<div class="field">'
+  end="</form>"
+/>
+
+The input's `id`, `name`, `type`, repopulated value and accessibility attributes still come from Formidable. The [rendering guide](/docs/formidable/guides/render-a-form) walks through each layer.
+
+## Building forms
+
+- A drag-and-drop **builder** with pages, sections and a field grid. Everything a drag does is also on a keyboard-reachable menu.
+- **28 fieldtypes**, including file uploads, a signature pad, Computed fields that work out totals, names and ages as the visitor types, and three kinds of CAPTCHA: ExpressionEngine's own, Cloudflare Turnstile and hCaptcha.
+- **Conditions** that show, hide or require fields, skip pages and hide sections. They run in the browser for the visitor and again on the server for the submission, from one shared set of test cases.
+- A **Field Library** for fields you use on every form.
+- Already have hand-written forms? **`{exp:formidable:capture}`** builds the form behind your markup and leaves the markup alone.
+
+## After someone submits
+
+Submissions are listed in the control panel with filters, saved views and statuses, and export to CSV, JSON, XML or plain text. Fields can be encrypted at rest.
+
+**Workflows** decide what happens next: send an email, call a signed webhook, or push to Mailchimp, Campaign Monitor, Constant Contact, Dotdigital, HubSpot, Salesforce or Mailjet. Each workflow has its own conditions, and every run is recorded in a log, with what it sent and what came back. When something fails, fix the workflow and press **Run again**.
+
+## For developers
+
+- A **JSON API** for forms and submissions. Your own pages use it without a key. Other systems use scoped API keys, stored as hashes.
+- Forms as JSON for headless front ends, carrying the same rules, conditions and classes the tag would use.
+- Register your own **fieldtypes** and **connection providers**, and hook into `formidable_submission_complete` and `formidable_spam_caught`.
+- **Command line** tools for themes, fieldtype sync, capture status and recalculating Computed answers.
+
+## Requirements and getting started
+
+Formidable 1.0 needs ExpressionEngine 7.5 or later and PHP 8.2 or later.
+
+- [Install Formidable](/docs/formidable/getting-started/installation)
+- [Quick start: a working form in a few minutes](/docs/formidable/getting-started/quick-start)
+- [1.0.0 release notes](/docs/formidable/release/1-0-0)
+- [Form tag reference](/docs/formidable/developer/tags/form)

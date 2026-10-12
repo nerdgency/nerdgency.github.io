@@ -1,0 +1,10 @@
+{exp:formidable:form form_handle="contact_us" only="email_address"}
+    <form {form_attributes:bag except="data-formidable-disable-submit"}>
+        {form_meta}
+        {fields}
+            <label {label_attributes:bag class="form-label"}>{field_name}</label>
+            <input {field_attributes:bag only="id|name|type|value"}>
+        {/fields}
+        <button type="submit">Send</button>
+    </form>
+{/exp:formidable:form}

@@ -1,70 +1,51 @@
 ---
 title: Troubleshooting
-sidebar_position: 35
-slug: /getting-started/troubleshooting
-description: What to do when a form renders nothing, a field is missing, or a class you set never appears.
+sidebar_position: 4
+description: What to do when a form renders nothing, a field is missing, a class never appears, or a submission does not arrive.
 keywords:
   - formidable
   - troubleshooting
   - debug
-  - expressionengine
 ---
 
 # Troubleshooting
 
-Most Formidable problems are **silent** rather than loud: a form renders,
-looks fine, and is missing something. This page is about turning that
-silence into a sentence.
+Most Formidable problems are quiet rather than loud: the page renders, looks fine, and is missing something. Formidable is built so a misconfigured form never takes a live page down, which means you sometimes have to ask it what went wrong. This page shows how.
 
-## Start here: two things to read
+## Start with these two
 
 ### 1. Add `debug="on"` to the tag
 
+```ee title="templates/default_site/contact.group/index.html"
+{exp:formidable:form form_handle="contact_us" debug="on"}
 ```
-{exp:formidable:form form_handle="contact" debug="on"}
-```
 
-With it on, situations that normally fall back quietly become errors that
-name themselves:
+`debug=` accepts `on`, `yes`, `y`, `true` or `1`. With it on, problems that normally fall back quietly halt the page with a message that names them:
 
-- no form matches `form_id=` / `form_handle=`
-- the form has no fields
-- every field was filtered out — and **which** filter removed each one
-- a field's template could not be resolved at any level
+| Message | Meaning |
+| --- | --- |
+| The "form_id" or "form_handle" parameter is required. | The tag names no form. |
+| No form was found with either the id or handle. | The handle is misspelled, or the form belongs to another site. |
+| This form does not have any fields. | The form exists but is empty. |
 
-Turn it off again before the page goes live. Without it, all of the above
-render nothing rather than interrupting a visitor.
+Without `debug=`, the same situations render the tag's `{if no_results}` block, or nothing. Turn it off before the page goes live.
 
 ### 2. Read the page source
 
-If `{form_fields}` produced nothing, Formidable leaves an HTML comment
-saying so:
+When the fields render no markup, Formidable leaves an HTML comment in the page. **It does not need `debug=`**: an empty render would otherwise look exactly like a successful one.
 
-```html
-<!-- formidable: {form_fields} is empty -- 1 field(s) reached the loop,
-     all rendering no markup: color (fieldtype=color group=inputs
-     stored=0 group_stored=0 shipped=0 group_shipped=207 root=ok). -->
+```html title="In the page source"
+<!-- formidable: {form_fields} is empty -- 0 field(s) reached the loop (the filter removed them all; add debug="on" for the reasons). -->
 ```
 
-**This comment is not behind `debug=`.** It is there whether or not you
-thought to ask, because an empty render is otherwise indistinguishable
-from a successful one.
-
-Reading it:
-
-| Part | Meaning |
+| The comment says | Look at |
 | --- | --- |
-| `0 field(s) reached the loop` | The filter removed them all — turn on `debug=` for the reasons |
-| `N field(s) … rendering no markup` | The fields ran; their templates produced nothing |
-| `fieldtype=` / `group=` | The two handles the template resolver looked up |
-| `group=NULL` | The fieldtype's `parent_id` does not point at a fieldtype group |
-| `stored=` / `shipped=` … | Bytes each level returned — all zero means nothing was found anywhere |
-| `root=MISSING` | The addon's `views/templates/` directory is not where it should be — a broken install |
+| `0 field(s) reached the loop` | `only=`, `exclude=` or `page=` removed every field. |
+| `N field(s) reached the loop, all rendering no markup: …` | The theme parts for those fields are empty. The comment names each field and the parts that were looked for. |
 
-There is a second comment for the easier-to-miss case: some fields
-rendering and others not.
+A second comment covers the easier case to miss, where some fields render and others do not:
 
-```html
+```html title="In the page source"
 <!-- formidable: no markup for phone -- check the fieldtype template chain. -->
 ```
 
@@ -72,85 +53,59 @@ rendering and others not.
 
 ### A field renders nothing
 
-Almost always a template level returning empty where inheritance was
-expected. The comment above names the levels and what each returned.
-
-Remember that **an empty template means "inherit", not "render
-nothing"** — half the fieldtypes ship no template of their own and draw
-from their group's. If both come back empty, the field has nowhere to get
-markup from.
+A field is a **shell** (`_field`) around a **control** (`_control`). Each is looked up by fieldtype, then fieldtype group, then the generic part, first in your theme's template group, then in the theme it was copied from, then in Default. A part that exists but is empty in your template group still wins the lookup. Delete the empty template to fall back to the shipped one. See [Themes](/docs/formidable/core-concepts/themes#fields-a-shell-around-a-control).
 
 ### The whole form renders nothing
 
-Check whether the `<form>` element is in the source at all.
+Check whether a `<form>` element is in the page source.
 
-- **No `<form>`** — the tag aborted. `debug="on"` will say why. If it
-  says nothing, suspect template caching serving a stale page.
-- **`<form>` present but empty** — read the comment inside it.
+- **No `<form>`:** the tag stopped early. `debug="on"` says why. If it says nothing, suspect a cached page.
+- **A `<form>` with nothing inside:** read the comment inside it.
+- **A closed form:** a form past its closing date or submission limit, or a members-only form shown to a guest, renders its message instead of its fields. See [Limits and access](/docs/formidable/core-concepts/forms-and-fields#limits-and-access).
 
 ### A class or attribute never appears
 
-Work **down** the [attribute layers](/getting-started/concepts) from 7 to
-1. The last layer that sets the attribute is the one you are seeing —
-something more specific is replacing it.
+Attributes are layered, and a more specific layer replaces a more general one: fieldtype group, fieldtype, site, form, field, then tag parameters. `class` is the exception and **appends** across layers. Work from the most specific layer down. The last layer that sets the attribute is the one you see. See [Regions and attributes](/docs/formidable/core-concepts/regions-and-attributes).
 
-Remember that `class` **appends** across layers while everything else
-**replaces**. To discard what earlier layers contributed, prefix with
-`=`:
+A theme can also add classes inside its own markup, with the `:bag` modifier: `{field_wrapper_attributes:bag class="…"}`. Those are applied after every layer, so `=` on a tag parameter does not remove them. Copy the theme part and edit it instead.
 
+### A tag parameter seems to do nothing
+
+Formidable ignores a parameter it does not recognise rather than reporting it. Check the spelling against the [form tag reference](/docs/formidable/developer/tags/form). Settings such as `return`, `return_on_error`, `template_columns` and `success_message` use the same name as a tag parameter and as the setting in the control panel.
+
+### Uploads arrive empty
+
+A form with a file field needs `enctype="multipart/form-data"`. `{form_attributes}` adds it for you. A hand-written `<form action="…" method="post">` without `{form_attributes}` loses it, and the files are silently dropped. Keep `{form_attributes}` on your `<form>`.
+
+### Next does nothing on a multi-page form
+
+**Next** checks the current page first, using the browser's own validation. If a required field on that page is empty, the browser points at it instead of moving on. Fields hidden by conditions are skipped. If the page has no navigation at all, keep `{page_nav}` in your page markup. See [Multi-page forms](/docs/formidable/guides/multi-page-forms).
+
+### The step indicator never changes
+
+Each step needs `data-formidable-page-step="{page_number}"`. Without it the script has nothing to update.
+
+### Conditions do not work on the page
+
+Conditions run in `formidable.js`, which Formidable adds to the page only when the form needs it. The page template must output a `<head>` for EE to put the script in, and `include_js="no"` must not be set. The server checks conditions again on every submission, so a form submitted with scripts disabled is still validated correctly.
+
+### A submission was accepted but nothing was sent
+
+Open **Formidable › Workflow Log**. Every workflow run is recorded there: whether it succeeded, failed, or had nothing to do (no recipient, no URL), what it sent and what came back. After fixing the workflow, **Run again** replays the run with the original answers. See [The workflow log](/docs/formidable/core-concepts/workflows#the-workflow-log).
+
+### Visitors are sent to the site index after submitting
+
+A `return=` URL on a host other than your site's is refused, and the visitor falls back to the site index. Allow the host in `config.php`:
+
+```php title="system/user/config/config.php"
+$config['formidable_return_hosts'] = ['checkout.example.com'];
 ```
-field:attribute:class="=mt-2"
-```
 
-### A tag parameter appears to do nothing
+## Reporting a problem
 
-Check the spelling against the setting's name. `return`,
-`return_on_error`, `template_columns` and `success_message` are also
-control panel settings, and the parameter and the setting share one name
-deliberately. A parameter Formidable does not recognise is ignored rather
-than reported.
+Include:
 
-### A template edit did not take effect
-
-Templates live in the database and are mirrored to disk. **The database
-is what renders.** If you edited the file, **Templates → Sync** will show
-`file_changed` and nothing will have changed on the front end until you
-apply it.
-
-If Sync reports `conflict`, both copies changed. Formidable will not pick
-a winner for you — that would mean silently discarding somebody's work.
-
-### The step indicator never moves
-
-Each step needs `data-formidable-page-step="{page_number}"`. Without it
-there is nothing for the stepper to update. See
-[the `{form_pages}` loop](../tags/form.md).
-
-### Multi-page: Next does nothing
-
-Next runs the browser's own validation on the current page first. If a
-required field on that page is empty, the browser reports it rather than
-advancing. Fields hidden by conditions are skipped.
-
-## When to suspect the install rather than the form
-
-Two symptoms point at the addon's files rather than anything you
-configured:
-
-- `root=MISSING` in the diagnostic comment
-- a control panel page 404ing that should exist
-
-Both suggest the copy of Formidable being executed is not the one you
-think. If the addon is a real directory rather than a symlink to your
-build output, confirm the copy actually ran.
-
-## Still stuck
-
-Open an issue with:
-
-1. The tag as written, including parameters
-2. The HTML comment from the page source, verbatim
-3. What `debug="on"` said, or that it said nothing
-
-The comment is usually enough to identify the cause without a
-reproduction, which is what it exists for.
+1. The tag as written, with every parameter.
+2. Any `<!-- formidable: … -->` comment from the page source, verbatim.
+3. What `debug="on"` said, or that it said nothing.
+4. Your Formidable, ExpressionEngine and PHP versions.

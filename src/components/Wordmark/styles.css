@@ -1,5 +1,5 @@
 .nerdgency-wordmark {
-  display: flex;
+  display: inline-flex;
   gap: 2px;
   align-items: center;
 }

@@ -1,0 +1,8 @@
+formidable:
+  label: Formidable
+  permalink: /formidable
+  description: Posts about the Formidable forms add-on.
+release:
+  label: Release
+  permalink: /release
+  description: Release announcements.

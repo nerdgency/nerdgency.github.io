@@ -1,0 +1,88 @@
+---
+title: Send email notifications
+sidebar_label: Email notifications
+sidebar_position: 5
+description: Email your team when a form is submitted, send the visitor a copy, and let visitors choose which department receives their message without exposing addresses.
+keywords:
+  - formidable
+  - email notification
+  - workflow
+  - recipients
+---
+
+# Send email notifications
+
+Emails are sent by [workflows](/docs/formidable/core-concepts/workflows). Each workflow sends one email. Add one per audience: one for your team, one for the visitor.
+
+## Email your team
+
+<Steps>
+  <Step title="Add a workflow">
+
+Open the form, go to its **Workflows** tab and add a workflow. Name it (for example *Notify sales*), leave the event as **Submission Created**, and choose **Send an email**.
+
+  </Step>
+  <Step title="Choose the recipients">
+
+Add a recipient row for each address: a typed address, a member, or every member of a role. Each row is delivered as **To**, **Cc** or **Bcc**.
+
+  </Step>
+  <Step title="Write the subject and choose the message">
+
+Leave **From** blank to use the site's webmaster address, or set your own. **Reply-to** is optional and takes a fixed address. The subject can include answers with `{field:HANDLE}`:
+
+```text title="Subject"
+New enquiry from {field:first_name} {field:last_name}
+```
+
+For the message, choose the email theme's **Submission** message, which lists every answer in a table, and keep **Use the email layout** on.
+
+  </Step>
+  <Step title="Test it">
+
+Submit the form, then open **Formidable › Workflow Log**. The run shows who it went to, the subject and body as sent, and whether the mail server accepted it.
+
+  </Step>
+</Steps>
+
+## Send the visitor a copy
+
+Add a second workflow with an email action and a **Form Field** recipient pointing at the visitor's email field.
+
+A form field can only receive a workflow email when it is safe for it to do so, so first open that field and turn on **Allow as Workflow Recipient** on its **Advanced** tab. This lets anyone who submits the form choose an address your site will email, which is what a "send me a copy" field is for. Turn it on only for fields like this one.
+
+To make the copy optional, add a Checkbox field such as *Email me a copy*, and give the workflow a condition: **Email me a copy** *equals* the checkbox's checked value.
+
+## Let visitors choose the recipient
+
+Let visitors pick "Sales", "Support" or "Billing" without the addresses ever appearing on the page.
+
+<Steps>
+  <Step title="Add a choice field with Recipients">
+
+Add a **Select**, **Radio Buttons** or **Checkboxes** field. On its **Options** tab choose the **Recipients** source, and add a row per choice: a short **value** (`sales`), the **label** visitors see, and one or more **email** addresses, separated by commas.
+
+  </Step>
+  <Step title="Point a workflow at it">
+
+In a workflow's email recipients, add a **Form Field** row and pick this field.
+
+  </Step>
+</Steps>
+
+The page, the [form's JSON](/docs/formidable/developer/form-json) and anything else a visitor can see carry only the values and labels. The addresses stay in the field's settings and are read only when the workflow sends. A visitor cannot add an address. A posted value that is not one of the field's values fails validation, and only the addresses in the field's own rows can ever be reached.
+
+## Customise the email
+
+The **Submission** message and the layout come from the [email theme](/docs/formidable/core-concepts/themes#email-themes). Copy the **Email** theme into a template group to change them, and choose that group as the **email theme** in Configuration or on the form. Add your own messages as more hidden templates in the group, such as `_welcome.html`, and each workflow can choose one:
+
+```ee title="system/user/templates/default_site/forms_email.group/_welcome.html"
+<p>Hi {field:first_name},</p>
+<p>Thanks for getting in touch about {form_name}. Here is a copy of what you sent:</p>
+{submission_answers}
+```
+
+## Attach files
+
+- **Attach uploaded files** attaches the files uploaded with the submission.
+- **Attachments** adds files from ExpressionEngine's file manager to every email the workflow sends, such as a price list.

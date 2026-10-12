@@ -1,0 +1,308 @@
+/* Shared styles for the documentation components. */
+
+/* Example: a template and what it renders, as one figure ------------ */
+.example {
+  margin: 1.5rem 0 2rem;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius);
+  background: var(--ng-bg);
+}
+
+.exampleHeader {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--ng-border);
+  background: var(--ng-surface);
+  border-radius: var(--ng-radius) var(--ng-radius) 0 0;
+}
+
+.exampleTitle {
+  font-family: var(--ng-font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.exampleBody {
+  padding: 1rem 1rem 0.25rem;
+}
+
+.exampleBody > :global(.theme-code-block) {
+  margin-bottom: 1rem;
+}
+
+.exampleCaption {
+  padding: 0 1rem 0.9rem;
+  color: var(--ng-text-muted);
+  font-size: 0.875rem;
+}
+
+/* Kind labels: template / captured output / illustrative ------------ */
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--ng-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.label::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.labelTemplate { color: var(--ng-label-template); }
+.labelCaptured { color: var(--ng-label-output); }
+.labelIllustrative { color: var(--ng-label-illustrative); }
+
+.output {
+  margin: 0 0 1rem;
+}
+
+.outputHeader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+}
+
+.outputSource {
+  font-size: 0.8rem;
+  color: var(--ng-text-muted);
+}
+
+.output > :global(.theme-code-block) {
+  margin-bottom: 0;
+}
+
+/* Illustrative output gets a dashed frame, so it never passes for real. */
+.outputIllustrative > :global(.theme-code-block) {
+  border-style: dashed !important;
+}
+
+/* Steps ------------------------------------------------------------- */
+.steps {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 2rem;
+}
+
+.step {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 1.25rem 3rem;
+  margin: 0;
+}
+
+.step::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ng-font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: var(--ng-orange);
+  color: var(--ng-orange-ink);
+}
+
+/* The rail joining one step to the next. */
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: calc(1rem - 1px);
+  top: 2.25rem;
+  bottom: 0.25rem;
+  width: 2px;
+  background: var(--ng-border);
+}
+
+.stepTitle {
+  font-family: var(--ng-font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0.2rem 0 0.5rem;
+}
+
+.stepBody > :last-child {
+  margin-bottom: 0;
+}
+
+/* Parameter reference ----------------------------------------------- */
+.param {
+  border-top: 1px solid var(--ng-border);
+  padding: 1.1rem 0 0.4rem;
+}
+
+.paramHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.paramName {
+  font-family: var(--ng-font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+.paramName code {
+  border: 0 !important;
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.chip {
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  border: 1px solid var(--ng-border-strong);
+  color: var(--ng-text-muted);
+  white-space: nowrap;
+}
+
+.chipRequired {
+  border-color: transparent;
+  background: var(--ng-orange);
+  color: var(--ng-orange-ink);
+}
+
+.paramMeta {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.2rem 1rem;
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem;
+}
+
+.paramMeta dt {
+  color: var(--ng-text-muted);
+  font-weight: 500;
+}
+
+.paramMeta dd {
+  margin: 0;
+}
+
+/* Version notice ---------------------------------------------------- */
+.version {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--ng-text-muted);
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius);
+  padding: 0.55rem 0.9rem;
+  margin: 0 0 1.75rem;
+  background: var(--ng-surface);
+}
+
+.version strong {
+  color: var(--ng-text);
+}
+
+.since {
+  font-family: var(--ng-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  background: var(--ng-accent-soft);
+  color: var(--ng-link);
+  vertical-align: middle;
+}
+
+/* Screenshot -------------------------------------------------------- */
+.screenshot {
+  margin: 1.5rem 0 2rem;
+}
+
+.screenshotFrame {
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius);
+  overflow: hidden;
+  background: var(--ng-surface);
+}
+
+.screenshotFrame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0 !important;
+}
+
+.screenshot figcaption {
+  font-size: 0.85rem;
+  color: var(--ng-text-muted);
+  margin-top: 0.5rem;
+}
+
+/* Card grid (doc landing pages) ------------------------------------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius);
+  color: inherit !important;
+  text-decoration: none !important;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.card:hover {
+  border-color: var(--ng-link);
+  box-shadow: var(--ng-shadow);
+}
+
+.cardTitle {
+  font-family: var(--ng-font-display);
+  font-weight: 700;
+  color: var(--ng-text);
+}
+
+.cardBody {
+  font-size: 0.9rem;
+  color: var(--ng-text-muted);
+}
+
+/* Data tables generated from the source map ------------------------- */
+.mono {
+  font-family: var(--ng-font-mono);
+  font-size: 0.85em;
+}

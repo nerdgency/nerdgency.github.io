@@ -1,0 +1,38 @@
+---
+title: Configuration (config.php)
+sidebar_label: Configuration
+sidebar_position: 6
+description: Every config.php key Formidable reads, with its default.
+keywords:
+  - formidable
+  - config.php
+  - configuration
+---
+
+# Configuration (config.php)
+
+Most settings live on **Formidable › Configuration** and on each form. See [Settings and inheritance](/docs/formidable/core-concepts/settings-and-inheritance). A few behaviours are set in the site's `system/user/config/config.php` instead, with keys prefixed `formidable_`. They survive add-on updates. Do not edit the add-on's own `config/config.php`, which is replaced by every update.
+
+```php title="system/user/config/config.php"
+$config['formidable_rate_limit'] = 20;
+$config['formidable_return_hosts'] = ['checkout.example.com'];
+```
+
+<ConfigTable descriptions={{
+  formidable_api: "'n' switches the JSON API off. Every request then answers 404 api_disabled.",
+  formidable_captcha_word_ttl: 'Seconds a Captcha word stays answerable.',
+  formidable_capture_public: 'Allow {exp:formidable:capture} to create and change forms without a Super Admin session. Staging only.',
+  formidable_connection_providers: 'Extra connection provider classes. See Custom connections.',
+  formidable_duplicate_window: 'Seconds within which identical answers from one IP count as a double submission and are accepted once. 0 turns it off.',
+  formidable_fieldtypes: 'Extra fieldtype classes. See Custom fieldtypes.',
+  formidable_meta_ttl: 'Seconds a rendered form’s signed meta stays valid. Long on purpose: forms sit in open tabs and cached pages.',
+  formidable_rate_limit: 'Submissions allowed per IP within the window. 0 turns the limit off.',
+  formidable_rate_window: 'The rate limit’s window, in seconds.',
+  formidable_return_hosts: 'Extra hosts return= may redirect to, as an array or a comma- or pipe-separated string. The site’s own host is always allowed.',
+  formidable_signing_key: 'The key that signs form meta. Falls back to ExpressionEngine’s encryption_key.',
+  formidable_upload_quarantine_ttl: 'Seconds a failed submission’s uploads are held for the resubmit.',
+  formidable_workflow_log: "'n' records no workflow runs.",
+  formidable_workflow_log_days: 'Days to keep workflow runs. 0 keeps them all.',
+}} />
+
+The spam settings `formidable_rate_limit`, `formidable_rate_window` and `formidable_duplicate_window` can also be set on **Configuration › Spam**. When both are set, `config.php` wins.

@@ -1,0 +1,16 @@
+{exp:formidable:form form_handle="contact_us" only="first_name|email_address"}
+    <form {form_attributes} class="stack">
+        {form_meta}
+        {fields}
+            <div class="field">
+                <label for="{field_handle}">{field_name}</label>
+                {if field_instructions}
+                    <p class="hint" id="{field_handle}-instructions">{field_instructions}</p>
+                {/if}
+                <input {field_attributes}>
+                {if field_has_error}<p class="field-error">{field_error}</p>{/if}
+            </div>
+        {/fields}
+        <button type="submit">Send</button>
+    </form>
+{/exp:formidable:form}

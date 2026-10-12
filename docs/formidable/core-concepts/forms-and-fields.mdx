@@ -1,0 +1,125 @@
+---
+title: Forms, fields and the builder
+sidebar_label: Forms and fields
+sidebar_position: 2
+description: How a form is structured into pages, sections and fields, what each field can be configured to do, and how the Field Library shares fields between forms.
+keywords:
+  - formidable
+  - form builder
+  - pages
+  - sections
+  - field library
+---
+
+# Forms, fields and the builder
+
+## Structure: pages, sections, fields
+
+```text
+Form
+└── Page        a step the visitor moves through (Back / Next / Submit)
+    └── Section a titled group of fields, such as an address block
+        └── Field
+```
+
+Every form has at least one page, and every page at least one section. A one-page form shows no step navigation. It ends with a Submit button.
+
+- **Pages** have a name, a description, a heading level (2 unless changed) and their own button labels. Empty labels use the defaults: Next, Previous and Submit.
+- **Sections** have a name, a description and a heading level (3 unless changed).
+- Pages and sections can have **conditions**, which skip a page or hide a section depending on earlier answers. A page condition can only use fields on earlier pages, and a section condition can only use fields before it, so the order of the form is always well defined. The builder only offers fields that come earlier.
+- **Fields** sit on a grid inside their section. A field's width is a quarter, half, three-quarters or the full width of the section.
+
+There is no "submit button" field and no "group" field. Every page has its own navigation, and sections do the grouping.
+
+## The builder
+
+A form's edit screen shows the whole form at once: each page is a panel, each section a box inside it, and each field a tile in its section's grid.
+
+- **Add a field** by dragging it from the **Add field** palette to where it should go, or by clicking it to add it to the end of the section you are looking at. Each section also ends with its own **Add field** picker, which you can search with the keyboard. To add a field next to another, hover any edge of a field and choose the **+** that appears: left or top adds before it, right or bottom after it. The keyboard reaches the one before each field.
+- **Edit** a field by clicking its tile. **Move** it by dragging, between sections and across pages. **Resize** it by dragging its right edge.
+- **Every drag has a keyboard route.** A field's menu offers **Width**, **Move up**, **Move down** and **Move to** any section on any page. Page and section menus have their own **Move** options.
+- **Pages and sections** are dragged by their headers. Clicking a name opens its settings. A page or section can only be deleted once it is empty, and a form always keeps one of each.
+- **Hidden fields** have no place in the layout, so they are listed above the pages.
+- **Overview** (the **Builder | Overview** switch above the builder) shows a map of the form: every page and section, its conditions written out as sentences, and lines linking each condition to the fields it reads.
+
+## Field settings
+
+A field's editor has these tabs. Some settings appear only for the fieldtypes they apply to.
+
+| Tab | Settings |
+| --- | --- |
+| **General** | Label, handle, instructions, default value, required, encrypted, and for some fieldtypes the input type. |
+| **Advanced** | **Allow as Workflow Recipient** (email-capable fields), **Cast Storage To**, and the Field Library link. |
+| **Conditions** | Show or hide the field, and make it required, based on other answers. See [Conditions](./conditions.md). |
+| **Validation Rules** | Rules checked on the server when the form is submitted. See [Validation rules](#validation-rules). |
+| **Templating** | Classes and attributes for the field's parts: the wrapper, label, input, instructions, error and options. See [Regions and attributes](./regions-and-attributes.mdx). |
+
+A few of these are worth knowing about from the start:
+
+- **Handle.** Templates address a field by its handle: `{field:email_address:attributes}`, `field:email_address:rules=`, `{email_address}` in a submission. Stored answers are keyed by the field's id, so renaming a handle never orphans old answers, but templates that used the old handle need updating.
+- **Default value.** A default may contain ExpressionEngine variables such as `{segment_3}` or a global variable. They are parsed when the form renders.
+- **Encrypted.** The answer is encrypted before it is stored, and decrypted only where it is displayed: the submission screen, exports, workflows and the `{exp:formidable:submissions}` tag.
+- **Cast Storage To.** Stores the answer as a whole number, decimal or true/false, which also decides how conditions and the submissions filter compare it.
+
+### Validation rules
+
+Rules are ExpressionEngine validation rules. A field's **Required** setting is separate from its rules. Each field also gets the rules its settings imply: for example, a Text field's **Maximum Length** sets both `maxlength` on the input and a `maxLength` rule. A template can add or replace rules for one render with [`field:HANDLE:rules=`](/docs/formidable/developer/tags/form#field-handle-rules).
+
+<RuleTable descriptions={{
+  alpha: 'contains only letters',
+  alphaDash: 'contains only letters, numbers, underscores and dashes',
+  alphaDashPeriodEmoji: 'contains only letters, numbers, underscores, dashes, periods or emoji',
+  alphaNumeric: 'contains only letters and numbers',
+  boolean: 'is a true or false value',
+  email: 'is an email address',
+  enum: 'is one of the listed values: enum[a|b|c]',
+  exactLength: 'is exactly this many characters long',
+  greaterOrEqualThan: 'is a number greater than or equal to this',
+  greaterThan: 'is a number greater than this',
+  hexColor: 'is a hex colour',
+  integer: 'is a whole number',
+  ipAddress: 'is an IP address',
+  isNatural: 'contains only digits 0–9',
+  isNaturalNoZero: 'contains only digits and is not zero',
+  lessOrEqualThan: 'is a number less than or equal to this',
+  lessThan: 'is a number less than this',
+  limitHtml: 'uses only the listed HTML tags',
+  maxLength: 'is at most this many characters long',
+  minLength: 'is at least this many characters long',
+  noHtml: 'contains no HTML',
+  notNumeric: 'is not a number',
+  notStartsWith: 'does not start with this text',
+  numeric: 'is a number',
+  startsWith: 'starts with this text',
+  url: 'is a URL',
+  whenPresent: 'is only validated when the field was submitted',
+}} />
+
+More rules can be added under **Registry › Validation Rules**.
+
+## The Field Library
+
+The Field Library holds reusable fields. Build "Phone" once, with its instructions, pattern and placeholder, or "Province" with its choices, and add it to any form.
+
+- **Formidable › Field Library** lists library fields and how many form fields link to each. On a multi-site install, a library field can be **Available To** this site only, or every site.
+- In the builder, the palette's **Library** tab lists library fields. Adding one opens the field editor already filled in. Whatever you change before saving becomes this form's own setting, and everything else stays linked.
+- A linked field **stores only what differs**. Change a setting on the form and it overrides the library for that form. Leave it alone and it follows the library. The editor lists the overrides, and you can drop any of them to follow the library again. An override replaces a whole setting: change one choice in a list, and the form owns the whole list.
+- The handle, layout and conditions always belong to the form. The fieldtype always comes from the library field.
+- **Save to Library** copies an ordinary field into the library and links it. **Unlink from Library** keeps every setting as it currently reads and stops following.
+- A library field that form fields still link to cannot be deleted. Submissions are never affected, because answers belong to the form's own field.
+
+## Limits and access
+
+A form's **General** tab can close it automatically:
+
+| Setting | Effect |
+| --- | --- |
+| **Accept submissions until** | After this date the form shows its closed message instead of its fields. |
+| **Maximum submissions** | Once this many submissions are stored, the form closes. |
+| **Members only** | Only logged-in members may fill it in. Guests see a message. This follows the site setting unless the form sets its own. |
+
+Each has its own message. The form is checked again when a submission arrives, so a page cached before the form closed cannot get a submission through. Templates can place the message themselves with `{if form_closed}`. See [the form tag](/docs/formidable/developer/tags/form#closed-forms).
+
+## Statuses
+
+Every submission has a status. Statuses are defined in **Configuration › Statuses** and on each form's **Statuses** tab, each with a name and a colour. Statuses can be changed from the submission screen, used to filter the submissions listing, and passed to the `status=` parameter of [`{exp:formidable:submissions}`](/docs/formidable/developer/tags/submissions).
