@@ -1,7 +1,7 @@
 ---
 slug: introducing-formidable-1-0
 title: Introducing Formidable 1.0
-description: Formidable 1.0 is a forms add-on for ExpressionEngine 7.5+. Build forms in the control panel or capture your own markup, render them through themes you can change part by part, and act on every submission with workflows.
+description: Formidable is a forms add-on for ExpressionEngine 7.5+ with signatures, uploads and computed fields, layered spam protection, multi-page forms that save and resume, and workflows that email, call webhooks and update your CRM.
 authors: [nerdgency]
 tags: [formidable, release]
 keywords:
@@ -9,24 +9,26 @@ keywords:
   - expressionengine forms
   - expressionengine add-on
   - form builder
+  - multi-page forms
+  - signature field
 image: /img/social/nerdgency-docs.png
 ---
 
-Formidable 1.0 is out: a forms add-on for ExpressionEngine 7.5 and later. It covers the whole life of a form, from building it and getting it onto a page in your own markup, to storing, reviewing and acting on what people send.
+Every ExpressionEngine site has forms, and every ExpressionEngine developer has rebuilt the same one more times than they'd like to admit. A contact form. A job application. A registration with "add another attendee". Each comes with the same chores: validation, spam, storing what people send, emailing someone about it, and keeping the markup the designer actually asked for.
+
+Today we're releasing **Formidable 1.0**, a forms add-on for ExpressionEngine 7.5 and later that does those chores properly, from the first field to the last email, so your templates can be about design.
 
 {/* truncate */}
 
-## One tag, then as much markup as you want
+## The idea: start with one tag, keep your markup
 
-A form built in the control panel renders with a single tag:
+Form builders usually make you choose. Either the builder owns your markup, or you own it and write the plumbing yourself. Formidable doesn't make you pick. Build a form in the control panel, then put it on a page:
 
 ```ee title="templates/default_site/contact.group/index.html"
 {exp:formidable:form form_handle="contact_us"}
 ```
 
-That renders the complete form from a theme: the form element, the hidden processing inputs, pages, sections, fields, errors and buttons. Formidable ships three themes (Default, Tailwind and Bootstrap 5), and any of them can be copied into an ExpressionEngine template group, where each part is an ordinary hidden template you can edit, version and deploy.
-
-When a template needs to own the markup, it can take over one layer at a time: its own `<form>` element around the theme's fields, its own markup for every field, or individual fields placed by hand. Here is a hand-written field loop, and what it rendered on a real install:
+That's the whole template. It renders a complete, accessible form from your theme: **Default**, **Tailwind** or **Bootstrap 5**. When a design needs more, take over the next layer, from your own `<form>` element down to every label and input. Formidable keeps supplying what's tedious to get right: names and ids, the value a visitor typed before an error, `required`, and the ARIA links that make instructions readable to screen readers.
 
 <CapturedExample
   name="custom-markup"
@@ -35,34 +37,116 @@ When a template needs to own the markup, it can take over one layer at a time: i
   end="</form>"
 />
 
-The input's `id`, `name`, `type`, repopulated value and accessibility attributes still come from Formidable. The [rendering guide](/docs/formidable/guides/render-a-form) walks through each layer.
+Already have forms written by hand? Wrap one in `{exp:formidable:capture}` and Formidable builds the form behind it, leaving your markup exactly as you wrote it.
 
-## Building forms
+## Every field you'll need
 
-- A drag-and-drop **builder** with pages, sections and a field grid. Everything a drag does is also on a keyboard-reachable menu.
-- **28 fieldtypes**, including file uploads, a signature pad, Computed fields that work out totals, names and ages as the visitor types, and three kinds of CAPTCHA: ExpressionEngine's own, Cloudflare Turnstile and hCaptcha.
-- **Conditions** that show, hide or require fields, skip pages and hide sections. They run in the browser for the visitor and again on the server for the submission, from one shared set of test cases.
-- A **Field Library** for fields you use on every form.
-- Already have hand-written forms? **`{exp:formidable:capture}`** builds the form behind your markup and leaves the markup alone.
+Formidable ships **28 fieldtypes** in four groups (inputs, dates and times, options, and special fields), and a few of them do things most form tools leave to a plugin.
 
-## After someone submits
+### Signatures
 
-Submissions are listed in the control panel with filters, saved views and statuses, and export to CSV, JSON, XML or plain text. Fields can be encrypted at rest.
+A **Signature** field gives visitors a pad to sign with a mouse, trackpad or finger. Set the pad's size, pen and colours, and choose where each signature goes: stored inside the submission as an image, or written to one of your upload destinations as a file. It's ideal for consent forms, waivers and sign-offs, and it shows a polite message to the rare visitor without JavaScript.
 
-**Workflows** decide what happens next: send an email, call a signed webhook, or push to Mailchimp, Campaign Monitor, Constant Contact, Dotdigital, HubSpot, Salesforce or Mailjet. Each workflow has its own conditions, and every run is recorded in a log, with what it sent and what came back. When something fails, fix the workflow and press **Run again**.
+### File uploads
 
-## For developers
+A **File** field uploads into ExpressionEngine's own file manager, to the upload destination and subfolder you choose, one file or several. Allowed types and sizes come from that destination, so they're set once, where ExpressionEngine already enforces them. If a submission fails validation, its uploads are held for a few minutes, so nobody has to pick their files again.
 
-- A **JSON API** for forms and submissions. Your own pages use it without a key. Other systems use scoped API keys, stored as hashes.
-- Forms as JSON for headless front ends, carrying the same rules, conditions and classes the tag would use.
-- Register your own **fieldtypes** and **connection providers**, and hook into `formidable_submission_complete` and `formidable_spam_caught`.
-- **Command line** tools for themes, fieldtype sync, capture status and recalculating Computed answers.
+### Computed fields
 
-## Requirements and getting started
+A **Computed** field works out a value from other answers as the visitor types: a full name, an order total, an age, a date thirty days from now. Formulas are checked when you save them, never `eval`'d. The server works the value out again on submit, whatever the browser sent, and when you change a calculation Formidable offers to recalculate every stored submission.
 
-Formidable 1.0 needs ExpressionEngine 7.5 or later and PHP 8.2 or later.
+### Choices that stay current
 
-- [Install Formidable](/docs/formidable/getting-started/installation)
-- [Quick start: a working form in a few minutes](/docs/formidable/getting-started/quick-start)
-- [1.0.0 release notes](/docs/formidable/release/1-0-0)
-- [Form tag reference](/docs/formidable/developer/tags/form)
+Select, Multi-select, Checkboxes and Radio Buttons can take their choices from a list you type, a number range, or a **built-in list** of countries, languages, U.S. states, Canadian provinces, days, weeks or months. They can also be built from your site's own entries, categories, members or roles, so they never go stale. **Recipients** lists let a visitor choose which department hears from them, while the email addresses never reach the page.
+
+Add dates, times, months and weeks with their native pickers, numbers and ranges, colour pickers, hidden values and blocks of HTML, and most forms are covered before you write a line of code.
+
+## Spam, stopped quietly
+
+Spam protection is layered, and most of it is switched on before you've added your first field:
+
+- **A honeypot**, an input people never see and bots can't resist filling in.
+- **A JavaScript honeypot**, which catches scripted posts that never ran the page.
+- **A rate limit** per IP address, on by default, so a form that emails someone can never become a mail relay.
+- **Duplicate detection**, so a double-clicked Submit is stored once.
+
+A caught submission gets the same polite response as a real one, so bots learn nothing, and each form keeps a count of what was stopped.
+
+When a form needs a visible challenge, add one as a field: **ExpressionEngine's own CAPTCHA**, **Cloudflare Turnstile** or **hCaptcha**. Turnstile and hCaptcha keys are saved once as a connection and chosen per field, so a staging site and production can use different widgets.
+
+Under all of it, every form carries signed, encrypted meta that nobody can tamper with, CSRF protection on every post (AJAX included), checked return URLs, and optional **encryption at rest** for sensitive fields.
+
+## Long forms people actually finish
+
+Applications, intake questionnaires and grant forms lose people. Formidable is built to keep them.
+
+### Multi-page forms
+
+Split a form into pages in the builder, and the form tag renders them with a step indicator and Back / Next navigation. Nothing changes in your template. **Next** checks the current page before moving on, steps are clickable, and the whole form is still validated on the server when it's sent. Conditions can **skip a page** entirely: hide "Company details" when someone is applying as an individual, and Next, Back and the step indicator all simply pass it by.
+
+### Conditions and repeating sections
+
+Show, hide or require any field based on earlier answers, and hide whole sections. The builder reads every condition back to you as a sentence, with lines to the fields it depends on. **Repeating sections** add "Add another" rows for dependants, employers or line items, with conditions that work row by row and `sum()`, `count()` and `average()` for totals across the rows.
+
+### Save and resume
+
+Turn on **save and resume** and every page gets a **Save and continue later** button:
+
+```ee title="templates/default_site/apply.group/index.html"
+{exp:formidable:form form_handle="application" drafts="yes"}
+```
+
+The visitor's answers are kept as a draft, with a link back to exactly where they left off, uploaded files included. Members can simply open the form again on any device. Turn on **save on each page** and nothing is lost even if they never press Save. Set **Reminder after (days)**, and anyone who wanders off gets a friendly email with their link. `{exp:formidable:drafts}` lists a member's unfinished forms on their account page, and drafts nobody returns to tidy themselves away.
+
+## Workflows: what happens after Submit
+
+A **workflow** is something that happens after a submission, and each form can have as many as it needs, each with its own conditions. They run when a submission is **created**, **edited**, or **moved to a new status**, and when a draft is **saved** or **due a reminder**. So "email the applicant when their status changes to Approved" is one workflow, not a custom add-on.
+
+### Email that looks like it came from you
+
+Send to typed addresses, members, whole roles, or the address a visitor chose. Messages come from an **email theme** with a shared layout, so every notification matches your brand. Subjects can include answers, **Reply-to** can be the visitor's own address so your team just hits Reply, and files can be attached: the visitor's uploads, or a brochure from your file manager.
+
+### Webhooks and CRMs
+
+**Call a webhook** to post the submission as JSON to any URL, signed with an HMAC so the receiver can trust it. Or **send to a connection** to push straight into **Mailchimp**, **HubSpot**, **Salesforce**, **Campaign Monitor**, **Constant Contact**, **Dotdigital** or **Mailjet**. Map `email`, `first_name` and friends once, and each provider translates them into its own fields.
+
+### A log you can replay
+
+Every run is recorded: whether it worked, what it sent and what came back, encrypted at rest. When a mail server or CRM has a bad day, the log tells you why, and **Run again** sends it once you've fixed things. Add a queue (Formidable's own, or BoldMinded's Queue add-on) and workflows run in the background with automatic retries, so a slow CRM never slows down your visitor.
+
+## A control panel you'll want to open
+
+The new **dashboard** shows what came in, a fourteen-day chart, how workflows are doing, and anything that needs a look. Each form's submissions can be filtered, saved as views, given colour-coded statuses, edited (repeating rows included), and exported to CSV, JSON, XML or plain text. **Eight permissions** let each role see exactly what it should, right down to the sidebar, and **Utilities** puts API keys and every command one click away.
+
+## Room to grow
+
+- **A JSON API** serves forms and accepts submissions from any front end, with the same validation as a posted form.
+- **Eighteen extension hooks** cover submitting, validation, workflows, exports, rendering and the API.
+- **Your own fieldtypes and connection providers** register from your add-on, one PHP class each.
+- **Twelve commands** for cron and deploy scripts, all runnable from the control panel too.
+- **The Formidable Form channel field** lets editors put a form on any entry, including inside Grid and Fluid.
+
+## Documented to the parameter
+
+The documentation was written alongside the code, and it's checked against Formidable's source every time the site builds. If you read about a parameter, it exists. Where the docs show the HTML Formidable produces, it was captured from a real install, not typed by hand.
+
+## Get started
+
+Formidable 1.0 needs **ExpressionEngine 7.5** or later and **PHP 8.2** or later. Installing it means copying two folders and choosing **Install**, and your first form is about five minutes after that.
+
+<Cards>
+  <CardLink to="/docs/formidable/getting-started/installation" title="Install Formidable">
+    Requirements, and the two folders to copy.
+  </CardLink>
+  <CardLink to="/docs/formidable/getting-started/your-first-form" title="Build your first form">
+    A contact form, on a page, in about five minutes.
+  </CardLink>
+  <CardLink to="/docs/formidable/submissions/save-and-resume" title="Save and resume">
+    Long forms, finished later.
+  </CardLink>
+  <CardLink to="/docs/formidable/automation/workflows" title="Workflows">
+    Email, webhooks and CRMs, with a replayable log.
+  </CardLink>
+</Cards>
+
+We can't wait to see what you build with it.

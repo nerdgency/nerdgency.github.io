@@ -237,9 +237,9 @@ configKeys.sort((a, b) => a.key.localeCompare(b.key));
 
 const hooks = need(
   uniq(
-    [...fs.readdirSync(path.join(src, 'Actions'))].flatMap((f) =>
-      [...read(`Actions/${f}`).matchAll(/extensions->call\(\s*'([a-z_]+)'/g)].map((m) => m[1]),
-    ),
+    walk(src)
+      .filter((f) => f.endsWith('.php'))
+      .flatMap((f) => [...fs.readFileSync(f, 'utf8').matchAll(/extensions->call\(\s*'([a-z_]+)'/g)].map((m) => m[1])),
   ),
   'the extension hooks',
 );

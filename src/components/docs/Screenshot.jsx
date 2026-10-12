@@ -9,7 +9,7 @@ import styles from './styles.module.css';
  *     img={require('./img/forms-listing.png')}
  *     alt="The Forms listing, showing two forms and their submission counts"
  *     caption="Formidable › Forms"
- *     captured="Formidable 0.9.5 on ExpressionEngine 7.5.26, demo data"
+ *     captured="Formidable 1.0 on ExpressionEngine 7.5, demo data"
  *   />
  *
  * `captured` is required: every screenshot says what it was taken from.

@@ -1,0 +1,81 @@
+---
+title: Fields
+description: What a field can be set to do, from its handle and default value to encryption and storage, and how the Field Library shares fields between forms.
+keywords:
+  - formidable
+  - fields
+  - default value
+  - field library
+---
+
+# Fields
+
+## Introduction
+
+A field is one question on a form. Click a field's tile in the builder to open its editor. The editor has five tabs, and some settings appear only for the fieldtypes they apply to.
+
+| Tab | Settings |
+| --- | --- |
+| **General** | Label, handle, instructions, default value, and for some fieldtypes the input type. |
+| **Validation** | **Required**, and the rules checked when the form is submitted. See [Validation](./validation.mdx). |
+| **Conditions** | Show or hide the field, or make it required, based on other answers. See [Conditions](./conditions.md). |
+| **Advanced** | **Allow as Workflow Recipient**, **Encrypt Stored Value**, **Cast Storage To**, and the Field Library link. |
+| **Templating** | Classes and attributes for the field's parts: its wrapper, label, input, instructions, error and options. See [Regions and attributes](/docs/formidable/displaying-forms/regions-and-attributes). |
+
+## Handles
+
+A field's **handle** is how everything else refers to it. Its answer is posted under that name, and templates use it everywhere:
+
+```ee
+{field:email_address:label}
+field:email_address:rules="required|email"
+{email_address}
+```
+
+Formidable suggests a handle from the label. Stored answers are keyed by the field's id, not its handle, so renaming a handle never orphans old answers. Templates that used the old handle need updating, though.
+
+## Default values
+
+A field's **default value** is what it holds when the form first appears. Choice fields (Select, Multi-select, Checkboxes and Radio Buttons) have no default value box: tick the preselected choices on their **Options** tab instead.
+
+A default can use variables, filled in for whoever is viewing the form. **Insert variable** beside the box lists them:
+
+| Variables | |
+| --- | --- |
+| `{logged_in_member_id}` `{logged_in_username}` `{logged_in_screen_name}` `{logged_in_email}` `{logged_in_primary_role_id}` `{logged_in_primary_role_name}` | The member viewing the form. Empty for a guest. |
+| `{current_url}` `{current_path}` `{current_query_string}` `{segment_1}` … `{segment_9}` `{last_segment}` | The page the form is on. |
+| `{current_time format="%Y-%m-%d"}` | Today, for a Date field. `%H:%i` suits a Time field, and `%Y-%m-%dT%H:%i` a Date & Time field. `{current_time}` alone is a Unix timestamp. |
+| `{site_name}` `{site_url}` `{webmaster_email}` | The site. |
+
+Values are escaped as they're filled in, so a quote or a tag in a member's name can't break the form.
+
+Your own **Template Variables** (Developer › Templates › Template Variables) work too, because ExpressionEngine fills them in after the form renders. Snippets and embed variables don't: ExpressionEngine replaces those before any tag runs.
+
+The same variables are filled in for the form's JSON (`output="json"`) and the [JSON API](/docs/formidable/headless/json-api), for whoever makes the request.
+
+## Encryption
+
+Turn on **Encrypt Stored Value** on the **Advanced** tab to encrypt a field's answer before it's stored. It's decrypted only where it's displayed: the submission's page, exports, workflows and the `{exp:formidable:submissions}` tag. The submissions listing never decrypts answers, so a glance at the list can't disclose them in bulk.
+
+Encryption is chosen when the field is **created** and can't be changed afterwards. Answers stored before the switch would still be in the clear, and turning it on later would suggest otherwise. [Fieldtypes](./fieldtypes.mdx#which-fields-can-be-encrypted) lists the fieldtypes that can be encrypted.
+
+## Storage casting
+
+**Cast Storage To** stores an answer as a whole number, a decimal or true/false. It also decides how [conditions](./conditions.md) and the submissions filter compare the field. It's offered only where the stored shape can change, so not for File, Signature, Multi-select or Checkboxes.
+
+## Workflow recipients
+
+**Allow as Workflow Recipient** lets a workflow email the address a visitor typed into this field, for a "send me a copy" box, say. It's off by default, because otherwise anyone who submits the form could make your site email any address. See [Email notifications](/docs/formidable/automation/email-notifications#let-visitors-choose-the-recipient).
+
+## The Field Library
+
+The Field Library holds reusable fields. Build "Phone" once, with its instructions, pattern and placeholder, or "Province" with its choices, then add it to any form.
+
+- **Formidable › Field Library** lists library fields and how many form fields link to each. On a multi-site install, a library field can be **Available To** this site only, or every site.
+- In the builder, the palette's **Library** tab lists library fields. Adding one opens the field editor already filled in.
+- **A linked field stores only what differs.** Change a setting on the form and it overrides the library for that form. Leave it alone and it follows the library. The editor lists the overrides, and you can drop any of them to follow the library again.
+- An override replaces a whole setting. Change one choice in a list, and the form owns the whole list.
+- The handle, layout and conditions always belong to the form. The fieldtype always comes from the library field.
+- **Save to Library** copies an ordinary field into the library and links it. **Unlink from Library** keeps every setting as it reads now and stops following.
+
+A library field that form fields still link to can't be deleted. Submissions are never affected, because answers belong to the form's own field.

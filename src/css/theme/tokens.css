@@ -1,8 +1,13 @@
 /*
  * Nerdgency design tokens.
  *
+ * The look: a printed manual on warm paper. Ink-dark type, an editorial
+ * serif for headings, the brand amber used sparingly -- for the braces of
+ * the wordmark, the current page, a highlighted line -- and code on dark
+ * "ink" panels in both colour modes, so a snippet always reads as code.
+ *
  * Two layers:
- *   --ng-*   the brand and semantic tokens, set once per colour mode
+ *   --ng-*   brand and semantic tokens, set once per colour mode
  *   --ifm-*  Infima's variables (Docusaurus' CSS framework), mapped onto
  *            the --ng-* tokens so every stock theme component follows
  *
@@ -12,37 +17,51 @@
 
 :root {
   /* Brand ------------------------------------------------------------ */
-  --ng-orange: #faaf40;          /* brand fill: buttons, accents, focus */
-  --ng-orange-ink: #2b1200;      /* text on --ng-orange (9.5:1) */
+  --ng-amber: #faaf40;           /* the wordmark's braces; fills, never text on paper */
+  --ng-amber-deep: #e8930c;
+  --ng-amber-ink: #2b1700;       /* text on amber (9.6:1) */
   --ng-slate: #374654;           /* the wordmark's grey */
 
   /* Type ------------------------------------------------------------- */
   --ng-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, sans-serif;
-  --ng-font-display: 'Figtree', var(--ng-font-sans);
-  --ng-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+  --ng-font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --ng-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
     monospace;
 
   /* Shape ------------------------------------------------------------ */
   --ng-radius-sm: 6px;
-  --ng-radius: 10px;
-  --ng-radius-lg: 16px;
-  --ng-focus-ring: 0 0 0 3px color-mix(in srgb, var(--ng-orange) 55%, transparent);
+  --ng-radius: 12px;
+  --ng-radius-lg: 20px;
+  --ng-focus-ring: 0 0 0 3px color-mix(in srgb, var(--ng-amber) 60%, transparent);
+  --ng-content-width: 46rem;
 
-  /* Light mode ------------------------------------------------------- */
-  --ng-bg: #ffffff;
-  --ng-surface: #f8fafc;
-  --ng-surface-2: #f1f5f9;
-  --ng-border: #e2e8f0;
-  --ng-border-strong: #cbd5e1;
-  --ng-text: #0f172a;
-  --ng-text-muted: #475569;      /* 7.6:1 on white */
-  --ng-link: #a85d00;            /* 5.0:1 on white; the brand orange is 1.9:1 */
-  --ng-link-hover: #7c4400;
-  --ng-accent-soft: #fff4e0;     /* tint behind the active sidebar item */
-  --ng-code-bg: #f6f8fa;
-  --ng-code-inline-bg: #f1f5f9;
-  --ng-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 8px 24px rgb(15 23 42 / 0.06);
+  /* Light mode: paper ------------------------------------------------ */
+  --ng-bg: #fbf9f4;              /* paper */
+  --ng-bg-raised: #ffffff;
+  --ng-surface: #f4f1e8;
+  --ng-surface-2: #ece7da;
+  --ng-border: #e4ded0;
+  --ng-border-strong: #cfc6b2;
+  --ng-text: #1c1d21;            /* ink, 16:1 on paper */
+  --ng-text-muted: #5b5a55;      /* 6.6:1 */
+  --ng-text-faint: #8a877e;
+  --ng-link: #9a5300;            /* 5.6:1 on paper */
+  --ng-link-hover: #6f3b00;
+  --ng-accent-soft: #fbeccb;
+  --ng-mark: rgb(250 175 64 / 0.32);
+
+  /* Ink panels: code, the footer, feature bands -------------------- */
+  --ng-ink: #16181d;
+  --ng-ink-2: #1e2128;
+  --ng-ink-border: #2c3039;
+  --ng-ink-text: #e9e6dd;
+  --ng-ink-muted: #9b988f;
+
+  --ng-code-inline-bg: #f1ecdf;
+  --ng-code-inline-text: #7a3f00;
+  --ng-shadow: 0 1px 2px rgb(28 29 33 / 0.05), 0 12px 32px -12px rgb(28 29 33 / 0.18);
+  --ng-shadow-lg: 0 2px 4px rgb(28 29 33 / 0.04), 0 30px 60px -20px rgb(28 29 33 / 0.28);
 
   /* Labels for template / output examples */
   --ng-label-template: #1d4ed8;
@@ -51,95 +70,115 @@
 
   /* Infima mapping --------------------------------------------------- */
   --ifm-color-primary: var(--ng-link);
-  --ifm-color-primary-dark: #975400;
-  --ifm-color-primary-darker: #8f4f00;
-  --ifm-color-primary-darkest: #7c4400;
-  --ifm-color-primary-light: #b96600;
-  --ifm-color-primary-lighter: #c16b00;
-  --ifm-color-primary-lightest: #d67700;
+  --ifm-color-primary-dark: #8a4a00;
+  --ifm-color-primary-darker: #824600;
+  --ifm-color-primary-darkest: #6f3b00;
+  --ifm-color-primary-light: #aa5c00;
+  --ifm-color-primary-lighter: #b26000;
+  --ifm-color-primary-lightest: #c76c00;
 
   --ifm-font-family-base: var(--ng-font-sans);
   --ifm-heading-font-family: var(--ng-font-display);
   --ifm-font-family-monospace: var(--ng-font-mono);
   --ifm-font-size-base: 100%;
-  --ifm-line-height-base: 1.7;
-  --ifm-heading-font-weight: 700;
-  --ifm-h1-font-size: 2.25rem;
-  --ifm-h2-font-size: 1.6rem;
-  --ifm-h3-font-size: 1.25rem;
+  --ifm-line-height-base: 1.75;
+  --ifm-heading-font-weight: 600;
+  --ifm-heading-line-height: 1.2;
+  --ifm-h1-font-size: 2.75rem;
+  --ifm-h2-font-size: 1.75rem;
+  --ifm-h3-font-size: 1.3rem;
   --ifm-h4-font-size: 1.05rem;
+  --ifm-spacing-horizontal: 1.25rem;
 
   --ifm-background-color: var(--ng-bg);
   --ifm-background-surface-color: var(--ng-surface);
   --ifm-font-color-base: var(--ng-text);
   --ifm-heading-color: var(--ng-text);
+  --ifm-color-content: var(--ng-text);
   --ifm-color-content-secondary: var(--ng-text-muted);
   --ifm-link-color: var(--ng-link);
   --ifm-link-hover-color: var(--ng-link-hover);
   --ifm-toc-border-color: var(--ng-border);
   --ifm-hr-background-color: var(--ng-border);
+  --ifm-color-emphasis-100: var(--ng-surface);
   --ifm-color-emphasis-200: var(--ng-border);
   --ifm-color-emphasis-300: var(--ng-border-strong);
+  --ifm-color-emphasis-600: var(--ng-text-muted);
 
-  --ifm-navbar-background-color: color-mix(in srgb, var(--ng-bg) 88%, transparent);
-  --ifm-navbar-height: 4rem;
+  --ifm-navbar-background-color: color-mix(in srgb, var(--ng-bg) 82%, transparent);
+  --ifm-navbar-height: 4.25rem;
   --ifm-navbar-shadow: none;
-  --ifm-navbar-link-color: var(--ng-text);
-  --ifm-navbar-link-hover-color: var(--ng-link);
+  --ifm-navbar-link-color: var(--ng-text-muted);
+  --ifm-navbar-link-hover-color: var(--ng-text);
+  --ifm-navbar-padding-horizontal: 1.5rem;
 
   --ifm-menu-color: var(--ng-text-muted);
   --ifm-menu-color-active: var(--ng-text);
-  --ifm-menu-color-background-active: var(--ng-accent-soft);
-  --ifm-menu-color-background-hover: var(--ng-surface-2);
+  --ifm-menu-color-background-active: transparent;
+  --ifm-menu-color-background-hover: transparent;
 
-  --ifm-code-font-size: 88%;
+  --ifm-code-font-size: 86%;
   --ifm-code-background: var(--ng-code-inline-bg);
-  --ifm-code-border-radius: var(--ng-radius-sm);
-  --ifm-pre-background: var(--ng-code-bg);
-  --ifm-pre-padding: 1.1rem;
+  --ifm-code-border-radius: 5px;
+  --ifm-code-padding-horizontal: 0.35rem;
+  --ifm-pre-background: var(--ng-ink);
+  --ifm-pre-color: var(--ng-ink-text);
+  --ifm-pre-padding: 1.2rem;
+  --ifm-pre-line-height: 1.7;
 
   --ifm-table-border-color: var(--ng-border);
   --ifm-table-head-background: var(--ng-surface);
-  --ifm-table-stripe-background: color-mix(in srgb, var(--ng-surface) 60%, transparent);
+  --ifm-table-stripe-background: transparent;
 
   --ifm-global-radius: var(--ng-radius);
   --ifm-card-border-radius: var(--ng-radius);
-  --ifm-button-border-radius: var(--ng-radius-sm);
+  --ifm-button-border-radius: 999px;
   --ifm-global-shadow-lw: var(--ng-shadow);
+  --ifm-global-shadow-md: var(--ng-shadow);
 
-  --ifm-hero-background-color: var(--ng-surface);
+  --ifm-hero-background-color: var(--ng-bg);
   --ifm-hero-text-color: var(--ng-text);
 
-  --ifm-footer-background-color: var(--ng-surface);
-  --ifm-footer-color: var(--ng-text-muted);
-  --ifm-footer-link-color: var(--ng-text);
-  --ifm-footer-title-color: var(--ng-text);
+  --ifm-footer-background-color: var(--ng-ink);
+  --ifm-footer-color: var(--ng-ink-muted);
+  --ifm-footer-link-color: var(--ng-ink-text);
+  --ifm-footer-title-color: var(--ng-ink-text);
 
-  --docusaurus-highlighted-code-line-bg: rgb(250 175 64 / 0.16);
+  --ifm-breadcrumb-item-background-active: transparent;
+  --ifm-pagination-nav-color-hover: var(--ng-link);
+
+  --docusaurus-highlighted-code-line-bg: rgb(250 175 64 / 0.14);
   --docsearch-primary-color: var(--ng-link);
 
-  /* Legacy names the homepage components still read. */
-  --nerdgency-wordmark-bracket: var(--ng-orange);
-  --nerdgency-wordmark: var(--ng-slate);
-  --nerdgency-card-border: var(--ng-border-strong);
-  --nerdgency-card-icon-background: var(--ng-surface-2);
+  /* Names the homepage components read. */
+  --nerdgency-wordmark-bracket: var(--ng-amber);
+  --nerdgency-wordmark: var(--ng-text);
 }
 
-/* Dark mode ---------------------------------------------------------- */
+/* Dark mode: the ink, with paper type ------------------------------- */
 [data-theme='dark'] {
-  --ng-bg: #0b1120;
-  --ng-surface: #111a2e;
-  --ng-surface-2: #17223b;
-  --ng-border: #233150;
-  --ng-border-strong: #2f4066;
-  --ng-text: #e6edf7;            /* 16:1 on --ng-bg */
-  --ng-text-muted: #9aa8bd;      /* 7.8:1 */
-  --ng-link: #fbbf5a;            /* 11.4:1 */
-  --ng-link-hover: #ffd58f;
+  --ng-bg: #121317;
+  --ng-bg-raised: #191b20;
+  --ng-surface: #1a1c22;
+  --ng-surface-2: #22252c;
+  --ng-border: #2a2d35;
+  --ng-border-strong: #3a3e48;
+  --ng-text: #ece9e1;            /* 15:1 on --ng-bg */
+  --ng-text-muted: #a9a59b;      /* 7.9:1 */
+  --ng-text-faint: #77746c;
+  --ng-link: #fbbd5c;            /* 11:1 */
+  --ng-link-hover: #ffd590;
   --ng-accent-soft: rgb(250 175 64 / 0.12);
-  --ng-code-bg: #0d1526;
-  --ng-code-inline-bg: #17223b;
-  --ng-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.3);
+  --ng-mark: rgb(250 175 64 / 0.25);
+
+  --ng-ink: #0c0d10;
+  --ng-ink-2: #15171b;
+  --ng-ink-border: #262930;
+
+  --ng-code-inline-bg: #23262d;
+  --ng-code-inline-text: #fbcf86;
+  --ng-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  --ng-shadow-lg: 0 2px 4px rgb(0 0 0 / 0.4), 0 30px 60px -20px rgb(0 0 0 / 0.7);
 
   --ng-label-template: #93c5fd;
   --ng-label-output: #6ee7b7;
@@ -153,7 +192,5 @@
   --ifm-color-primary-lighter: #fcd287;
   --ifm-color-primary-lightest: #fde3b4;
 
-  --nerdgency-wordmark: #ffffff;
-  --nerdgency-card-border: var(--ng-border-strong);
-  --nerdgency-card-icon-background: var(--ng-orange);
+  --ifm-navbar-background-color: color-mix(in srgb, var(--ng-bg) 80%, transparent);
 }

@@ -2,10 +2,11 @@
 
 /* Example: a template and what it renders, as one figure ------------ */
 .example {
-  margin: 1.5rem 0 2rem;
+  margin: 1.75rem 0 2.25rem;
   border: 1px solid var(--ng-border);
   border-radius: var(--ng-radius);
-  background: var(--ng-bg);
+  background: var(--ng-bg-raised);
+  box-shadow: var(--ng-shadow);
 }
 
 .exampleHeader {
@@ -22,8 +23,8 @@
 
 .exampleTitle {
   font-family: var(--ng-font-display);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 560;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -46,10 +47,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-family: var(--ng-font-display);
-  font-size: 0.72rem;
+  font-family: var(--ng-font-sans);
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -118,11 +119,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--ng-font-display);
-  font-weight: 700;
-  font-size: 0.9rem;
-  background: var(--ng-orange);
-  color: var(--ng-orange-ink);
+  font-family: var(--ng-font-mono);
+  font-weight: 600;
+  font-size: 0.8rem;
+  background: var(--ng-bg-raised);
+  border: 1px solid var(--ng-border-strong);
+  color: var(--ng-text);
+  box-shadow: 0 0 0 4px var(--ng-bg);
 }
 
 /* The rail joining one step to the next. */
@@ -132,15 +135,16 @@
   left: calc(1rem - 1px);
   top: 2.25rem;
   bottom: 0.25rem;
-  width: 2px;
-  background: var(--ng-border);
+  width: 1px;
+  background: linear-gradient(var(--ng-border-strong), var(--ng-border));
 }
 
 .stepTitle {
   font-family: var(--ng-font-display);
-  font-size: 1.05rem;
-  font-weight: 700;
-  margin: 0.2rem 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 560;
+  margin: 0.15rem 0 0.5rem;
+  color: var(--ng-text);
 }
 
 .stepBody > :last-child {
@@ -188,8 +192,9 @@
 
 .chipRequired {
   border-color: transparent;
-  background: var(--ng-orange);
-  color: var(--ng-orange-ink);
+  font-family: var(--ng-font-sans);
+  background: var(--ng-amber);
+  color: var(--ng-amber-ink);
 }
 
 .paramMeta {
@@ -207,25 +212,6 @@
 
 .paramMeta dd {
   margin: 0;
-}
-
-/* Version notice ---------------------------------------------------- */
-.version {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  align-items: center;
-  font-size: 0.85rem;
-  color: var(--ng-text-muted);
-  border: 1px solid var(--ng-border);
-  border-radius: var(--ng-radius);
-  padding: 0.55rem 0.9rem;
-  margin: 0 0 1.75rem;
-  background: var(--ng-surface);
-}
-
-.version strong {
-  color: var(--ng-text);
 }
 
 .since {
@@ -274,30 +260,50 @@
 }
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 1rem 1.1rem;
+  gap: 0.4rem;
+  padding: 1.1rem 1.25rem 1.2rem;
   border: 1px solid var(--ng-border);
   border-radius: var(--ng-radius);
+  background: var(--ng-bg-raised);
   color: inherit !important;
   text-decoration: none !important;
-  transition: border-color 120ms ease, box-shadow 120ms ease;
+  transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
 }
 
 .card:hover {
-  border-color: var(--ng-link);
+  border-color: var(--ng-amber);
   box-shadow: var(--ng-shadow);
+  transform: translateY(-2px);
 }
 
 .cardTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   font-family: var(--ng-font-display);
-  font-weight: 700;
+  font-weight: 560;
+  font-size: 1.08rem;
   color: var(--ng-text);
+}
+
+.cardTitle::after {
+  content: '→';
+  font-family: var(--ng-font-sans);
+  color: var(--ng-amber-deep);
+  transition: transform 140ms ease;
+}
+
+.card:hover .cardTitle::after {
+  transform: translateX(3px);
 }
 
 .cardBody {
   font-size: 0.9rem;
+  line-height: 1.55;
   color: var(--ng-text-muted);
 }
 

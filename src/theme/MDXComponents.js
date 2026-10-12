@@ -12,7 +12,7 @@ import CapturedResponse from '@site/src/components/docs/CapturedResponse';
 import Output from '@site/src/components/docs/Output';
 import {Steps, Step} from '@site/src/components/docs/Steps';
 import Param from '@site/src/components/docs/Param';
-import {VersionNotice, Since} from '@site/src/components/docs/VersionNotice';
+import {Since} from '@site/src/components/docs/Since';
 import Screenshot from '@site/src/components/docs/Screenshot';
 import {Cards, CardLink} from '@site/src/components/docs/Cards';
 import * as Reference from '@site/src/components/docs/Reference';
@@ -28,7 +28,6 @@ export default {
   Steps,
   Step,
   Param,
-  VersionNotice,
   Since,
   Screenshot,
   Cards,

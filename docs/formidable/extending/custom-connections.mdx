@@ -1,0 +1,98 @@
+---
+title: Custom connections
+description: Add a connection provider so workflows can push submissions to a service Formidable does not ship with.
+keywords:
+  - formidable
+  - custom connection
+  - crm
+  - integration
+---
+
+# Custom connections
+
+## Introduction
+
+A connection provider is a PHP class that knows how to talk to one service. Formidable ships providers for Mailchimp, Campaign Monitor, Constant Contact, Dotdigital, HubSpot, Salesforce and Mailjet, plus Turnstile and hCaptcha. Your add-on can add more.
+
+## Write the provider
+
+Extend `Nerdgency\Formidable\App\Connections\Connection` and implement `PushProviderInterface`. Implement `TestableProviderInterface` too, so the connections screen can check the saved credentials:
+
+```php title="system/user/addons/my_addon/Connections/ExampleCrm.php"
+<?php
+
+namespace MyAddon\Connections;
+
+use Nerdgency\Formidable\App\Connections\Connection;
+use Nerdgency\Formidable\Library\Interfaces\PushProviderInterface;
+use Nerdgency\Formidable\Library\Interfaces\TestableProviderInterface;
+
+class ExampleCrm extends Connection implements PushProviderInterface, TestableProviderInterface
+{
+    protected const API = 'https://api.example-crm.test/v1';
+
+    public function handle(): string
+    {
+        return 'example_crm';
+    }
+
+    public function name(): string
+    {
+        return 'Example CRM';
+    }
+
+    /** The settings form for a connection of this kind. */
+    public function settingsFields(): array
+    {
+        return [
+            ['key' => 'api_token', 'label' => 'API token', 'type' => 'text', 'secret' => true, 'required' => true],
+        ];
+    }
+
+    /** Help text for the workflow's Target box. */
+    public function targetDescription(): string
+    {
+        return 'The id of the list to add contacts to.';
+    }
+
+    public function send(mixed $connection, string $target, array $payload): void
+    {
+        [$first, $last] = $this->names($payload);
+
+        $this->requestJson('POST', self::API . '/lists/' . rawurlencode($target) . '/contacts', [
+            'email' => $this->requireEmail($payload),
+            'first_name' => $first,
+            'last_name' => $last,
+            'fields' => $this->without($payload, ['email', 'name', 'first_name', 'last_name']),
+        ], $this->bearerAuth($this->requireSetting($connection, 'api_token')));
+    }
+
+    public function test(mixed $connection): string
+    {
+        $this->requestJson('GET', self::API . '/me', [], $this->bearerAuth($this->requireSetting($connection, 'api_token')));
+
+        return 'Example CRM accepted the token.';
+    }
+}
+```
+
+`api.example-crm.test` is a placeholder. Use your service's real API.
+
+- **Settings** marked `secret` are encrypted at rest. Read them with `$connection->getSetting('key')`, or `requireSetting()`, which fails with a clear message when one is blank.
+- **The payload** is the workflow's mapping, keyed `email`, `name`, `first_name`, `last_name`, `phone`, `company`, or the provider's own field names. Translate the standard keys into your API's names, and pass the rest on as custom fields.
+- **`requestJson()`** sends JSON and reads JSON, with an 8-second total timeout. It throws on a transport failure or an HTTP status of 400 or more, with the provider's own error message where it can find one. A thrown exception becomes a **Failed** run in the workflow log.
+- **The log records** what was sent and what came back, through `lastExchange()`. Headers, which carry credentials, are never recorded.
+
+## Register it
+
+```php title="system/user/config/config.php"
+$config['formidable_connection_providers'] = [
+    \MyAddon\Connections\ExampleCrm::class,
+];
+```
+
+The provider then appears when creating a connection on **Formidable › Connections**, and as a choice in workflows.
+
+## Testing without the network
+
+`Connection::fake()` swaps the HTTP transport for a callable that receives `(method, url, body, headerLines)` and returns `[status, body]`. Pass `null` to restore the real transport.

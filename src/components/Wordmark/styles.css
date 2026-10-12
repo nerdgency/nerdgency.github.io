@@ -1,17 +1,27 @@
+/* The {nerdgency} wordmark: amber braces around the name, in type. */
 .nerdgency-wordmark {
   display: inline-flex;
-  gap: 2px;
-  align-items: center;
+  align-items: baseline;
+  gap: 0.08em;
+  font-family: var(--ng-font-mono);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
 .nerdgency-wordmark-bracket {
-  display: block;
-  font-size: 1.25em;
-  line-height: 1;
   color: var(--nerdgency-wordmark-bracket);
+  font-weight: 600;
 }
 
 .nerdgency-wordmark-name {
   color: var(--nerdgency-wordmark);
-  font-weight: normal;
+  font-family: var(--ng-font-sans);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  padding: 0 0.04em;
+}
+
+.navbar-wordmark {
+  font-size: 1.2rem;
 }

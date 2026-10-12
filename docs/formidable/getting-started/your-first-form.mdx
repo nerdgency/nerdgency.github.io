@@ -1,0 +1,93 @@
+---
+title: Your first form
+description: Build a contact form in the control panel, put it on a page with one tag, and follow a submission back into the control panel.
+keywords:
+  - formidable
+  - quick start
+  - first form
+  - tutorial
+---
+
+# Your first form
+
+Let's build a small contact form, put it on a page with a single tag, and follow a submission back into the control panel. It takes about five minutes. You'll need Formidable [installed](./installation.mdx).
+
+## Create the form
+
+<Steps>
+  <Step title="Start a new form">
+
+Open **Add-Ons › Formidable**, then **Forms**, and choose **New**. Name it *Contact Us*. Formidable suggests the handle `contact_us`.
+
+Templates find a form by its handle, so pick one you won't want to change.
+
+  </Step>
+  <Step title="Add some fields">
+
+Once the form is saved, its edit screen opens on the **builder**. Drag three fields from the **Add field** palette into the page:
+
+- a **Text** field called *First Name*
+- a **Text** field called *Last Name*
+- an **Email** field called *Email Address*
+
+Click a field to edit its label, instructions and validation. Each field gets a handle from its label (`first_name`, `email_address`). That's the name its answer is posted under, and the name you'll use for it in templates.
+
+  </Step>
+  <Step title="Make Email required">
+
+Open *Email Address*, switch to its **Validation** tab and turn on **Required**. An Email field already checks that the answer is a real address.
+
+  </Step>
+</Steps>
+
+## Put it on a page
+
+Add the form tag to any template:
+
+```ee title="templates/default_site/contact.group/index.html"
+{exp:formidable:form form_handle="contact_us"}
+```
+
+That's the whole template. With only a handle, the tag renders the complete form from your site's theme: the `<form>` element, its hidden processing inputs, every field, error messages and the submit button.
+
+## Submit it
+
+Visit the page, fill the form in and submit it. With no `return=` parameter, the visitor comes back to the same page and the form shows its success message.
+
+Try it again with the email left empty. The page shows the error beside the field and keeps everything else you typed.
+
+## Find the submission
+
+Back in the control panel, the [dashboard](/docs/formidable/control-panel/dashboard) lists your new submission under **Latest submissions**. Open it to read the answers, change its status, or edit it. The form's **Submissions** screen lists every submission, with filters and exports.
+
+## What the tag produced
+
+Here's that one-line template, rendered by a real install. Its *Contact Us* form has the fields above and a few more, and the site uses the Tailwind theme. The excerpt shows the start of the form and its first field.
+
+<CapturedExample
+  name="minimal"
+  title="The whole form, from one tag"
+  start='<form id="contact_us"'
+  end={'<input id="first_name" name="first_name" value="" type="text" aria-describedby="first_name-instructions" class="block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm">'}
+/>
+
+A few things worth noticing:
+
+- **The form posts to a Formidable action** (`?ACT=…`). You never write that URL yourself.
+- **A hidden block comes first.** It holds a signed `_formidable_meta` value telling the server which form this is and how it was rendered, ExpressionEngine's CSRF token, and a honeypot that bots tend to fill in.
+- **The input's `id`, `name` and `type` come from the field.** Its instructions have an id the input points at with `aria-describedby`, so screen readers announce them.
+- **The classes come from the theme**, and from attributes saved in the control panel. You can change them without touching this template. See [Regions and attributes](/docs/formidable/displaying-forms/regions-and-attributes).
+
+## Next steps
+
+<Cards>
+  <CardLink to="/docs/formidable/displaying-forms/rendering" title="Render a form your way">
+    Go from the one-line tag to your own markup, one layer at a time.
+  </CardLink>
+  <CardLink to="/docs/formidable/automation/email-notifications" title="Send an email on submit">
+    Add a workflow that emails your team, or a copy to the visitor.
+  </CardLink>
+  <CardLink to="/docs/formidable/displaying-forms/themes" title="Choose a theme">
+    Default, Tailwind or Bootstrap, or your own copy of one.
+  </CardLink>
+</Cards>

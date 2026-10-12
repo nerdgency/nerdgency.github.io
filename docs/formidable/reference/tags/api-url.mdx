@@ -1,0 +1,38 @@
+---
+title: "{exp:formidable:api_url}"
+sidebar_label: "{exp:formidable:api_url}"
+description: Prints the address of a Formidable JSON API endpoint, so templates never hard-code the install's action id.
+formidable_tag: api_url
+keywords:
+  - formidable
+  - api url
+---
+
+# `{exp:formidable:api_url}`
+
+Prints the URL of a [JSON API](/docs/formidable/headless/json-api) endpoint. The API is one ExpressionEngine action whose id differs between installs, so templates should never hard-code it.
+
+
+## Parameters
+
+<Param tag="api_url" name="form_handle" example='form_handle="contact_us"'>
+
+A form's endpoint: `forms/{form_handle}`.
+
+</Param>
+
+<Param tag="api_url" name="submissions" values={<code>yes</code>}>
+
+With `form_handle=`, the form's submissions endpoint instead: `forms/{form_handle}/submissions`.
+
+</Param>
+
+<Param tag="api_url" name="endpoint" example='endpoint="forms"'>
+
+Any endpoint, written out. Used when `form_handle=` is not given.
+
+</Param>
+
+<CapturedExample name="api-url" title="Endpoint URLs for a script" />
+
+The URL alone does not grant anything. Whether a request to it succeeds depends on who makes it. See [Who may call it](/docs/formidable/headless/json-api#who-may-call-it).

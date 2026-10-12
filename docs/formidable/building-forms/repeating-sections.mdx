@@ -1,0 +1,101 @@
+---
+title: Repeating sections
+description: Let visitors add as many rows as they need to a section -- dependants, previous employers, line items -- with "Add another".
+keywords:
+  - formidable
+  - repeating sections
+  - repeater
+  - add another
+---
+
+# Repeating sections
+
+## Introduction
+
+Some questions are asked once per thing: each dependant's name and date of birth, each previous employer, each item ordered. Instead of adding *Employer 1*, *Employer 2* and *Employer 3* as separate fields, make the section **repeat**. Visitors answer its fields once per row, and add rows with **Add another**.
+
+## Setting one up
+
+<Steps>
+  <Step title="Make the section repeat">
+
+Open the section's settings (click its name in the builder) and, on **Repeating**, turn on **Repeats**. The builder marks the section **Repeats**.
+
+| Setting | |
+| --- | --- |
+| **Minimum rows** | Rows shown to start with, and the fewest that can be sent. `0` lets the section be left out altogether. |
+| **Maximum rows** | The most rows a visitor can add. `0` allows up to 50. |
+| **"Add another" label**, **"Remove" label** | The buttons' text. Blank uses "Add another" and "Remove". |
+
+  </Step>
+  <Step title="Put the fields in it">
+
+Add fields to the section as usual. Each field is answered once per row, and is required, validated and shown or hidden per row.
+
+A repeating section can hold text and number inputs, dates and times, choices (Select, Multi-select, Checkboxes, Radio Buttons, Datalist, Checkbox) and HTML. It cannot hold **File**, **Signature**, **CAPTCHA**, **Hidden** or **Computed** fields. The builder refuses to add one, and refuses to make a section repeat while one is in it.
+
+  </Step>
+  <Step title="What visitors see">
+
+The section shows its minimum number of rows, each with its fields and a **Remove** button, followed by **Add another**. Remove is hidden while the section is at its minimum, and Add another once it reaches its maximum. A row added and left completely blank is ignored when the form is sent.
+
+Without JavaScript, the minimum number of rows still shows and sends. Only adding and removing rows needs the script.
+
+  </Step>
+</Steps>
+
+## Conditions
+
+Conditions inside a row read that row's answers, and conditions from outside the section ask about any row. See [Conditions in repeating sections](/docs/formidable/building-forms/conditions#repeating-sections).
+
+## Totals
+
+A computed field outside the section can total one of its fields with `sum()`, `count()` and `average()`:
+
+```text
+sum({price}) * 1.2
+```
+
+`count({price})` counts the rows with a price. See [Computed fields](/docs/formidable/building-forms/computed-fields#numbers).
+
+## The answers
+
+A repeated field's answer is a list, one entry per row:
+
+| Where | Shown as |
+| --- | --- |
+| **Submissions** listing and exports | The rows in one column, separated by `; ` |
+| **Export as CSV, one line per row** | Each row on its own line, with the submission's other answers repeated on each. Offered on the Submissions screen of a form with a repeating section. |
+| A submission's page in the control panel | A table of rows. Edit them, add rows and remove them, within the section's minimum and maximum. |
+| Emails | `{field:handle}` is the rows separated by commas |
+| Connections | A mapped field is sent as its rows separated by commas |
+| [JSON API](/docs/formidable/headless/json-api) | A list. In the form's JSON, the section has `repeat` with its bounds and labels, and each of its fields has `repeated: true`. |
+
+## In your own markup
+
+Each row's inputs are named `handle[0]`, `handle[1]` and so on. The theme's `repeat` and `repeat-row` parts render a repeating section. To change its markup, copy those parts into your template group, and keep their attribute variables (`{repeat_attributes}`, `{repeat_row_attributes}`, `{repeat_add_attributes}` and `{repeat_remove_attributes}`), which are what the script finds. See [Themes](/docs/formidable/displaying-forms/themes).
+
+A template that loops `{fields}` itself gets each repeating section as **one item**: its first field has `{field_repeats}` set and `{repeat_markup}` holding the whole section, with its rows and buttons. The section's other fields are not listed again. Output the markup for that item and render the rest as usual:
+
+```ee title="templates/default_site/apply.group/index.html"
+{exp:formidable:form form_handle="application"}
+    <form {form_attributes}>
+        {form_meta}
+
+        {fields}
+            {if field_repeats}
+                {repeat_markup}
+            {if:else}
+                <div {field_wrapper_attributes}>
+                    {field_label}
+                    <input {field_attributes}>
+                </div>
+            {/if}
+        {/fields}
+
+        {page_nav}
+    </form>
+{/exp:formidable:form}
+```
+
+The row template sits in a `<template hidden>`, so a CSS grid gives it no cell. In the Tailwind and Bootstrap themes the section spans the full width of the grid, and each row lays its fields out on its own grid.

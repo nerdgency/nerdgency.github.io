@@ -1,7 +1,5 @@
 ---
-title: Formidable documentation
-sidebar_label: Overview
-sidebar_position: 1
+title: Introduction
 slug: /formidable
 description: Formidable is a forms add-on for ExpressionEngine. Build forms in the control panel or capture them from your own markup, then store, review and act on every submission.
 keywords:
@@ -10,51 +8,66 @@ keywords:
   - expressionengine add-on
 ---
 
-# Formidable
+# Meet Formidable
 
-Formidable is a forms add-on for ExpressionEngine 7.5 and later. You build a form in the control panel, or wrap a form you already wrote, and Formidable takes care of the rest: rendering, validation, spam protection, storage, notifications, and handing submissions on to other services.
+Formidable is a forms add-on for ExpressionEngine 7.5 and later. Build a form in the control panel, or keep the form you already wrote, and Formidable handles everything after: rendering, validation, spam protection, storage, notifications and handing submissions on to the services you use.
 
-<VersionNotice />
+## Why Formidable?
 
-## Where to start
+Most form tools make you choose. Either a builder owns your markup, or you own your markup and write the plumbing yourself. Formidable doesn't make you pick.
+
+- **One tag, a complete form.** `{exp:formidable:form form_handle="contact"}` renders a finished, accessible form from a theme. That's the whole template.
+- **Then take over as much as you like.** Swap one class, one attribute, one field's markup, or the whole form. Every layer you don't replace keeps working.
+- **Or bring your own.** Wrap a hand-written form in `{exp:formidable:capture}` and Formidable builds the form behind it, leaving your markup exactly as you wrote it.
+- **The server is the source of truth.** Conditions, required fields, computed values and limits are decided again on submit, whatever the browser sent.
+
+## What's in the box
 
 <Cards>
-  <CardLink to="/docs/formidable/getting-started/installation" title="Install Formidable">
-    Requirements, installing the two folders, and updating.
+  <CardLink to="/docs/formidable/building-forms/forms" title="A visual builder">
+    Pages, sections and a grid. Drag fields in, resize them, and read every condition as a sentence.
   </CardLink>
-  <CardLink to="/docs/formidable/getting-started/quick-start" title="Quick start">
-    Build a contact form and put it on a page in a few minutes.
+  <CardLink to="/docs/formidable/building-forms/fieldtypes" title="Every field you need">
+    Text, dates, choices, uploads, signatures, computed values, CAPTCHA, Turnstile and hCaptcha.
   </CardLink>
-  <CardLink to="/docs/formidable/core-concepts/how-formidable-works" title="How Formidable works">
-    The pieces, and how a submission moves through them.
+  <CardLink to="/docs/formidable/building-forms/conditions" title="Conditional logic">
+    Show, hide or require fields, skip pages and hide sections, on the page and on the server.
   </CardLink>
-  <CardLink to="/docs/formidable/developer/tags/form" title="Form tag reference">
-    Every parameter and variable of <code>{'{exp:formidable:form}'}</code>.
+  <CardLink to="/docs/formidable/building-forms/repeating-sections" title="Repeating sections">
+    "Add another" for dependants, employers or line items, with totals across the rows.
+  </CardLink>
+  <CardLink to="/docs/formidable/submissions/managing-submissions" title="Submissions you can work with">
+    Filters, saved views, statuses, encryption at rest, and exports to CSV, JSON, XML and text.
+  </CardLink>
+  <CardLink to="/docs/formidable/automation/workflows" title="Workflows">
+    Email, webhooks and CRM pushes, each with its own conditions, a replayable log and an optional queue.
+  </CardLink>
+  <CardLink to="/docs/formidable/submissions/save-and-resume" title="Save and resume">
+    Long forms can be saved part-way, finished later, and followed up with a reminder.
+  </CardLink>
+  <CardLink to="/docs/formidable/headless/json-api" title="A JSON API">
+    Serve forms and accept submissions from any front end, with the same validation as a posted form.
   </CardLink>
 </Cards>
 
-## What it does
+## Where to start
 
-**Build forms.** A drag-and-drop builder lays fields out on a grid, in sections and across pages. It ships with <FieldtypeCount /> fieldtypes: text inputs, dates, choices, file uploads, signatures, calculated values, CAPTCHA, Cloudflare Turnstile and hCaptcha. Fields can show, hide or become required based on other answers. Reusable fields live in a [Field Library](/docs/formidable/core-concepts/forms-and-fields#the-field-library).
+New to Formidable? Read these three in order. They take about fifteen minutes, and everything else will make sense afterwards.
 
-**Use your own markup.** A single tag renders a complete form from a [theme](/docs/formidable/core-concepts/themes). Every part of that output can be taken over one piece at a time, down to individual attributes. If you already have hand-written forms, [`{exp:formidable:capture}`](/docs/formidable/guides/capture-existing-forms) builds the form from them and leaves your markup untouched.
+1. [Installation](/docs/formidable/getting-started/installation): requirements, and the two folders to copy.
+2. [Your first form](/docs/formidable/getting-started/your-first-form): build a contact form and put it on a page.
+3. [How it works](/docs/formidable/getting-started/how-it-works): the pieces, and the path a submission takes through them.
 
-**Keep and review submissions.** Submissions are listed in the control panel with filters, saved views, custom statuses and exports to CSV, JSON, XML and plain text. Fields can be encrypted at rest. Templates can [list submissions](/docs/formidable/developer/tags/submissions) or let a visitor [edit their own](/docs/formidable/guides/edit-a-submission).
+Already comfortable? Jump to the [form tag reference](/docs/formidable/reference/tags/form), or learn to [render a form your way](/docs/formidable/displaying-forms/rendering).
 
-**Act on them.** [Workflows](/docs/formidable/core-concepts/workflows) send email, call webhooks and push to [connections](/docs/formidable/core-concepts/connections) such as Mailchimp, HubSpot or Salesforce, each with its own conditions. Every run is recorded in a log you can replay.
+## Requirements
 
-**Work headless.** A [JSON API](/docs/formidable/developer/json-api) serves forms and submissions and accepts new submissions, using the same validation as a posted form.
-
-## How these docs are organised
-
-| Section | For |
+| | |
 | --- | --- |
-| [Getting started](/docs/formidable/getting-started) | Installing, a first form, and fixing the common problems. |
-| [Core concepts](/docs/formidable/core-concepts) | How the pieces fit together. Read these once and the rest makes sense. |
-| [Guides and recipes](/docs/formidable/guides) | One task each, from start to a working template. |
-| [Developer reference](/docs/formidable/developer) | Every tag, parameter, variable, endpoint, hook and setting. |
-| [Release information](/docs/formidable/release) | Release notes, changelog, upgrade notes and the roadmap. |
+| **ExpressionEngine** | 7.5 or later |
+| **PHP** | 8.2 or later |
+| **Database** | Whatever your version of ExpressionEngine requires |
 
 :::note About the examples
-Template examples name the file they belong in. Where a page shows the HTML Formidable produces, it is labelled either as **rendered output**, copied from a real install with the source named, or as **illustrative**, written by hand to show a shape. Tag parameters in every example are checked against the add-on's source code each time the site builds.
+Template examples name the file they belong in. Where a page shows the HTML Formidable produces, it's labelled either **rendered output**, copied from a real install, or **illustrative**, written by hand to show a shape. Every tag parameter in these docs is checked against the add-on's source each time the site builds.
 :::
