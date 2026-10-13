@@ -1,0 +1,271 @@
+<!doctype html>
+<!--
+  Formidable 1.0 hero banner, and its social card. design/render-hero.mjs
+  renders this page twice:
+    static/img/blog/formidable-1-0-hero.png    1600x640 at 2x (3200x1280)
+    static/img/blog/formidable-1-0-social.png  #social: 1600x840 at 0.75x (1200x630)
+  Edit here, then re-render both.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Formidable 1.0</title>
+<style>
+	:root {
+		--navy: #0b1120;
+		--navy-2: #111a2e;
+		--card: #172238;
+		--line: #2a3a57;
+		--text: #e7ecf5;
+		--muted: #8b98b1;
+		--amber: #faaf40;
+		--blue: #5b8def;
+		--green: #34c38f;
+	}
+	* { box-sizing: border-box; margin: 0; }
+	html, body { width: 1600px; height: 640px; }
+	/* The social card: 1200x630's shape, the same design taller. The cards
+	   move down to the middle, and two more fill the top and bottom. */
+	html.social, html.social body { height: 840px; }
+	html.social .bg { transform: translateY(100px); }
+	.social-only { display: none; }
+	html.social .social-only { display: block; }
+	html.social .name { font-size: 112px; }
+	html.social .shield { width: 230px; height: 230px; }
+	body {
+		position: relative;
+		overflow: hidden;
+		font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+		color: var(--text);
+		background:
+			radial-gradient(900px 520px at 22% 50%, rgba(250, 175, 64, 0.10), transparent 70%),
+			radial-gradient(800px 600px at 85% 20%, rgba(91, 141, 239, 0.12), transparent 70%),
+			linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+	}
+	/* A faint grid, like a form builder's canvas. */
+	body::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+		background-size: 40px 40px;
+		mask-image: linear-gradient(90deg, transparent 0%, #000 45%, #000 100%);
+	}
+	body::after {
+		content: "";
+		position: absolute;
+		left: 0; right: 0; bottom: 0;
+		height: 12px;
+		background: var(--amber);
+		z-index: 4;
+	}
+
+	/* ---------------- The components, scattered behind ---------------- */
+	.bg { position: absolute; inset: 0; }
+	.c {
+		position: absolute;
+		padding: 16px 18px;
+		background: rgba(23, 34, 56, 0.82);
+		border: 1px solid var(--line);
+		border-radius: 14px;
+		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+		font-size: 14px;
+		color: var(--text);
+	}
+	.far { opacity: 0.38; filter: blur(1.2px); }
+	.mid { opacity: 0.62; }
+	.near { opacity: 0.9; }
+	.lbl { font-size: 12px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.01em; }
+	.req { color: var(--amber); }
+	.input {
+		height: 38px; border: 1px solid #3a4c6e; border-radius: 8px; background: #0f182a;
+		display: flex; align-items: center; padding: 0 12px; color: #c9d3e6;
+	}
+	.input.focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(91,141,239,0.25); }
+	.caret { width: 1.5px; height: 18px; background: var(--blue); margin-left: 2px; }
+	.row { display: flex; align-items: center; gap: 10px; }
+	.opt { display: flex; align-items: center; gap: 10px; margin: 7px 0; color: #c9d3e6; }
+	.box { width: 18px; height: 18px; border: 2px solid #4b5f84; border-radius: 5px; display: grid; place-items: center; }
+	.box.on { background: var(--amber); border-color: var(--amber); }
+	.box.on::after { content: ""; width: 5px; height: 9px; border: solid var(--navy); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg) translate(-1px, -1px); }
+	.radio { width: 18px; height: 18px; border: 2px solid #4b5f84; border-radius: 50%; display: grid; place-items: center; }
+	.radio.on { border-color: var(--blue); }
+	.radio.on::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+	.stars { font-size: 30px; letter-spacing: 4px; color: #4b5f84; line-height: 1; }
+	.stars b { color: var(--amber); font-weight: normal; }
+	.scale { display: flex; gap: 6px; }
+	.scale span { width: 32px; height: 32px; border: 1px solid #4b5f84; border-radius: 7px; display: grid; place-items: center; font-weight: 600; font-size: 13px; color: #c9d3e6; }
+	.scale span.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+	.toggle { width: 46px; height: 26px; border-radius: 999px; background: var(--green); position: relative; }
+	.toggle::after { content: ""; position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; }
+	.btn { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 9px; background: var(--amber); color: var(--navy); font-weight: 700; font-size: 15px; }
+	.btn.ghost { background: transparent; border: 1px solid #4b5f84; color: #c9d3e6; font-weight: 600; }
+	.drop { border: 2px dashed #3f5378; border-radius: 10px; padding: 18px; text-align: center; color: var(--muted); font-size: 13px; }
+	.drop .arrow { font-size: 24px; color: var(--blue); display: block; margin-bottom: 4px; }
+	.cal { display: grid; grid-template-columns: repeat(7, 26px); gap: 4px; font-size: 11px; color: #9fb0cd; text-align: center; }
+	.cal span { height: 24px; line-height: 24px; border-radius: 6px; }
+	.cal .on { background: var(--amber); color: var(--navy); font-weight: 700; }
+	.cal .h { color: var(--muted); font-weight: 600; }
+	table.matrix { border-collapse: collapse; font-size: 12px; color: #c9d3e6; }
+	table.matrix th { font-weight: 500; color: var(--muted); padding: 4px 8px; text-align: center; }
+	table.matrix td { padding: 6px 8px; text-align: center; border-top: 1px solid var(--line); }
+	table.matrix td:first-child { text-align: left; white-space: nowrap; }
+	.dot { display: inline-block; width: 13px; height: 13px; border-radius: 50%; border: 2px solid #4b5f84; vertical-align: middle; }
+	.dot.on { border-color: var(--blue); background: radial-gradient(circle, var(--blue) 45%, transparent 50%); }
+	.steps { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+	.steps i { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 700; border: 2px solid #4b5f84; color: #9fb0cd; }
+	.steps i.done { background: var(--green); border-color: var(--green); color: var(--navy); }
+	.steps i.cur { border-color: var(--amber); color: var(--amber); }
+	.steps hr { width: 34px; border: 0; border-top: 2px solid #3a4c6e; }
+	.cards { display: flex; gap: 10px; }
+	.card { width: 92px; border: 2px solid #3a4c6e; border-radius: 10px; overflow: hidden; font-size: 11px; text-align: center; color: #c9d3e6; }
+	.card .pic { height: 58px; }
+	.card.on { border-color: var(--blue); }
+	.card div:last-child { padding: 6px; }
+	.chip { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+	.wf { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+	.wf .node { padding: 8px 12px; border-radius: 9px; border: 1px solid #3a4c6e; background: #0f182a; }
+	.wf .arr { color: var(--muted); }
+
+	/* ---------------- The title ---------------- */
+	.hero {
+		position: absolute;
+		left: 110px; top: 50%;
+		transform: translateY(-50%);
+		display: flex; align-items: center; gap: 40px;
+		z-index: 2;
+	}
+	.shield { width: 210px; height: 210px; filter: drop-shadow(0 24px 40px rgba(0,0,0,0.45)); }
+	.name { font-size: 104px; font-weight: 800; letter-spacing: -0.035em; line-height: 0.95; }
+	.ver {
+		display: inline-flex; align-items: center;
+		margin-left: 18px; padding: 6px 20px 8px;
+		border-radius: 18px;
+		background: var(--amber); color: var(--navy);
+		font-size: 60px; font-weight: 800; letter-spacing: -0.02em;
+		vertical-align: 14px;
+		box-shadow: 0 12px 30px rgba(250, 175, 64, 0.35);
+	}
+	.tag { margin-top: 18px; font-size: 30px; color: #b9c4d8; font-weight: 500; letter-spacing: -0.005em; }
+	.tag b { color: var(--text); font-weight: 600; }
+	.scrim {
+		position: absolute; inset: 0; z-index: 1;
+		background: linear-gradient(90deg, rgba(11,17,32,0.96) 0%, rgba(11,17,32,0.88) 40%, rgba(11,17,32,0.25) 66%, rgba(11,17,32,0) 80%);
+	}
+	.nerd { position: absolute; right: 40px; bottom: 30px; height: 60px; z-index: 3; }
+	/* A clear corner for the logo, so nothing behind competes with it. */
+	.corner { position: absolute; right: 0; bottom: 0; width: 360px; height: 150px; z-index: 2;
+		background: radial-gradient(ellipse at 100% 100%, rgba(11,17,32,0.95) 0%, rgba(11,17,32,0.85) 45%, rgba(11,17,32,0) 75%); }
+</style>
+</head>
+<body>
+	<script>if (location.hash === '#social') document.documentElement.classList.add('social');</script>
+	<div class="bg">
+		<!-- the social card's extra rows, above and below -->
+		<div class="c far social-only" style="left: 760px; top: -86px; width: 300px; transform: rotate(3deg);">
+			<div class="lbl">Company</div>
+			<div class="input">Analytical Engines Ltd</div>
+		</div>
+		<div class="c mid social-only" style="left: 1150px; top: -70px; width: 290px; transform: rotate(-2deg);">
+			<div class="lbl">Budget</div>
+			<div class="input" style="justify-content: space-between;">$5,000 to $15,000<span style="color: var(--muted)">▾</span></div>
+		</div>
+		<div class="c mid social-only" style="left: 640px; top: 640px; width: 300px; transform: rotate(-3deg);">
+			<div class="lbl">Full name</div>
+			<div class="row"><div class="input" style="flex:1">Ada</div><div class="input" style="flex:1">Lovelace</div></div>
+		</div>
+		<!-- top row -->
+		<div class="c mid" style="left: 560px; top: 40px; width: 300px; transform: rotate(-4deg);">
+			<div class="lbl">Email address <span class="req">*</span></div>
+			<div class="input focus">ada@example.com<span class="caret"></span></div>
+		</div>
+		<div class="c near" style="left: 905px; top: 26px; width: 250px; transform: rotate(3deg);">
+			<div class="lbl">How was your stay?</div>
+			<div class="stars"><b>★★★★</b>☆</div>
+		</div>
+		<div class="c mid" style="left: 1200px; top: 34px; width: 330px; transform: rotate(-2deg);">
+			<div class="steps"><i class="done">✓</i><hr><i class="done">✓</i><hr><i class="cur">3</i><hr><i>4</i><span style="margin-left:6px">Experience</span></div>
+		</div>
+		<div class="c far" style="left: 1410px; top: 110px; width: 230px; transform: rotate(6deg);">
+			<div class="lbl">Preferred date</div>
+			<div class="cal">
+				<span class="h">M</span><span class="h">T</span><span class="h">W</span><span class="h">T</span><span class="h">F</span><span class="h">S</span><span class="h">S</span>
+				<span>6</span><span>7</span><span>8</span><span class="on">9</span><span>10</span><span>11</span><span>12</span>
+				<span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span>
+			</div>
+		</div>
+
+		<!-- middle -->
+		<div class="c near" style="left: 880px; top: 150px; width: 270px; transform: rotate(-3deg);">
+			<div class="lbl">Interested in</div>
+			<div class="opt"><span class="box on"></span>Design</div>
+			<div class="opt"><span class="box on"></span>Development</div>
+			<div class="opt"><span class="box"></span>Ongoing support</div>
+		</div>
+		<div class="c mid" style="left: 1180px; top: 196px; width: 260px; transform: rotate(2deg);">
+			<div class="lbl">How urgent is it?</div>
+			<div class="opt"><span class="radio"></span>Not urgent</div>
+			<div class="opt"><span class="radio on"></span>Normal</div>
+			<div class="opt"><span class="radio"></span>Urgent</div>
+		</div>
+		<div class="c far" style="left: 600px; top: 150px; width: 220px; transform: rotate(5deg);">
+			<div class="row" style="justify-content: space-between;"><span>Keep me updated</span><span class="toggle"></span></div>
+		</div>
+		<div class="c mid" style="left: 1470px; top: 270px; width: 300px; transform: rotate(-5deg);">
+			<div class="lbl">CV / résumé</div>
+			<div class="drop"><span class="arrow">↑</span>Drop a file or browse</div>
+		</div>
+
+		<!-- lower -->
+		<div class="c mid" style="left: 770px; top: 450px; width: 380px; transform: rotate(-2deg);">
+			<div class="lbl">How likely are you to recommend us?</div>
+			<div class="scale"><span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span class="on">9</span><span>10</span></div>
+		</div>
+		<div class="c near" style="left: 1010px; top: 352px; width: 420px; transform: rotate(2.5deg);">
+			<table class="matrix">
+				<tr><th></th><th>Disagree</th><th>Neutral</th><th>Agree</th></tr>
+				<tr><td>The staff were helpful</td><td><span class="dot"></span></td><td><span class="dot"></span></td><td><span class="dot on"></span></td></tr>
+				<tr><td>It was good value</td><td><span class="dot"></span></td><td><span class="dot on"></span></td><td><span class="dot"></span></td></tr>
+			</table>
+		</div>
+		<div class="c far" style="left: 470px; top: 515px; width: 330px; transform: rotate(3deg);">
+			<div class="cards">
+				<div class="card on"><div class="pic" style="background: linear-gradient(135deg,#5b8def,#2c4a8a)"></div><div>Loft</div></div>
+				<div class="card"><div class="pic" style="background: linear-gradient(135deg,#34c38f,#1b6b4f)"></div><div>Garden</div></div>
+				<div class="card"><div class="pic" style="background: linear-gradient(135deg,#faaf40,#a8641a)"></div><div>Suite</div></div>
+			</div>
+		</div>
+		<div class="c mid" style="left: 1010px; top: 548px; width: 380px; transform: rotate(-3deg);">
+			<div class="wf"><span class="node">New submission</span><span class="arr">→</span><span class="node">Send an email</span><span class="chip" style="background: rgba(52,195,143,0.18); color: var(--green);">Ready</span></div>
+		</div>
+		<div class="c near" style="left: 1450px; top: 448px; width: 170px; transform: rotate(4deg); padding: 14px;">
+			<span class="btn">Submit →</span>
+		</div>
+		<div class="c far" style="left: 330px; top: 30px; width: 120px; padding: 12px; transform: rotate(-6deg);">
+			<span class="btn ghost">Back</span>
+		</div>
+	</div>
+
+	<div class="scrim"></div>
+
+	<div class="hero">
+		<svg class="shield" viewBox="0 0 200 200" aria-hidden="true">
+			<path d="M100,14 C124,14 146,22 168,38 L168,96 C168,146 138,178 100,194 C62,178 32,146 32,96 L32,38 C54,22 76,14 100,14 Z" fill="#FAAF40" stroke="#374654" stroke-width="6"/>
+			<rect x="62" y="64" width="76" height="13" rx="6.5" fill="#FFFFFF"/>
+			<rect x="62" y="86" width="58" height="13" rx="6.5" fill="#FFFFFF"/>
+			<rect x="62" y="108" width="40" height="13" rx="6.5" fill="#FFFFFF"/>
+			<circle cx="146" cy="150" r="27" fill="#FFFFFF" stroke="#374654" stroke-width="6"/>
+			<polyline points="134,150 143,159 160,140" fill="none" stroke="#FAAF40" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+		</svg>
+		<div>
+			<div class="name">Formidable<span class="ver">1.0</span></div>
+			<div class="tag">Forms for <b>ExpressionEngine</b></div>
+		</div>
+	</div>
+
+	<div class="corner"></div>
+	<img class="nerd" src="white-logo.png" alt="Nerdgency">
+</body>
+</html>
