@@ -41,6 +41,7 @@ const sidebars = {
       f('building-forms/repeating-sections'),
       f('building-forms/computed-fields'),
       f('building-forms/settings'),
+      f('building-forms/blueprints'),
     ]),
     section('Displaying forms', [
       f('displaying-forms/rendering'),
@@ -65,6 +66,7 @@ const sidebars = {
     section('Control panel', [
       f('control-panel/dashboard'),
       f('control-panel/configuration'),
+      f('control-panel/registry'),
       f('control-panel/utilities'),
       f('control-panel/permissions'),
     ]),

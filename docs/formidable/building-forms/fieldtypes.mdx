@@ -124,6 +124,7 @@ An upload. Its **File** tab chooses the ExpressionEngine **upload destination**,
 - **Allowed types and sizes** come from the upload destination (**Files › Upload Directories**), so they're set once, where ExpressionEngine already enforces them.
 - **Uploads become ordinary files** in ExpressionEngine's file manager, and the submission stores a reference to them.
 - **A failed submission keeps its uploads** for up to 15 minutes, so the visitor doesn't have to choose them again.
+- **Editing a submission** on the front end lists the files it holds, each with a box to keep it. See [Front-end editing](/docs/formidable/submissions/front-end-editing).
 - **Workflows can attach them** to the emails they send.
 
 ## Dates and times
@@ -180,7 +181,7 @@ A row of numbered buttons, starting at 0 to 10: a Net Promoter Score ("How likel
 
 ### Image Choice {#image_choice}
 
-One choice from picture cards: a room, a product, a style. A new Image Choice field opens its **Options** tab on **Manual** choices. Type each choice's value and label, then use **Choose image** in its **Image** column to pick the picture from the file manager, or upload one there. The thumbnail appears straight away, and the builder shows the cards. Pictures come only with Manual choices. A choice without a picture shows its label alone. `--formidable-image-choice-accent` colours the chosen card, and `--formidable-image-choice-size` sets the cards' width. In your own markup, each option's `{image}` is its picture's address.
+One choice from picture cards: a room, a product, a style. A new Image Choice field opens its **Options** tab on **Manual** choices. Type each choice's value and label, then use **Choose image** in its **Image** column to pick the picture from the file manager, or upload one there. The thumbnail appears straight away, and the builder shows the cards. Pictures come only with Manual choices. A choice without a picture shows its label alone. `--formidable-image-choice-accent` colours the chosen card, and `--formidable-image-choice-size` sets the cards' width. In your own markup, each option's `{image}` is its picture's address. On a submission's page in the control panel, the answer is the same cards, with a **No answer** card to clear it.
 
 ### Image Choices {#image_choices}
 
@@ -190,7 +191,7 @@ Image Choice with as many picks as apply, like Checkboxes. It stores a list.
 
 Several statements answered on the same scale, a Likert grid: "The staff were friendly", "The room was clean", each from *Strongly disagree* to *Strongly agree*. Its **Matrix** tab takes the **Statements** and the **Choices**, one per line. The choices start as that five-point scale.
 
-Each answer is stored as `Statement: Choice`, so the field's answer is a list such as `Staff: Agree; Room: Neutral`. Exports, conditions and filters read it like a Checkboxes answer, and a condition can ask for *Matrix is any of "Room: Strongly disagree"*. **Required** means every statement has to be answered. On a phone, each statement stacks with its choices under it. A matrix can't go in a repeating section.
+Each answer is stored as `Statement: Choice`, so the field's answer is a list such as `Staff: Agree; Room: Neutral`. Exports, conditions and filters read it like a Checkboxes answer, and a condition can ask for *Matrix is any of "Room: Strongly disagree"*. **Required** means every statement has to be answered. Turn on **Offer "no answer"** to add a last column, set apart from the scale, for a statement the visitor would rather not rate. Its label is yours to change (*No answer* unless you do). It's stored like any choice, such as `Staff: No answer`, and it counts as answered when the field is required. On a phone, each statement stacks with its choices under it. On a submission's page in the control panel, the answer is the same table, with an **Unanswered** column to clear a statement. A matrix can't go in a repeating section.
 
 ### Where choices come from
 
@@ -230,11 +231,11 @@ ExpressionEngine's own CAPTCHA, following **Settings › CAPTCHA**, including it
 
 ### Turnstile {#turnstile}
 
-Cloudflare Turnstile, using the site and secret keys saved as a [connection](/docs/formidable/automation/connections). Create the connection first: a field with no connection selected rejects every submission. Different forms can use different connections, such as separate staging and production keys. Nothing is stored.
+Cloudflare Turnstile, using the site and secret keys saved as a [connection](/docs/formidable/automation/connections). Create the connection first: the builder offers Turnstile only once an enabled Turnstile connection exists, and a field with no connection selected rejects every submission. Different forms can use different connections, such as separate staging and production keys. Nothing is stored.
 
 ### hCaptcha {#hcaptcha}
 
-hCaptcha, set up the same way as Turnstile, with its keys saved as a connection. Nothing is stored.
+hCaptcha, set up the same way as Turnstile, with its keys saved as a connection. The builder offers it once an enabled hCaptcha connection exists. Nothing is stored.
 
 ### Attribution {#attribution}
 
