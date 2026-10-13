@@ -173,7 +173,7 @@ Every choice visible, exactly one chosen.
 
 ### Rating {#rating}
 
-Stars to click, such as "How was your stay?". It's one choice from a **Number Range**, 1 to 5 unless you change it on the **Options** tab. Each star keeps its number for screen readers. The answer is filtered as a number, so a condition or a filter can ask for *4 or more*. Restyle the stars with the `--formidable-rating-on` and `--formidable-rating-off` CSS properties.
+Stars to click, such as "How was your stay?". It's one choice from a **Number Range**, 1 to 5 unless you change it on the **Options** tab. Each star keeps its number for screen readers. The answer is filtered as a number, so a condition or a filter can ask for *4 or more*. Restyle the stars with the `--formidable-rating-on` and `--formidable-rating-off` CSS properties. A chosen star is filled and an unchosen one an outline, so the difference isn't colour alone; keep your colours at 3:1 against the background.
 
 ### Scale {#scale}
 
@@ -181,7 +181,7 @@ A row of numbered buttons, starting at 0 to 10: a Net Promoter Score ("How likel
 
 ### Image Choice {#image_choice}
 
-One choice from picture cards: a room, a product, a style. A new Image Choice field opens its **Options** tab on **Manual** choices. Type each choice's value and label, then use **Choose image** in its **Image** column to pick the picture from the file manager, or upload one there. The thumbnail appears straight away, and the builder shows the cards. Pictures come only with Manual choices. A choice without a picture shows its label alone. `--formidable-image-choice-accent` colours the chosen card, and `--formidable-image-choice-size` sets the cards' width. In your own markup, each option's `{image}` is its picture's address. On a submission's page in the control panel, the answer is the same cards, with a **No answer** card to clear it.
+One choice from picture cards: a room, a product, a style. A new Image Choice field opens its **Options** tab on **Manual** choices. Type each choice's value and label, then use **Choose image** in its **Image** column to pick the picture from the file manager, or upload one there. The thumbnail appears straight away, and the builder shows the cards. Pictures come only with Manual choices. A choice without a picture shows its label alone. `--formidable-image-choice-accent` colours the chosen card, `--formidable-control-line` an unchosen card's edge, and `--formidable-image-choice-size` sets the cards' width. In your own markup, each option's `{image}` is its picture's address. On a submission's page in the control panel, the answer is the same cards, with a **No answer** card to clear it.
 
 ### Image Choices {#image_choices}
 
