@@ -2,6 +2,13 @@
 
 Internal notes for the v1.0.0 documentation. Not published (outside `docs/` and `blog/`).
 
+## Structure and design (October 2026 rewrite)
+
+- **Organisation** follows Laravel's docs: `sidebars.js` lists every page by hand, in sections that run Prologue → Getting started → Building forms → Displaying forms → Submissions → Automation → Control panel → Headless → Reference → Extending. Each section is a folder under `docs/formidable/`, and the folder name is the URL segment. Add a page to `sidebars.js` or it will not appear.
+- **Pages open with `## Introduction`** after the title, then task-shaped sections. Titles are short nouns ("Validation", "Workflows").
+- **Design**: tokens in `src/css/theme/tokens.css` (paper and ink, amber accents, Fraunces / Inter / JetBrains Mono), element styling in `base.css`, code colours in `src/theme/prism-nerdgency.js` (one dark theme for both modes). The navbar logo (`src/theme/Navbar/Logo`) and footer (`src/theme/Footer`) are ejected components. Marketing pages build from `src/components/Marketing`.
+- **Code blocks** name their file with `title=`. Tags with three or more parameters are broken one parameter per line.
+
 ## Source of truth
 
 The add-on source (`ee/packages/formidable/dist/system/user/addons/formidable`) is the source of truth. The add-on's own `docs/` folder was used as a starting point, but checked against code. Where they disagreed, the code won.
@@ -15,7 +22,7 @@ The add-on source (`ee/packages/formidable/dist/system/user/addons/formidable`) 
 | Validation rules | `FormidableRuleSeeder::RULES` | `<RuleTable>` |
 | CLI commands | `addon.setup.php` | `<CommandTable>` (fails on unknown command); check-docs checks `eecli.php formidable:*` |
 | config.php keys | `Library/Config::DEFAULTS` plus direct `config->item('formidable_*')` | `<ConfigTable>`; check-docs checks `$config['formidable_*']` |
-| Hooks | `extensions->call()` in `Actions/` | `<HookList>` |
+| Hooks | `extensions->call()` anywhere in the add-on | `<HookList>` |
 | API routes and scopes | `Service/Api/ApiRoutes.php` | `<ApiRoutesTable>` |
 | Shipped theme parts | `themes/*/` | `<ThemePartsTable>` |
 | Rendered HTML and JSON | A real EE 7.5.26 install running the add-on source | `npm run capture:examples` writes `src/data/examples.json`; `<CapturedExample>`/`<CapturedResponse>` show template and output from the same capture |
@@ -40,7 +47,7 @@ PHP examples (custom fieldtype, custom connection, webhook receiver) were linted
 4. **Reply-to is not interpolated** in workflow emails (`WorkflowRunner::sendEmail`), unlike the subject. A "reply to the visitor" setup is not possible. Documented as a limitation.
 5. **Lang string drift:** `permissions.formidable_manage_registry_desc` says "templates"; the permission guards Themes.
 6. **The add-on's own docs have drifted** from the code. Examples: `tags/form.md` documents `js_honeypot=` (code reads `honeypot_js=`), `columns=` (code reads `template_columns=`, default 12 not 16), `{has_errors}`/`{errors}` (code: `{form_has_errors}`/`{form_errors}`), `{field_has_conditions}`, `{field_conditions}`, `{field_condition_attributes}` (code: `_show`/`_require` variants), `{form_uses_captcha}` (not published), `form:setting:submission_prefix` (code: `submission_name`). `templating-regions.md` uses `form="contact"` and "thirteen regions". `concepts.md` uses `label_attribute`. `channel-field.md` uses `columns=` and `template=`. `fieldtypes.mdx` lists the wrong encryptable fieldtypes. Run `node scripts/check-docs.mjs <path>` against that folder to find more.
-7. **Version.** `FORMIDABLE_VERSION` is `0.9.5`. The docs and launch post describe 1.0.0. Bump the constant, then `npm run sync:source` so `<VersionNotice>` reads 1.0.0.
+7. **Version.** `FORMIDABLE_VERSION` is still below 1.0.0, while the docs and launch post describe 1.0. The per-page "Verified against Formidable x.y.z" notice was removed, so no pre-release number is published; bump the constant before release so `sync:source` records 1.0.0.
 
 ## Unresolved questions
 
@@ -54,7 +61,24 @@ PHP examples (custom fieldtype, custom connection, webhook receiver) were linted
 
 ## Screenshots
 
-None were captured: the CP session in the local sandbox was signed out, and passwords are not entered on the user's behalf. The demo submissions also contain a real name and email address, so submission screens need clean demo data first. `<Screenshot>` (requires `alt` and `captured=`) is ready. Suggested captures: Forms listing, builder, field editor (Conditions tab), Templating map, Submissions listing with a saved view, Workflow log run, Themes screen. `static/img/screenshots/forms-listing.png` predates this work and is unused. Its provenance is unknown.
+Control panel and front-end screenshots are captured, not drawn, by
+`npm run capture:screens` (`scripts/capture-screens.mjs`, Playwright):
+
+- **Login**: a dedicated test Super Admin on the local site (`docs_capture`),
+  credentials in the gitignored `.env` (`EE_URL`, `EE_CP_PATH`,
+  `EE_CAPTURE_USERNAME`, `EE_CAPTURE_PASSWORD`). Never a real account.
+- **Content**: the demo forms, workflows and submissions from
+  `scripts/demo-content/` (see its README), and the site's
+  `formidable_demo` template group for the visitor-side pages. All names
+  and addresses are fictional (`example.com`).
+- **Output**: 2x PNGs in `static/img/screenshots/formidable/`, mostly cropped
+  to Formidable's content panel so text stays legible in the docs column.
+  `src/data/screenshots.json` records the capture date.
+- **Use**: `<Screenshot img={require('@site/static/img/screenshots/formidable/NAME.png')} alt="…" caption="…" captured="…" />`.
+- **Recapture** after any CP change: `npm run capture:screens` (or name the
+  screens: `npm run capture:screens -- dashboard utilities`).
+- The dashboard's Documentation card prints `FORMIDABLE_VERSION`; bump it to
+  1.0.0 before the final capture so no pre-release number appears.
 
 ## Local side effects
 
