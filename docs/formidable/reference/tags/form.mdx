@@ -358,6 +358,7 @@ Loops over every field that renders in the layout, in builder order (page, then 
 | `{field_value}` | The value to show: what was submitted, else the stored submission's, else the default |
 | `{field_submitted_value}` | Only what this visitor sent, so "left blank" can be told from "not asked yet" |
 | `{field_content}` | The content of an HTML field, and the markup of special fieldtypes |
+| `{field_files}…{/field_files}` | A File field's stored files when `submission_handle=` (or a resumed draft) fills the form: `{file_id}`, `{file_name}`, `{file_url}`, `{file_is_image}`. With `{field_files_count}`, `{field_files_note}` (what the boxes do), and `{field_files_keep}`, the name for each file's keep box (`value="{file_id}"`, after one empty hidden input of the same name) |
 | `{field_columns}` | The field's width in your grid. See `template_columns=`. |
 | `{field_page}`, `{field_section}` | The page number and section id the field is in |
 | `{field_error}`, `{field_has_error}` | The validation message, and whether there is one |

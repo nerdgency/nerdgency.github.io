@@ -65,6 +65,6 @@ Links into these docs for the things people most often look up. The address come
 
 ## Guided tours
 
-The dashboard, a form's builder, its **Workflows** tab, its submissions, **Utilities**, **Themes** and each theme's page have a short guided tour. It points at one part of the screen at a time and says what it's for. Each tour starts by itself the first time you open its screen, once, and on any browser. The dashboard's waits until the [setup wizard](./configuration.md#the-setup-wizard) is finished or set aside.
+The dashboard, a form's builder, its **Workflows** tab, its submissions, **Blueprints**, **Utilities**, the **Registry**, **Themes** and each theme's page have a short guided tour. It points at one part of the screen at a time and says what it's for. Each tour starts by itself the first time you open its screen, once, and on any browser. The dashboard's waits until the [setup wizard](./configuration.md#the-setup-wizard) is finished or set aside.
 
 **Take the tour**, below the page's panels, runs it again whenever you like, with **Docs for this page** beside it. Step through with **Next** and **Back** or the arrow keys, and close it with Esc or **Skip the tour**. A step about something you can't see, such as a card your permissions don't open, is skipped.
