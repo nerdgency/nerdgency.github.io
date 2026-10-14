@@ -53,7 +53,7 @@ PHP examples (custom fieldtype, custom connection, webhook receiver) were linted
 
 - **Where is Formidable sold or downloaded?** No distribution channel is named anywhere in the source. The launch post and installation page link only to the docs. Add the real link before publishing.
 - **Repository and issue tracker.** `github.com/nerdgency/ee-formidable` returns 404 publicly, so no repo or issues link is published. Troubleshooting says "Reporting a problem" without a destination.
-- **Launch date.** The blog post is dated 2026-10-11 (folder name and implied date). Change it to the real publication date.
+- **Launch date.** The blog post is dated 2026-10-14 (folder name and implied date), with a matching Changelog entry. If it goes out on another day, rename the folder and update the entry.
 - **`page=` storage.** The add-on docs say `page=` renders each page as its own submission. That was carried over but not traced end to end in `Actions/Submit`.
 - **Pre-release forms with Group / Submit / Next / Previous fields.** No migration was found. Upgrade notes do not mention it. Is there an upgrade path?
 - **Roadmap.** Items now built (permissions, fieldtype registration, fieldtype contract) were moved to Available. "Richer Jump Menu integration" remains in Next, because a minimal `jump.formidable.php` exists. Confirm the remaining Next/Exploring/Not planned items still reflect intent.
