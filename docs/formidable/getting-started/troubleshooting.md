@@ -114,7 +114,7 @@ $config['formidable_return_hosts'] = ['checkout.example.com'];
 
 ## Reporting a problem
 
-Include:
+Report bugs on the [issue tracker](https://github.com/nerdgency/ee-formidable-issues), and email security problems to security@nerdgency.ca instead. [Getting help](./support.md) explains both. Include:
 
 1. The tag as written, with every parameter.
 2. Any `<!-- formidable: … -->` comment from the page source, verbatim.

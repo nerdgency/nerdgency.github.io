@@ -63,6 +63,10 @@ For members with **View workflow log**: how many runs succeeded, failed or had n
 
 Links into these docs for the things people most often look up. The address comes from the `FORMIDABLE_DOCS_URL` constant in the add-on's `addon.setup.php`.
 
+## Support
+
+The green card under **Documentation** is where to go when something's wrong or missing: report a bug or request a feature (new fieldtypes included) on the [issue tracker](https://github.com/nerdgency/ee-formidable-issues), browse what's already been reported, or email a security vulnerability privately. See [Getting help](/docs/formidable/getting-started/support).
+
 ## Guided tours
 
 The dashboard, a form's builder, its **Workflows** tab, its submissions, **Blueprints**, **Utilities**, the **Registry**, **Themes** and each theme's page have a short guided tour. It points at one part of the screen at a time and says what it's for. Each tour starts by itself the first time you open its screen, once, and on any browser. The dashboard's waits until the [setup wizard](./configuration.md#the-setup-wizard) is finished or set aside.

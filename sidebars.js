@@ -30,6 +30,7 @@ const sidebars = {
       f('getting-started/your-first-form'),
       f('getting-started/how-it-works'),
       f('getting-started/troubleshooting'),
+      f('getting-started/support'),
     ]),
     section('Building forms', [
       f('building-forms/forms'),
