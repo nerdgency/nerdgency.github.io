@@ -57,6 +57,7 @@ Formidable 1.0 needs **ExpressionEngine 7.5** or later and **PHP 8.2** or later.
 
 - **A dashboard** with your forms, the latest submissions, a fourteen-day chart, workflow health and what needs attention. See [Dashboard](/docs/formidable/control-panel/dashboard).
 - **Utilities**: manage API keys, and run any of Formidable's commands from the browser. See [Utilities](/docs/formidable/control-panel/utilities).
+- **Health checks** on Configuration and the dashboard: missing tables or fieldtypes, the encryption key, the queue worker, failing workflows, CAPTCHA fields without a connection, and connections whose credentials stopped working. Each comes with its fix. See [Configuration](/docs/formidable/control-panel/configuration#health-checks).
 - **Eight permissions** to grant roles separately, with a sidebar that shows each member only the screens they can open. See [Permissions](/docs/formidable/control-panel/permissions).
 - **Jump Menu** commands for every Formidable screen, picking a form to edit, view or export, and finding a submission by number.
 
@@ -64,9 +65,9 @@ Formidable 1.0 needs **ExpressionEngine 7.5** or later and **PHP 8.2** or later.
 
 - **A JSON API** for forms and submissions, with keyless access from your own pages and scoped, hashed keys for everything else. See [JSON API](/docs/formidable/headless/json-api).
 - **Forms as JSON** with `output="json"`, for headless front ends. See [Form JSON](/docs/formidable/headless/form-json).
-- **18 extension hooks** through submitting, workflows, exports, rendering and the API, plus ExpressionEngine's model hooks for every Formidable model. See [Extension hooks](/docs/formidable/extending/hooks).
+- **20 extension hooks** through submitting, workflows, exports, rendering and the API, plus ExpressionEngine's model hooks for every Formidable model. See [Extension hooks](/docs/formidable/extending/hooks).
 - **Your own fieldtypes and connection providers**, registered from your add-on. See [Custom fieldtypes](/docs/formidable/extending/custom-fieldtypes) and [Custom connections](/docs/formidable/extending/custom-connections).
-- **Twelve commands** for the command line, also runnable from Utilities. See [Command line](/docs/formidable/reference/command-line).
+- **Fifteen commands** for the command line, also runnable from Utilities. See [Command line](/docs/formidable/reference/command-line).
 
 ## Security
 

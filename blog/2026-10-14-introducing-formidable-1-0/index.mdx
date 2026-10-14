@@ -179,7 +179,7 @@ Every shipped theme is built toward **WCAG 2.1 AA**. Checkboxes and radios sit i
     Twenty extension hooks, plus your own fieldtypes and connection providers, one PHP class each.
   </Feature>
   <Feature icon={icons.templates} title="Scripts and deploys">
-    Fourteen commands for cron and deploy scripts, all runnable from the control panel. Blueprints in PHP, forms in version control.
+    Fifteen commands for cron and deploy scripts, all runnable from the control panel. Blueprints in PHP, forms in version control.
   </Feature>
 </FeatureGrid>
 
@@ -194,12 +194,28 @@ And for content editors: the **Formidable Form** channel field puts a form on an
 | **3** | themes: Default, Tailwind and Bootstrap 5 |
 | **7** | email marketing and CRM integrations, plus any webhook |
 | **20** | extension hooks |
-| **14** | commands |
+| **15** | commands |
 | **0** | puzzles for your visitors to solve |
 
 ## Documented to the parameter
 
 The documentation was written alongside the code, and it's checked against Formidable's source every time this site builds. If you read about a parameter, it exists. Where the docs show the HTML Formidable produces, it was captured from a real install, not typed by hand.
+
+## Changelog
+
+### 1.0.0, 14 October 2026
+
+The first public release. Everything is new, so in brief:
+
+- **Building:** a visual builder with pages, sections and a twelve-column grid; 38 fieldtypes; conditions that show, hide or require fields and skip pages; repeating sections; computed fields; a Field Library; nine blueprints, plus import and export.
+- **Displaying:** one `{exp:formidable:form}` tag; Default, Tailwind and Bootstrap 5 themes; classes and attributes for every part; capture from your own markup; the Formidable Form channel field.
+- **Submissions:** a listing with filters, saved views and statuses; editing, including signatures, names and addresses, and repeating rows; exports to CSV, JSON, XML and text; per-field encryption; save and resume; front-end editing; submission actions such as Approve and Reject.
+- **Automation:** workflows that email, call signed webhooks or push to seven CRM and email services, with a background queue, retries and a replayable log.
+- **Control panel:** a dashboard, health checks with their fixes, eight permissions, Jump Menu commands, guided tours and Utilities.
+- **For developers:** a JSON API with scoped keys, forms as JSON, 20 extension hooks, your own fieldtypes and connections, and fifteen commands.
+- **Requirements:** ExpressionEngine 7.5+ and PHP 8.2+.
+
+The full list is in the [release notes](/docs/formidable/prologue/release-notes).
 
 ## Get started
 
