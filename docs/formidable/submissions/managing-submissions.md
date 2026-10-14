@@ -35,7 +35,11 @@ Answers are shown the way they read, with an option's label rather than its stor
 Opening a submission shows every answer, decrypted, and lets you change its status and edit its answers. The page has two tabs: the submission, with its details and every answer (headed by page on a multi-page form), and its workflow runs. The form's [submission actions](/docs/formidable/submissions/submission-actions) you may run appear above the details, and an **Activity** tab lists the ones that have run. Each answer is as wide as its field is in the form builder, so the page reads like the form.
 
 - **Repeating sections** appear as a table of rows. Edit any row, move rows up and down, add rows and remove them, within the section's minimum and maximum. Rows keep the order the visitor gave them.
-- **File uploads** appear as cards with the file's name, type and size. Choose a different file from ExpressionEngine's file picker, or mark one to remove when you save.
+- **File uploads** appear as cards with the file's name, type and size, and a thumbnail for images. Choose a different file from ExpressionEngine's file picker, or mark one to remove when you save.
+- **Signatures** show the signature itself, whether it was saved with the submission or as a file, with when it was signed when the field records that. You can remove a signature but not draw a new one: signing on a visitor's behalf isn't the same as fixing a typo.
+- **Names and addresses** have a box per part. Saving rebuilds the whole answer from the parts, so `{field:name:first}` and the full name always agree.
+- **Dates, times and colours** use the browser's own pickers. An answer the picker can't read, such as a date typed in another format, stays in a text box so saving never loses it.
+- **Attribution** is shown, not edited: it records where the visitor came from.
 - **Saving works out computed answers again**, so correcting a quantity corrects its total.
 - **Saving can run workflows.** A changed answer raises **Submission Updated**, and a new status raises **Submission Status Changed**. The **Run workflows** switch decides whether they run for this save. Saving without changing anything runs nothing.
 

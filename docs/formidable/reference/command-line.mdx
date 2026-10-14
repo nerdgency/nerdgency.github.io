@@ -28,6 +28,7 @@ php system/ee/eecli.php formidable:forms
   'formidable:drafts:prune': 'Delete save-and-resume drafts last saved more than draft_days ago, with their uploads: --limit=500. Saving a draft already clears a few; run this daily on a busy site.',
   'formidable:drafts:remind': 'Run the Draft Reminder workflows for drafts that have waited their form\'s "Reminder after (days)", once each: --limit=200. Run from cron, hourly or daily.',
   'formidable:workflows:work': 'Run the workflows waiting in the workflow queue and retry failed ones on their schedule: --limit=50, --status (only count what is waiting), --json. Run it from cron every minute when the queue is on.',
+  'formidable:connections:test': 'Test every enabled connection\'s saved credentials and keep the result for the Connections health check. Run it daily from cron.',
   'formidable:theme:copy': 'Copy parts of a shipped theme into a template group: --theme, --group, --partials=a,b, --replace.',
   'formidable:theme:status': 'List the themes, or where each part of one theme group comes from: --group, --json.',
   'formidable:theme:classes': 'Write the control panel\'s classes into a theme group\'s _classes part, where a CSS build can read them: --group.',

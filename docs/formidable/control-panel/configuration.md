@@ -45,6 +45,7 @@ At the top of the page, Formidable checks whether it's set up to work, and says 
 | **Waiting runs** | No queued workflow run has waited more than 15 minutes. | The workflow log. |
 | **Workflow failures** | No workflow failed in the last day. | The workflow log. |
 | **Spam checks** | Every Turnstile or hCaptcha field has an enabled connection to verify against. Without one, its form refuses every submission. | **Connections**. |
+| **Connections** | Every enabled connection passed its last test, and was tested in the last week. Tests run when you press **Test connection** on a connection or run **Test connections**; the check never calls a provider itself, so it doesn't slow the page. | **Utilities › Test connections**, or `php eecli.php formidable:connections:test` daily from cron. |
 
 A check that doesn't apply to your site, such as the queue worker with the queue off, isn't shown. Anything that needs attention also appears on the [dashboard](./dashboard.md) for members with **Manage registry**.
 
