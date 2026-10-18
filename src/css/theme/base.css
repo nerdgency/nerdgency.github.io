@@ -230,22 +230,6 @@ h4, h5, h6 {
   color: var(--ng-text);
 }
 
-/* The docs call to action on the right of the navbar. */
-.navbar a.navbar-cta {
-  margin-left: 0.5rem;
-  padding: 0.45rem 1.05rem;
-  border-radius: 999px;
-  background: var(--ng-text);
-  color: var(--ng-bg);
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.navbar a.navbar-cta:hover {
-  background: var(--ng-link);
-  color: var(--ng-bg);
-}
-
 .navbar__search-input,
 .navbar [class*='searchBox'] input {
   background: var(--ng-surface) !important;

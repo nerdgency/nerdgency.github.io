@@ -1,0 +1,51 @@
+---
+title: Template tags
+description: Every variable an Autograph field provides inside a channel entries tag.
+keywords:
+  - autograph
+  - template tags
+  - variables
+---
+
+# Template tags
+
+## Introduction
+
+These variables work wherever ExpressionEngine parses channel fields, such as `{exp:channel:entries}`, and member fields, such as `{exp:member:custom_profile_data}`. In the examples the field is called `customer_signature`. Use your own field's short name.
+
+| Variable | Outputs |
+| --- | --- |
+| [`{customer_signature}`](#field_name) | An `<img>` of the signature |
+| [`{customer_signature:url}`](#url) | The signature's PNG data URL |
+| [`{customer_signature:width}`](#width) | The field's canvas width, in pixels |
+| [`{customer_signature:height}`](#height) | The field's canvas height, in pixels |
+
+## `{field_name}` {#field_name}
+
+An `<img>` of the signature, with `width` and `height` set to the field's canvas size:
+
+```html
+<img src="data:image/png;base64,iVBORw0KGgo…" width="400" height="200" />
+```
+
+It has no `alt` attribute. When the entry has no signature, or holds something that isn't a PNG data URL, the `src` is empty, so test the field first:
+
+```html
+{if customer_signature}{customer_signature}{/if}
+```
+
+## `{field_name:url}` {#url}
+
+The saved value: the signature as a PNG data URL, beginning `data:image/png;base64,`. Empty when there's no signature. Use it as an `<img>` `src` in your own markup. See [Displaying signatures](../using-autograph/displaying-signatures.mdx#with-your-own-markup).
+
+## `{field_name:width}` {#width}
+
+The field's **Canvas Width** setting. It's the same for every entry, signed or not.
+
+## `{field_name:height}` {#height}
+
+The field's **Canvas Height** setting. It's the same for every entry, signed or not.
+
+## Conditionals
+
+`{if customer_signature}` is true when the entry has a signature and false when it's empty or was cleared.

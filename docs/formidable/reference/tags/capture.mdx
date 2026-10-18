@@ -44,7 +44,9 @@ The form's name, used only when the form is created.
 | `update` | Also create fields that were added and update fields that changed. |
 | `off` | Do not read the markup at all. Look the form up and render. Use this in production. |
 
-Markup identical to the last capture skips parsing anyway, because a checksum is compared first.
+Markup identical to the last capture skips parsing anyway, because a checksum is compared first. After a Formidable update that reads markup differently, the next capture reads it again even if it hasn't changed.
+
+The control panel reports a captured form's markup as changed only while that report is current. A form rendered with `sync="off"` isn't compared, so it isn't shown as changed; `formidable:capture-status` lists it as not checked.
 
 </Param>
 
@@ -108,6 +110,12 @@ The JavaScript honeypot input's name, as on the form tag.
 
 </Param>
 
+<Param tag="capture" name="include_js" default="yes" values={<><code>yes</code>, <code>no</code></>}>
+
+Whether `formidable.js` is added to the page. A captured form needs it when the form's JavaScript honeypot is on: the script fills in the check input inside `{captured_meta}`, and without it every submission is counted as spam. With `no`, load `formidable.js` yourself.
+
+</Param>
+
 <Param tag="capture" name="prefix" example='prefix="contact_"'>
 
 Prefixes every variable the tag publishes.
@@ -136,9 +144,10 @@ The error summary's regions can be styled with the same `REGION:attribute:NAME=`
 | `{captured_synced}` | Handles written, under `sync="update"` |
 | `{captured_action_url}`, `{captured_meta}` | See above |
 | `{form_has_errors}`, `{form_error_count}`, `{form_errors}…{/form_errors}` | Errors after a failed submission, as on the form tag |
-| `{error:HANDLE}`, `{value:HANDLE}` | One field's error and submitted value |
+| `{error:HANDLE}`, `{value:HANDLE}` | One field's error and submitted value. Both are empty until a submission fails. |
+| `{form_success}`, `{form_success_message}`, `{submission_id}`, `{submission_handle}`, `{submission:HANDLE}` | After a successful submission, as on the form tag. See [After a successful submission](/docs/formidable/reference/tags/form#after-a-successful-submission). |
 
-The handle lists are pipe-separated, and all of them work in conditionals. **Removed fields are reported, never deleted**, even under `sync="update"`, because they may have submissions.
+The handle lists are pipe-separated, and all of them work in conditionals. In a conditional, quote `{error:HANDLE}` and `{value:HANDLE}`: `{if "{error:email}" != ""}`, `{if "{value:role}" == "school"}`. Unquoted, `{if error:email}` is always false, because ExpressionEngine reads the part after the colon as a modifier. **Removed fields are reported, never deleted**, even under `sync="update"`, because they may have submissions.
 
 ## How a control is matched
 

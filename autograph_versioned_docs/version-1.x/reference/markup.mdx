@@ -1,0 +1,61 @@
+---
+title: Markup
+description: The HTML an Autograph field renders in a Channel Form, and the classes and ids to style or script it.
+keywords:
+  - autograph
+  - markup
+  - css classes
+---
+
+# Markup
+
+## Introduction
+
+This is the HTML an Autograph field renders in a Channel Form, for styling the pad or scripting around it. Here the field is called `customer_signature`.
+
+```html
+<div class="autograph-manager"
+     data-autograph-key="customer_signature"
+     data-autograph-settings="eyJjYW52YXMiOnsid2lkdGgiOiI0MDAi…">
+
+    <canvas class="ft-autograph autograph-manager-canvas"
+            id="autograph-manager-canvas-customer_signature"
+            width="400" height="200"
+            tabindex="1"></canvas>
+
+    <div class="autograph-buttons">
+        <button type="button" class="autograph-manager-undo"
+                id="autograph-manager-undo-customer_signature">Undo</button>
+        <button type="button" class="autograph-manager-clear"
+                id="autograph-manager-clear-customer_signature">Clear</button>
+    </div>
+
+    <textarea name="customer_signature" id="customer_signature"
+              style="display: none;"></textarea>
+</div>
+```
+
+:::note In Autograph 2
+Autograph 2 keeps all of these classes and ids, and adds its own `autograph__*` classes beside them. See [Markup in 2.x](/docs/autograph/reference/markup).
+:::
+
+## Classes and ids
+
+| Selector | Element |
+| --- | --- |
+| `.autograph-manager` | The wrapper around one pad. `autograph.js` finds every pad on the page by this class. |
+| `canvas.ft-autograph` | The signing surface. Its size comes from the field settings. |
+| `.autograph-manager-canvas` | The same canvas, in Channel Forms. Applies from 1.0.1; before that the attribute was ignored. |
+| `.autograph-buttons` | The wrapper around the two buttons. Channel Forms only. |
+| `.autograph-manager-undo` | The **Undo** button. Channel Forms only. |
+| `.autograph-manager-clear` | The **Clear** button. Channel Forms only. |
+| `#autograph-manager-canvas-{name}` | The canvas, by field name. |
+| `#{name}` | The hidden textarea that carries the saved value. |
+
+## The saved value
+
+The hidden textarea holds the signature as a PNG data URL, and is posted with the form under the field's name. `autograph.js` writes to it after every stroke and undo, and empties it on **Clear**. The server checks it on submit.
+
+## The control panel
+
+On the publish form, with **Save in Control Panel** on, the markup is the same except that the field is named `field_id_N` (`m_field_id_N` on a member's profile), the buttons use the control panel's `button` classes, and there's no `.autograph-buttons` wrapper. With it off, the field is an `<img>` of the signature (or an empty-field message) and the hidden textarea.

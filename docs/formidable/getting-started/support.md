@@ -12,19 +12,19 @@ keywords:
 
 # Getting help
 
-Formidable's issues are tracked in public on GitHub, at [nerdgency/ee-formidable-issues](https://github.com/nerdgency/ee-formidable-issues). That's the place for bug reports, feature requests and ideas for new fieldtypes. The **Support** card on Formidable's dashboard links straight to it.
+Formidable's issues are tracked in public on GitHub, at [nerdgency/ee-addon-issues](https://github.com/nerdgency/ee-addon-issues), shared with Nerdgency's other add-ons and labelled `formidable`. That's the place for bug reports, feature requests and ideas for new fieldtypes. The **Support** card on Formidable's dashboard links straight to it.
 
 Security vulnerabilities are the one exception. **Never report one in a public issue.** Email it instead (see [below](#reporting-a-security-vulnerability)).
 
 ## Before you report
 
 1. **Check [Troubleshooting](./troubleshooting.md).** Most problems are quiet rather than broken: a field that renders nothing, a script that never loads, an email that was handed to a mail server that never delivered it. Adding `debug="on"` to the tag usually says why.
-2. **Update.** Make sure you're on the latest Formidable 1.x release. The [release notes](/docs/formidable/prologue/release-notes) say what's been fixed.
-3. **Search the [open and closed issues](https://github.com/nerdgency/ee-formidable-issues/issues?q=is%3Aissue).** If someone has already reported it, add a 👍 or a comment with your details rather than opening a new issue. Upvotes help decide what gets done first.
+2. **Update.** Make sure you're on the latest Formidable 1.x release. The [changelog](/docs/formidable/prologue/changelog) says what's been fixed.
+3. **Search the [open and closed issues](https://github.com/nerdgency/ee-addon-issues/issues?q=is%3Aissue+label%3Aformidable).** If someone has already reported it, add a 👍 or a comment with your details rather than opening a new issue. Upvotes help decide what gets done first.
 
 ## Reporting a bug
 
-[Open a bug report](https://github.com/nerdgency/ee-formidable-issues/issues/new/choose) and include:
+[Open a bug report](https://github.com/nerdgency/ee-addon-issues/issues/new?template=formidable-bug-report.yml) and include:
 
 1. **Versions:** Formidable, ExpressionEngine and PHP. Formidable's version is at the bottom of its dashboard.
 2. **What you did,** step by step, so someone else can make it happen again.
@@ -39,7 +39,7 @@ Issues are public. Don't paste submissions, visitors' answers, API keys, Connect
 
 ## Requesting a feature
 
-[Open a feature request](https://github.com/nerdgency/ee-formidable-issues/issues/new/choose). The most useful requests describe **the problem you're trying to solve**, not only the solution you have in mind: what the form is for, what you tried, and where Formidable got in the way. There's often more than one way to solve it, and knowing the why helps find the best one.
+[Open a feature request](https://github.com/nerdgency/ee-addon-issues/issues/new?template=formidable-feature-request.yml). The most useful requests describe **the problem you're trying to solve**, not only the solution you have in mind: what the form is for, what you tried, and where Formidable got in the way. There's often more than one way to solve it, and knowing the why helps find the best one.
 
 ## Requesting a fieldtype
 

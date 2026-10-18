@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Autograph</title>
+    <path d="M50,16 L124,16 L160,52 L160,176 C160,182 156,186 150,186 L50,186 C44,186 40,182 40,176 L40,26 C40,20 44,16 50,16 Z" fill="#FAAF40" stroke="#374654" stroke-width="6" stroke-linejoin="round" />
+    <path d="M124,16 L124,46 C124,49 127,52 130,52 L160,52" fill="none" stroke="#374654" stroke-width="6" stroke-linejoin="round" />
+    <rect x="62" y="56" width="44" height="11" rx="5.5" fill="#FFFFFF" />
+    <path d="M60,124 C68,98 78,86 84,92 C90,98 78,128 88,128 C98,128 102,104 110,108 C117,112 112,124 120,122 C126,120 130,112 136,110" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="62" y="140" width="50" height="9" rx="4.5" fill="#FFFFFF" />
+    <circle cx="150" cy="152" r="27" fill="#FFFFFF" stroke="#374654" stroke-width="6" />
+    <line x1="161" y1="141" x2="147" y2="155" stroke="#FAAF40" stroke-width="7" stroke-linecap="round" />
+    <path d="M143,152 L150,159 L138,164 Z" fill="#FAAF40" stroke="#FAAF40" stroke-width="2" stroke-linejoin="round" />
+</svg>

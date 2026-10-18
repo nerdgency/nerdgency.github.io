@@ -1,0 +1,55 @@
+---
+title: Displaying signatures
+description: Show a saved signature in a template, as an image or through its data URL.
+keywords:
+  - autograph
+  - template tags
+  - display signature
+---
+
+# Displaying signatures
+
+## Introduction
+
+Inside `{exp:channel:entries}`, an Autograph field outputs the signature as an image. Every variable is listed under [Template tags](../reference/template-tags.mdx).
+
+## As an image
+
+The field's own tag outputs an `<img>` the size of the canvas:
+
+```html title="templates/default_site/waivers.group/entry.html"
+{exp:channel:entries channel="waivers" limit="1"}
+    <h1>{title}</h1>
+
+    {if customer_signature}
+        {customer_signature alt="Signature of {title}"}
+    {if:else}
+        <p>Not signed yet.</p>
+    {/if}
+{/exp:channel:entries}
+```
+
+An unsigned entry outputs nothing, so the `{if}` is only needed for the *Not signed yet* message. The tag also takes `class=`, `width=` and `height=`. See [`{field_name}`](../reference/template-tags.mdx#field_name).
+
+## With your own markup
+
+Use `{customer_signature:url}` for the image's address, and `:width` and `:height` for the canvas size, to write the `<img>` yourself:
+
+```html title="templates/default_site/waivers.group/entry.html"
+{if customer_signature}
+    <figure class="signature">
+        <img
+            src="{customer_signature:url}"
+            alt="Signature of {title}"
+            width="{customer_signature:width}"
+            height="{customer_signature:height}">
+        <figcaption>Signed {customer_signature:signed_at format="%F %j, %Y"}</figcaption>
+    </figure>
+{/if}
+```
+
+The image is a PNG, transparent unless the field has a **Background Color**, so it sits on whatever is behind it.
+
+## In emails and PDFs
+
+For a signature saved in the entry, `{customer_signature:url}` is a `data:` URL, with the image inside it. Browsers and most PDF generators display it as-is, but many email clients, Gmail and Outlook among them, block `data:` images. For signatures that appear in emails, [save them as files](./storage.md): then `:url` is an ordinary link to the PNG.

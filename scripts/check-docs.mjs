@@ -39,6 +39,10 @@ const walk = (dir) =>
 const targets = process.argv.slice(2).map((p) => path.resolve(p));
 const files = (targets.length ? targets.flatMap((t) => (fs.statSync(t).isDirectory() ? walk(t) : [t])) : [
   ...walk(path.join(root, 'docs')),
+  // Autograph's own docs plugin: the current (next) version and the
+  // snapshots of released ones.
+  ...walk(path.join(root, 'docs-autograph')),
+  ...walk(path.join(root, 'autograph_versioned_docs')),
   ...walk(path.join(root, 'blog')),
   ...walk(path.join(root, 'examples/templates')),
 ]).filter((f) => /\.(mdx?|html)$/.test(f));
@@ -189,7 +193,11 @@ for (const file of files) {
   for (const m of text.matchAll(/!\[([^\]]*)\]\(([^)\s]+)/g)) {
     if (!m[1].trim()) report(file, lineOf(text, m.index), `image ${m[2]} has no alt text`);
   }
-  for (const m of text.matchAll(/<img\b[^>]*>/g)) {
+  // An <img> inside a code block or `code span` is shown, not rendered, so
+  // it needs no alt. Blank it out, keeping offsets so line numbers hold.
+  const blank = (s) => s.replace(/[^\n]/g, ' ');
+  const rendered = text.replace(/^```[\s\S]*?^```/gm, blank).replace(/`[^`\n]+`/g, blank);
+  for (const m of rendered.matchAll(/<img\b[^>]*>/g)) {
     if (!/\balt=/.test(m[0])) report(file, lineOf(text, m.index), 'an <img> has no alt attribute');
   }
   for (const m of text.matchAll(/["(](\/img\/[^")\s]+)/g)) {

@@ -1,0 +1,175 @@
+/*
+ * The Autograph product page (autograph.js). Its hero, sections and call
+ * to action share formidable.module.css, so the two pages match; this
+ * holds only what's Autograph's own.
+ */
+
+/* Pad illustration --------------------------------------------------- */
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.75rem;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius-lg);
+  background: var(--ng-bg-raised);
+  box-shadow: var(--ng-shadow-lg);
+  transform: rotate(0.6deg);
+  font-size: 0.85rem;
+}
+
+.previewLabel {
+  font-weight: 600;
+}
+
+.previewLabel b {
+  color: var(--ng-amber-deep);
+}
+
+.pad {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  border: 1px solid var(--ng-border-strong);
+  border-radius: 10px;
+  background: var(--ng-bg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ng-amber) 25%, transparent);
+}
+
+.signature {
+  position: absolute;
+  inset: 8% 6% 18%;
+  width: 88%;
+  height: 74%;
+  color: var(--ng-text);
+}
+
+.signLine {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 16%;
+  border-top: 1.5px dashed var(--ng-border-strong);
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tools span {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--ng-border-strong);
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--ng-text-muted);
+}
+
+.tools .signed {
+  margin-left: auto;
+  border: 0;
+  font-weight: 400;
+  color: var(--ng-text-faint);
+}
+
+/* New in 2.0 ------------------------------------------------------ */
+
+.newList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem 2rem;
+  margin: 0;
+  padding: 1.75rem 2rem;
+  list-style: none;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius-lg);
+  background:
+    radial-gradient(30rem 14rem at 0% 50%, color-mix(in srgb, var(--ng-amber) 14%, transparent), transparent 70%),
+    var(--ng-bg-raised);
+}
+
+.newList li {
+  position: relative;
+  padding-left: 1.6rem;
+  color: var(--ng-text-muted);
+}
+
+.newList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+  color: var(--ng-amber-deep);
+}
+
+/* Storage ----------------------------------------------------------- */
+
+.storage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.storageCard {
+  padding: 1.75rem;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius-lg);
+  background: var(--ng-bg-raised);
+}
+
+.storageCard h3 {
+  font-family: var(--ng-font-display);
+  font-size: 1.45rem;
+  font-weight: 560;
+  margin: 0 0 0.5rem;
+}
+
+.storageCard p {
+  color: var(--ng-text-muted);
+  line-height: 1.6;
+}
+
+.storageCard code {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+}
+
+/* Everywhere -------------------------------------------------------- */
+
+.places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.places li {
+  padding: 0.45rem 1rem;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.tags {
+  max-width: 44rem;
+}
+
+@media (max-width: 996px) {
+  .storage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .newList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .newList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

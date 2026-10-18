@@ -80,8 +80,29 @@ A failed submission comes back to the page with the same error variables the for
 
 ```ee title="templates/default_site/contact.group/index.html"
 <input type="email" name="email" id="email" value="{value:email}" required>
-{if error:email}<p class="field-error">{error:email}</p>{/if}
+{if "{error:email}" != ""}<p class="field-error">{error:email}</p>{/if}
 ```
+
+Both variables are empty until a submission fails, so the input is blank on a first visit. In a conditional, keep the quotes: `{if error:email}` on its own is always false, because ExpressionEngine reads the part after the colon as a modifier.
+
+## Saying thank you
+
+After a successful submission, the next page with this form's capture tag gets `{form_success}` and `{form_success_message}`, as the form tag does. Show the message in place of the form:
+
+```ee title="templates/default_site/contact.group/index.html"
+{exp:formidable:capture form_handle="contact" sync="off" return="{page_url}#contact"}
+    {if form_success}
+        <p class="form-thanks">{form_success_message}</p>
+    {if:else}
+        <form action="{captured_action_url}" method="post">
+            {captured_meta}
+            …
+        </form>
+    {/if}
+{/exp:formidable:capture}
+```
+
+The message comes from `success_message=`, then the form's and the site's settings. It shows once, so reloading the page shows the form again, and nobody can trigger it by editing the URL.
 
 ## Captured forms in the control panel
 

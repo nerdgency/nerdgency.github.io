@@ -62,7 +62,8 @@ The command line does the same: `formidable:form:export --form=handle > file.jso
 | The form's settings, pages and sections | Submissions, drafts and counts |
 | Every field and its settings, including conditions and computed fields | A captured form's link to its template: an imported form is a builder form |
 | Statuses and submission actions | Email addresses typed into workflows, member and role recipients |
-| Workflows: when they run, their conditions and their email wording | Webhook URLs and secrets, workflow connections and attached files |
+| Workflows: when they run, their conditions and their email wording | Webhook URLs and secrets, and attached files |
+| A connection workflow's list and field mapping, and its connection by name | |
 | Field recipients ("email the address in the Email field") | Connection keys, ever |
 
 A field linked to your [field library](/docs/formidable/building-forms/fields) is exported with its settings as they read. On import it's linked again if the site has a library field with the same handle and fieldtype, and arrives as an ordinary field otherwise.
@@ -73,7 +74,7 @@ Some settings point at things on the site itself. They're carried by name and ma
 
 - **Choices from channel entries, categories or members**: the channel, entry statuses, category group and roles, by name.
 - **File fields**: the upload destination and folder, by name.
-- **Turnstile and hCaptcha**: the connection, by its name. Its keys are never exported; the new site needs a connection of the same name.
+- **Turnstile and hCaptcha, and connection workflows** (Mailchimp, HubSpot and the rest): the connection, by its name. Its keys are never exported; the new site needs a connection of the same name.
 - **Submission actions**: who may run them, by role.
 - **The theme**: by name. A theme the site doesn't have falls back to the site's own theme.
 
@@ -81,7 +82,7 @@ Anything that can't be matched is listed before the form is made, and again once
 
 - A field whose fieldtype the site doesn't have is left out.
 - A setting with nothing to match is left empty, to choose in the field's settings.
-- A workflow that lost its recipients, URL or connection arrives **switched off**, until you set it up.
+- A workflow that lost its recipients or URL, or whose connection the site doesn't have, arrives **switched off**, until you set it up. One whose connection is found arrives switched on.
 - A submission action whose roles aren't all on the site arrives switched off, so it never opens up to more people than it did.
 - A File field arrives without an upload destination: choose one on its **File** tab before the form takes uploads.
 - A handle already taken gets a number added.
@@ -106,3 +107,46 @@ $document = BlueprintBuilder::make('Event RSVP', 'event_rsvp')
 ```
 
 The document can be imported with `formidable:form:import`, or written to a file and imported in the control panel. A document from a newer version of Formidable is refused, so update the site first.
+
+Connections are named by their handle, or as `provider:name`, never by id, so the same code works on every site that has a connection of that name. A workflow's `key` lets an update find it again after it's renamed:
+
+```php
+$document = BlueprintBuilder::make('Newsletter', 'newsletter')
+    ->field('email', 'Email', 'email', ['required' => true])
+    ->field('captcha', 'Spam check', 'turnstile', connection: 'cloudflare_turnstile')
+    ->workflow('Add to Mailjet', 'submission_created', 'connection', [
+        'connection_target' => '12345',
+        'connection_mapping' => [['name' => 'Email', 'value' => 'email']],
+    ], connection: 'mailjet', key: 'mailjet')
+    ->document();
+```
+
+## Keeping forms in code
+
+To keep a form defined in code or in version control, update it from its document instead of making a new one each time:
+
+```bash
+php system/ee/eecli.php formidable:form:import --file=forms/newsletter.json --update --check
+php system/ee/eecli.php formidable:form:import --file=forms/newsletter.json --update
+```
+
+From PHP, `FormImporter::sync($document)` does the same, and `FormImporter::checkSync($document)` returns the plan without changing anything.
+
+The form with the document's handle is updated in place, or created if it isn't there yet. Fields, statuses and actions are matched by handle, workflows by their key or name, and everything matched keeps its id, so **submissions, links and saved views are untouched**. The form's builder then shows that it's managed in code, since the next update replaces changes made there.
+
+An update is careful by default:
+
+| Change | What happens |
+| --- | --- |
+| A new field, status, workflow or action | Added |
+| A changed label, setting, option, condition or layout | Updated |
+| A field, status, workflow or action the document leaves out | Kept, and listed. `--prune` removes it. |
+| `--prune` on a field with answers, or a status submissions are in | Refused |
+| A field whose fieldtype changed | Refused, since its answers have the old shape. `--allow-type-changes` changes it anyway. |
+| An option removed that answers use | Updated, with a note: those answers keep their value |
+| Recipients, a webhook or a connection the document leaves blank | The site's own are kept, so updating from an exported file never wipes them |
+| Something **changed in the control panel since the last update**, which the document would change again | Refused, naming it, so the change isn't lost. Copy it into the document, or use `--overwrite-site-changes` to replace it. |
+
+Only what actually differs is listed and written: running an update twice in a row changes nothing the second time. Each update records what it wrote, which is how a later one notices edits made in between (the first update after upgrading has nothing to compare with, and says so).
+
+Anything refused stops the whole update, and nothing is changed. A form setting the document doesn't mention stays as the site has it. A captured form can't be updated this way, since its fields come from its template.

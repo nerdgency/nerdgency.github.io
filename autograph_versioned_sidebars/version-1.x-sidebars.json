@@ -1,0 +1,54 @@
+{
+  "autographSidebar": [
+    {
+      "type": "html",
+      "defaultStyle": false,
+      "value": "<a class=\"sidebar-product\" href=\"/docs/autograph\"><img src=\"/img/icons/autograph.svg\" alt=\"\" width=\"34\" height=\"34\"><span><strong>Autograph</strong><small>Signatures for ExpressionEngine</small></span></a>"
+    },
+    {
+      "type": "category",
+      "label": "Prologue",
+      "collapsible": false,
+      "collapsed": false,
+      "items": [
+        "index",
+        "prologue/changelog",
+        "prologue/upgrade-guide"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Getting started",
+      "collapsible": false,
+      "collapsed": false,
+      "items": [
+        "getting-started/installation",
+        "getting-started/troubleshooting",
+        "getting-started/support"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Using Autograph",
+      "collapsible": false,
+      "collapsed": false,
+      "items": [
+        "using-autograph/field-settings",
+        "using-autograph/channel-forms",
+        "using-autograph/control-panel",
+        "using-autograph/member-fields",
+        "using-autograph/displaying-signatures"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Reference",
+      "collapsible": false,
+      "collapsed": false,
+      "items": [
+        "reference/template-tags",
+        "reference/markup"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+---
+title: Displaying signatures
+description: Show a saved signature in a template, as an image or through its data URL.
+keywords:
+  - autograph
+  - template tags
+  - display signature
+---
+
+# Displaying signatures
+
+## Introduction
+
+Inside `{exp:channel:entries}`, an Autograph field outputs the signature as an image. Every variable is listed under [Template tags](../reference/template-tags.mdx).
+
+## As an image
+
+The field's own tag outputs an `<img>` the size of the canvas:
+
+```html title="templates/default_site/waivers.group/entry.html"
+{exp:channel:entries channel="waivers" limit="1"}
+    <h1>{title}</h1>
+
+    {if customer_signature}
+        {customer_signature}
+    {if:else}
+        <p>Not signed yet.</p>
+    {/if}
+{/exp:channel:entries}
+```
+
+Wrap it in `{if customer_signature}`, because an unsigned entry still outputs an `<img>`, with an empty `src`.
+
+## With your own markup
+
+Use `{customer_signature:url}` for the image itself, and `:width` and `:height` for the canvas size, to write the `<img>` yourself. This is how to add `alt` text, classes or a different display size:
+
+```html title="templates/default_site/waivers.group/entry.html"
+{if customer_signature}
+    <figure class="signature">
+        <img
+            src="{customer_signature:url}"
+            alt="Signature of {title}"
+            width="{customer_signature:width}"
+            height="{customer_signature:height}">
+        <figcaption>Signed {entry_date format="%F %j, %Y"}</figcaption>
+    </figure>
+{/if}
+```
+
+The image is a PNG with a transparent background, so it sits on whatever is behind it.
+
+## In emails and PDFs
+
+`{customer_signature:url}` is a `data:` URL, with the image inside it, not a link to a file. Browsers and most PDF generators display it as-is. Many email clients, Gmail and Outlook among them, block `data:` images, so a signature in a notification email usually won't show.

@@ -18,7 +18,7 @@ Nothing here carries a date. Items move between sections as more is learned, and
 
 ## Available now
 
-Everything in the [release notes](./release-notes.md), including the dashboard, Utilities, repeating sections, save and resume, the workflow queue and eighteen extension hooks.
+Everything in [1.0.0](./changelog.md#100--14-october-2026), including the dashboard, Utilities, repeating sections, save and resume, the workflow queue and eighteen extension hooks.
 
 ## Next
 

@@ -1,0 +1,82 @@
+---
+title: Channel Forms
+description: Collect signatures from visitors with an Autograph field in an ExpressionEngine Channel Form.
+keywords:
+  - autograph
+  - channel form
+  - signature form
+---
+
+# Channel Forms
+
+## Introduction
+
+Autograph is made for [Channel Forms](https://docs.expressionengine.com/latest/channels/channel-form/overview.html). Once the field is on the channel, output it in the form the way you'd output any custom field, and Autograph draws the pad, its buttons and the hidden field that carries the signature.
+
+## A signing form
+
+This form creates an entry in a `waivers` channel, which has a text field called `full_name` and an Autograph field called `customer_signature`:
+
+```html title="templates/default_site/waivers.group/sign.html"
+{exp:channel:form
+    channel="waivers"
+    return="waivers/thanks"
+    logged_out_member_id="2"
+}
+    <label for="title">Your name</label>
+    <input type="text" name="title" id="title" value="{title}">
+
+    <label>Sign here</label>
+    {field:customer_signature}
+
+    <button type="submit">Sign the waiver</button>
+{/exp:channel:form}
+```
+
+`{field:customer_signature}` outputs the pad. Visitors sign, and the signature is saved when they submit the form.
+
+:::note Don't name the field `signature`
+`signature` is reserved by ExpressionEngine (members have a signature of their own), so pick another short name, such as `customer_signature` or `waiver_signature`.
+:::
+
+The [`logged_out_member_id=`](https://docs.expressionengine.com/latest/channels/channel-form/overview.html#logged_out_member_id) parameter lets visitors who aren't logged in submit the form. Leave it out if only members sign.
+
+## Scripts
+
+The pad needs two scripts, and Autograph adds them for you. Channel Form prints the assets its fields ask for along with the form, as long as you haven't turned that off:
+
+- If the form has `include_assets="no"`, the scripts aren't printed and the pad won't draw. Remove the parameter, or put `{channel_form_assets}` inside the form where the scripts should go.
+- The scripts are added once per page, however many Autograph fields or forms it has.
+
+## The pad
+
+Each pad is a `<canvas>` the size set in the [field settings](./field-settings.md), followed by two buttons:
+
+- **Undo** removes the last stroke drawn on this visit. A signature that was already saved stays.
+- **Clear** empties the pad and the saved value.
+
+The signature is saved to the field after each stroke, undo and clear, so there's nothing for the visitor to confirm before submitting. The server checks it again on submit, and refuses anything that isn't a PNG signature.
+
+## Editing an entry
+
+When a Channel Form edits an existing entry (with `entry_id=` or `url_title=`), the saved signature is drawn on the pad when the page loads. Visitors can sign over it, or **Clear** it and sign again.
+
+## Styling the pad
+
+The pad has no styles of its own on the front end, so it takes on your site's styles. Give the canvas a border so visitors can see where to sign:
+
+```css title="assets/css/forms.css"
+.autograph-manager canvas {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    touch-action: none;
+}
+
+.autograph-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+```
+
+`touch-action: none` stops the page from scrolling while someone signs with a finger. The full markup and every class are listed under [Markup](../reference/markup.mdx).

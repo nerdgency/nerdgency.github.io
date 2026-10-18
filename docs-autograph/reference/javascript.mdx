@@ -1,0 +1,64 @@
+---
+title: JavaScript
+description: Reach an Autograph pad from your own scripts, listen for its events, and start pads in forms added later.
+keywords:
+  - autograph
+  - javascript
+  - events
+  - api
+---
+
+# JavaScript
+
+## Introduction
+
+Every pad on the page has an API on its `.autograph-manager` element, and fires events as it's used. You don't need any of this for an ordinary form. It's for sites that want to do more: clear a pad from their own button, disable it until a box is ticked, or start pads in a form loaded with AJAX.
+
+## Reaching a pad
+
+```js title="assets/js/waiver.js"
+const pad = document.querySelector('[data-autograph-key="customer_signature"]').autograph;
+
+pad.isEmpty();     // true until someone signs
+pad.clear();
+```
+
+`.autograph` appears once the pad has started. A pad that's off-screen or hidden when the page loads starts the first time it's shown, so wait for its `autograph:ready` event if you need it straight away.
+
+| Method | What it does |
+| --- | --- |
+| `clear()` | Empties the pad and the saved value. |
+| `undo()` | Removes the last stroke drawn on this visit. A signature that was already saved stays. |
+| `isEmpty()` | Whether nothing is drawn. |
+| `toDataURL()` | The signature as the PNG that will be saved: canvas width by canvas height, with the background color. `''` when empty. |
+| `fromDataURL(url)` | Replaces the pad's contents with a PNG data URL, as if signed. |
+| `disable()` / `enable()` | Stops and restarts signing, and disables the buttons. |
+| `destroy()` | Stops the pad and removes its listeners, before you remove its markup. |
+
+## Events
+
+Every event bubbles from the `.autograph-manager` element, and `event.detail.autograph` is the pad.
+
+| Event | When |
+| --- | --- |
+| `autograph:ready` | The pad has started and drawn any saved signature. |
+| `autograph:changed` | After each stroke, undo or `fromDataURL()`. |
+| `autograph:cleared` | After **Clear** or `clear()`. |
+| `autograph:error` | A saved signature couldn't be drawn back, or a required pad was empty on submit (`detail.reason` is `"required"`). |
+
+```js title="assets/js/waiver.js"
+document.addEventListener('autograph:changed', (event) => {
+    document.querySelector('#send').disabled = event.detail.autograph.isEmpty();
+});
+```
+
+## Forms added later
+
+Pads start when the page loads, and when Grid adds a row or Fluid adds a field. For a form you add yourself, start its pads after inserting it:
+
+```js
+container.innerHTML = html;
+window.Autograph.initAll(container);
+```
+
+Calling `initAll()` again is safe: pads that have already started are left alone.

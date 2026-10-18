@@ -1,0 +1,118 @@
+---
+slug: introducing-autograph-2-0
+title: "Autograph 2.0: more signature, less money"
+description: Autograph 2.0 is a rebuilt signature fieldtype for ExpressionEngine 7, with signatures saved as files, a responsive pad, Grid and Fluid, and a JavaScript API. And it now costs $15, down from $33.
+authors: [nerdgency]
+tags: [autograph, release]
+keywords:
+  - autograph
+  - expressionengine signature
+  - signature fieldtype
+  - channel form signature
+  - e-signature
+image: /img/blog/autograph-2-0-social.png
+---
+
+import {FeatureGrid, Feature, CodeWindow} from '@site/src/components/Marketing';
+
+![Autograph 2.0: signatures for ExpressionEngine](/img/blog/autograph-2-0-hero.png)
+
+Waivers. Consent forms. Delivery sign-offs. Volunteer agreements. Sooner or later, an ExpressionEngine site needs somebody to sign something, and Autograph has been the quiet way to do it: add a field, put it in a Channel Form, done.
+
+**Today, Autograph 2.0 is here, and it's a bigger add-on for a smaller price.**
+
+- **Save signatures as files** in any upload directory, S3 included, or keep them in the entry as before.
+- **A pad that fits the page**: responsive, sharp on high-resolution screens, and styled your way.
+- **Signatures everywhere**: Channel Forms, member forms, Grid rows and Fluid fields.
+- **Know when it was signed**, with a tag for the date and time.
+- **Checked on the server**, every time, before anything is kept.
+- **A JavaScript API** for the sites that want to do more.
+
+And it now costs **$15**, down from $33.
+
+{/* truncate */}
+
+## More for less
+
+Autograph 2.0 is the biggest release it's had, and it costs **less than half** what it did. **$15**, down from **$33**.
+
+Why? A signature field is something a lot of sites need once, for one form. It shouldn't be a purchase you have to think about. So we did the work to make Autograph the signature field we'd want on every site, and then made it an easy yes.
+
+## Signatures as files
+
+In 1.x, every signature lived inside the entry as an image. That's still the default, and it's still the simplest choice. Now there's another: set the field's **Storage Method** to *As a file*, choose an upload directory from the **Save To** list, and every new signature becomes a PNG in ExpressionEngine's file manager.
+
+- **Any upload directory**, including S3 and other storage, because Autograph writes through ExpressionEngine's own upload handling.
+- **Ordinary links**, so signatures show up in email notifications and PDFs that refuse inline images.
+- **No duplicates.** Edit an entry without touching the signature and it keeps the same file. Nothing is uploaded twice.
+- **Switch whenever you like.** Changing the setting only affects new signatures. Every signature already saved keeps displaying where it is.
+
+## A pad that fits
+
+The 1.x pad was a fixed-size box. The 2.0 pad fills the space it's given, keeps its shape, and draws at your screen's full resolution, so signatures are crisp on a phone, a tablet and a 5K display alike. Whatever size it's drawn at, the image you keep is always exactly the size you set.
+
+<FeatureGrid columns={3}>
+  <Feature title="Your pen">
+    Color, and the thinnest and thickest stroke. Lines thin out as the pen speeds up, like real ink.
+  </Feature>
+  <Feature title="Your page">
+    A border, a background color baked into the image, and placeholder text like <em>Sign here</em>.
+  </Feature>
+  <Feature title="Your rules">
+    Undo on or off, required with a friendly message before the form is sent, and a maximum size.
+  </Feature>
+</FeatureGrid>
+
+## Signatures wherever you need them
+
+Autograph 2.0 works as a **Grid column**, for a signature on every row (every attendee, every witness), and inside **Fluid**. Rows added on the page get their own pad straight away. It's a **member field** too, at registration and on profile forms, and of course in **Channel Forms**, with no template changes.
+
+## Know when, and trust what
+
+Every new signature is recorded with **when it was signed**, and who was logged in, without changing what the field stores. Put it on a page with one tag:
+
+<CodeWindow title="templates/default_site/waivers.group/entry.html">
+{`{if customer_signature}
+    {customer_signature alt="Signature of {title}"}
+    <p>Signed {customer_signature:signed_at format="%F %j, %Y"}</p>
+{/if}`}
+</CodeWindow>
+
+Before anything is kept, Autograph decodes the signature and checks it really is an image. What it saves is re-encoded from that check, never the raw text a browser sent. In the control panel, editors see the signature with when it was signed, can open it, and can remove it, but can't sign on somebody's behalf unless you choose in-person signing.
+
+## For developers
+
+Every pad has an API on its element: `clear()`, `undo()`, `disable()`, `toDataURL()` and more, with `autograph:ready`, `autograph:changed` and `autograph:cleared` events, and `Autograph.initAll()` for forms you load later. Storage is pluggable too: register your own method with the `autograph_storage_providers` hook.
+
+<CodeWindow title="assets/js/waiver.js" language="js">
+{`document.addEventListener('autograph:changed', (event) => {
+    send.disabled = event.detail.autograph.isEmpty();
+});`}
+</CodeWindow>
+
+## Coming from 1.x
+
+Autograph 2.0 is built so a 1.x site updates without changing a template, a stylesheet or an entry. Fields keep behaving as they did until you edit their settings, every 1.x class and id is still in the markup, and every saved signature keeps displaying. The update also widens Autograph's database columns, so long signatures are never cut off.
+
+A few things do look or behave a little differently, such as an unsigned field now printing nothing at all. The [upgrade guide](/docs/autograph/prologue/upgrade-guide) lists every one.
+
+## Get started
+
+Autograph 2.0 needs **ExpressionEngine 7** or later and **PHP 8.1** or later. **[Get it from the ExpressionEngine add-on store](https://expressionengine.com/add-ons/autograph) for $15.**
+
+<Cards>
+  <CardLink to="/docs/autograph/getting-started/installation" title="Install Autograph">
+    Requirements, and the two folders to copy.
+  </CardLink>
+  <CardLink to="/docs/autograph/using-autograph/channel-forms" title="Add it to a Channel Form">
+    A signing form in a few lines.
+  </CardLink>
+  <CardLink to="/docs/autograph/using-autograph/storage" title="Save signatures as files">
+    In the entry, or in an upload directory.
+  </CardLink>
+  <CardLink to="/docs/autograph/prologue/changelog" title="Everything in 2.0">
+    The full changelog.
+  </CardLink>
+</Cards>
+
+Somebody, somewhere, has a form that needs signing. **Now it's a $15 problem.**

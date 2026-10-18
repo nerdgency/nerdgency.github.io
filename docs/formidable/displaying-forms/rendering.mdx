@@ -88,7 +88,7 @@ Every field is also available outside the loop, by its handle. This suits a desi
         <div class="hero-signup">
             <label for="email_address">Your email</label>
             <input {field:email_address:attributes}>
-            {if error:email_address}<p class="field-error">{error:email_address}</p>{/if}
+            {if "{error:email_address}" != ""}<p class="field-error">{error:email_address}</p>{/if}
         </div>
         {fields}{field_template}{/fields}
         <button type="submit">Send</button>
