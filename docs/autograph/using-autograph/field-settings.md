@@ -14,7 +14,7 @@ keywords:
 
 An Autograph field is a channel field like any other. Create it under **Developer › Fields**, choose **Autograph** as the type, and assign its field group to the channels that need a signature.
 
-Autograph fields can be used as ordinary channel fields. They can't be used inside Grid or Fluid fields, and they don't work as member fields in 1.x.
+Autograph fields can be used as ordinary channel fields, and as [member fields](./member-fields.mdx). They can't be used inside Grid or Fluid fields.
 
 ## Settings
 

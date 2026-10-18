@@ -33,9 +33,9 @@ Signatures are saved in a database column that holds about 64 KB. A very large c
 
 **Workaround:** keep the canvas at the default 400 × 200 or close to it.
 
-### Not available in Grid, Fluid or member fields
+### Not available in Grid or Fluid fields
 
-Autograph fields work as ordinary channel fields only. They aren't offered inside Grid or Fluid fields. Autograph can't be used as a member field. Before 1.0.1 it was offered as one, but never saved there.
+Autograph fields work as ordinary channel fields and as [member fields](/docs/autograph/using-autograph/member-fields). They aren't offered inside Grid or Fluid fields.
 
 ### Signatures are always PNGs in the entry
 

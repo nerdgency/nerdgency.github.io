@@ -17,7 +17,7 @@ A fix release. No template, stylesheet or entry needs to change. Replace both fo
 - **Undo saves.** Before, the undone stroke was still submitted. Undo also keeps a signature that was saved earlier.
 - **Scripts follow your themes URL** (`theme_folder_url`), so subfolder installs and moved themes folders work.
 - **Proper button labels:** **Undo**, **Clear** and **Not signed yet.**, instead of the raw language keys.
-- Autograph is **no longer offered as a member field type**, because it never saved there.
+- **Member fields work:** on a member's profile, at registration and on profile edit forms. See [Member fields](/docs/autograph/using-autograph/member-fields).
 
 ## Autograph 1.0
 
@@ -41,4 +41,4 @@ Autograph 1.0 needs **ExpressionEngine 6.0** or later and **PHP 8.1** or later. 
 Still open in 1.0.1, and listed in [Troubleshooting](/docs/autograph/getting-started/troubleshooting#known-limitations):
 
 - Signatures are stored as PNG images, in the entry itself. Saving to an upload directory isn't available yet.
-- Autograph fields can't be used inside Grid or Fluid fields, or as member fields.
+- Autograph fields can't be used inside Grid or Fluid fields.

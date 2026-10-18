@@ -112,6 +112,7 @@ const sidebars = {
       a('using-autograph/field-settings'),
       a('using-autograph/channel-forms'),
       a('using-autograph/control-panel'),
+      a('using-autograph/member-fields'),
       a('using-autograph/displaying-signatures'),
     ]),
     section('Reference', [a('reference/template-tags'), a('reference/markup')]),

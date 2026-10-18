@@ -95,7 +95,7 @@ The add-on source in `ee/packages/autograph/dist/system/user/addons/autograph` (
 
 ## Add-on findings
 
-Items 1, 2, 4 (by removing `MemberField`), 5, 6 (`post_save()` removed; the settings keys stay), 7 (escaping and an `autograph_alt` lang string for the CP image; the front-end `{field}` tag still has no alt), 8 and 9 were fixed in **1.0.1**, and the docs were updated to match. A stored-XSS gap found while planning (values saved and printed unchecked) was fixed in the same release. Still open: 3 (blob column) and the soft high-DPI canvas, both planned for 2.0 in `ee/packages/autograph/ROADMAP.md`.
+Items 1, 2, 4 (member fields now work: the CP view uses `name()`, and front-end member forms get the scripts inline), 5, 6 (`post_save()` removed; the settings keys stay), 7 (escaping and an `autograph_alt` lang string for the CP image; the front-end `{field}` tag still has no alt), 8 and 9 were fixed in **1.0.1**, and the docs were updated to match. A stored-XSS gap found while planning (values saved and printed unchecked) was fixed in the same release. Still open: 3 (blob column) and the soft high-DPI canvas, both planned for 2.0 in `ee/packages/autograph/ROADMAP.md`.
 
 
 1. **Undo doesn't update the saved value.** `autograph.js` only writes the textarea on `endStroke` and `clear`.

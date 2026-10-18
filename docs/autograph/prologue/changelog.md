@@ -32,10 +32,10 @@ A fix release. No template, stylesheet or entry needs to change.
 - **Scripts** load from your themes URL (`theme_folder_url`) instead of always from `/themes/user/autograph/`, so subfolder installs and moved themes folders work. The file names haven't changed. See [The themes folder](/docs/autograph/getting-started/installation#the-themes-folder).
 - **Labels:** the buttons read **Undo** and **Clear**, and an unsigned field in the control panel reads **Not signed yet.**, instead of the raw keys `undo`, `clear` and `no_autograph`. The field settings' labels no longer depend on another part of ExpressionEngine having loaded its language file.
 - **Control panel:** the saved signature's image has alt text.
+- **Member fields work.** Autograph was offered as a member field type, but signatures never saved there. They now save from a member's profile in the control panel, from `{exp:member:registration_form}` and from `{exp:member:edit_profile}`, where Autograph prints the pad's scripts itself. See [Member fields](/docs/autograph/using-autograph/member-fields).
 
 ### Changed
 
-- **Member fields:** Autograph is no longer offered as a member field type, because signatures never saved there. Existing member fields of this type keep their data.
 - **Markup:** in Channel Forms, the canvas's second `class` attribute is merged into the first, so `autograph-manager-canvas` now applies alongside `ft-autograph`. See [Markup](/docs/autograph/reference/markup).
 - **Add-on icon** redrawn to match Nerdgency's other add-ons.
 - Removed unused code that could have written a stray `test2.png` to an upload directory.
