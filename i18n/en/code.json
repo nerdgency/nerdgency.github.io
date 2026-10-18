@@ -1,0 +1,10 @@
+{
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "You're reading the docs for {versionLabel}, which hasn't been released yet.",
+    "description": "Banner on an unreleased docs version. The default names the site title (\"Nerdgency Docs\") as if it were the product; the page already says which add-on it is."
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "You're reading the docs for {versionLabel}, which is no longer actively maintained.",
+    "description": "Banner on an old docs version. Same reason as above."
+  }
+}

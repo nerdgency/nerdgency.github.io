@@ -27,10 +27,10 @@ Each Autograph field has four settings, under **Field Options**:
 | **Pen Color** | Black | The colour of the ink. Picked with ExpressionEngine's colour picker. |
 | **Save in Control Panel** | Off | Whether editors can sign on the publish form. See [Control panel](./control-panel.md). |
 
-The canvas size is also the size of the saved image, and the size [`{field_name}`](/docs/autograph/reference/template-tags#field_name) gives the `<img>` it outputs. If you change it after signatures have been saved, existing signatures are drawn at the new size, stretched if the shape changed.
+The canvas size is also the size of the saved image, and the size [`{field_name}`](../reference/template-tags.mdx#field_name) gives the `<img>` it outputs. If you change it after signatures have been saved, existing signatures are drawn at the new size, stretched if the shape changed.
 
 :::tip Keep the canvas modest
-The signature is saved as a PNG image inside the entry. A bigger canvas makes a bigger image, and the column it's saved in holds about 64 KB. 400 × 200 leaves plenty of room. See [Long signatures are cut off](/docs/autograph/getting-started/troubleshooting#long-signatures-are-cut-off).
+The signature is saved as a PNG image inside the entry. A bigger canvas makes a bigger image, and the column it's saved in holds about 64 KB. 400 × 200 leaves plenty of room. See [Long signatures are cut off](../getting-started/troubleshooting.md#long-signatures-are-cut-off).
 :::
 
 ## Required fields

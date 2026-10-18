@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import {Eyebrow, Section, CodeWindow, FormPreview, FeatureGrid, Feature} from '@site/src/components/Marketing';
 import {icons} from '@site/src/components/Marketing/icons';
+import {store} from '@site/src/data/store';
 import styles from './formidable.module.css';
 
 const layers = [
@@ -59,8 +60,8 @@ export default function Formidable() {
             like, one layer at a time. Validation, spam protection, storage and workflows keep working underneath.
           </p>
           <div className={styles.actions}>
-            <Link className="button button--primary button--lg" to="/docs/formidable/getting-started/installation">
-              Get started
+            <Link className="button button--primary button--lg" href={store.formidable.url}>
+              Buy Formidable · {store.formidable.price}
             </Link>
             <Link className="button button--secondary button--lg" to="/docs/formidable">
               Read the docs
@@ -69,7 +70,10 @@ export default function Formidable() {
           <p className={styles.reqs}>
             <span>ExpressionEngine 7.5+</span>
             <span>PHP 8.2+</span>
-            <span>Version 1.0</span>
+            <span>Version 1.1</span>
+          </p>
+          <p className={styles.store}>
+            Sold and downloaded through the <a href={store.formidable.url}>ExpressionEngine add-on store</a>.
           </p>
         </div>
 
@@ -194,9 +198,15 @@ export default function Formidable() {
       <section className={styles.cta}>
         <div className={styles.ctaInner}>
           <h2>Your first form is five minutes away.</h2>
-          <p>Install Formidable, build a contact form, and put it on a page with one tag.</p>
+          <p>
+            Get Formidable from the ExpressionEngine add-on store, build a contact form, and put it on a page with one
+            tag.
+          </p>
           <div className={styles.actions}>
-            <Link className="button button--amber button--lg" to="/docs/formidable/getting-started/your-first-form">
+            <Link className="button button--amber button--lg" href={store.formidable.url}>
+              Get Formidable · {store.formidable.price}
+            </Link>
+            <Link className="button button--secondary button--lg" to="/docs/formidable/getting-started/your-first-form">
               Build your first form
             </Link>
             <Link className="button button--secondary button--lg" to="/blog/introducing-formidable-1-0">

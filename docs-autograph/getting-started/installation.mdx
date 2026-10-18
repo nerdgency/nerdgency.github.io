@@ -15,14 +15,18 @@ Autograph installs like any other ExpressionEngine add-on: copy two folders onto
 
 | | |
 | --- | --- |
-| **ExpressionEngine** | 6.0 or later |
+| **ExpressionEngine** | 7.0 or later. The installer stops, and says why, on anything older. |
 | **PHP** | 8.1 or later |
+
+## Getting Autograph
+
+Autograph is sold and downloaded through the ExpressionEngine add-on store: **[Autograph on expressionengine.com](https://expressionengine.com/add-ons/autograph)**, $15. After you buy it, the store gives you the release zip, and updates are downloaded from the same place.
 
 ## Installing Autograph
 
 The release zip mirrors the root of an ExpressionEngine site, so each folder goes to the same place on yours:
 
-```text title="Autograph-v1.0.1.zip"
+```text title="Autograph-v2.0.0.zip"
 system/user/addons/autograph/   →  your-site/system/user/addons/autograph/
 themes/user/autograph/          →  your-site/themes/user/autograph/
 ```
@@ -32,23 +36,19 @@ themes/user/autograph/          →  your-site/themes/user/autograph/
     Copy `system/user/addons/autograph` into your site's `system/user/addons/` folder.
   </Step>
   <Step title="Copy the front-end scripts">
-    Copy `themes/user/autograph` into your site's public `themes/user/` folder. It holds `signature_pad.min.js`, which draws the pad, and `autograph.js`, which connects each pad to its field.
+    Copy `themes/user/autograph` into your site's public `themes/user/` folder. It holds `autograph.js`, which draws the pad, and `autograph.css`, its few default styles.
   </Step>
   <Step title="Install from the control panel">
     Open **Developer › Add-Ons**, find **Autograph** under **Third Party Add-Ons** and choose **Install**.
   </Step>
   <Step title="Create a field">
-    Autograph is now a fieldtype. Create an Autograph field and assign it to a channel. See [Field settings](/docs/autograph/using-autograph/field-settings).
+    Autograph is now a fieldtype. Create an Autograph field and assign it to a channel. See [Field settings](../using-autograph/field-settings.md).
   </Step>
 </Steps>
 
 ### The themes folder
 
-Autograph loads its two scripts from `user/autograph/` inside your site's themes URL (ExpressionEngine's `theme_folder_url` setting), usually `/themes/user/autograph/`. If your themes are served from a subfolder or a CDN, copy the folder there. See [The pad doesn't appear](./troubleshooting.md#the-pad-doesnt-appear).
-
-:::note Before 1.0.1
-Autograph 1.0.0 always loaded the scripts from `/themes/user/autograph/` at the root of the domain, whatever `theme_folder_url` said.
-:::
+Autograph loads `autograph.js` and `autograph.css` from `user/autograph/` inside your site's themes URL (ExpressionEngine's `theme_folder_url` setting), usually `/themes/user/autograph/`. If your themes are served from a subfolder or a CDN, copy the folder there. See [The pad doesn't appear](./troubleshooting.md#the-pad-doesnt-appear).
 
 ## Updating
 
@@ -61,12 +61,12 @@ Autograph 1.0.0 always loaded the scripts from `/themes/user/autograph/` at the 
   </Step>
 </Steps>
 
-Read the [upgrade guide](/docs/autograph/prologue/upgrade-guide) before updating to a new major version.
+Read the [upgrade guide](../prologue/upgrade-guide.md) before updating to a new major version. Updating from 1.x runs two database changes: it widens existing Autograph columns, and adds the table that records when each signature was signed.
 
 ## Uninstalling
 
 Remove every Autograph field from your channels first, then choose **Uninstall** for Autograph on the **Add-Ons** screen and delete both folders.
 
 :::danger Deleting a field deletes its signatures
-Signatures are stored in the entry, in the field's own column. Deleting an Autograph field deletes every signature saved in it. Export anything you need to keep first.
+Signatures saved in the entry are in the field's own column, so deleting an Autograph field deletes them. Signatures saved as files stay in their upload directory. Uninstalling also removes the record of when each signature was signed. Export anything you need to keep first.
 :::

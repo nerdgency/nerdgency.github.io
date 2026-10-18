@@ -1,0 +1,84 @@
+---
+title: Template tags
+description: Every variable and parameter an Autograph field provides in templates.
+keywords:
+  - autograph
+  - template tags
+  - variables
+---
+
+# Template tags
+
+## Introduction
+
+These variables work wherever ExpressionEngine parses channel fields, such as `{exp:channel:entries}`, member fields, such as `{exp:member:custom_profile_data}`, and Grid columns and Fluid fields. In the examples the field is called `customer_signature`. Use your own field's short name.
+
+| Variable | Outputs |
+| --- | --- |
+| [`{customer_signature}`](#field_name) | An `<img>` of the signature, or nothing |
+| [`{customer_signature:url}`](#url) | The image's address: its data URL, or the file's URL |
+| [`{customer_signature:width}`](#width) | The field's canvas width, in pixels |
+| [`{customer_signature:height}`](#height) | The field's canvas height, in pixels |
+| [`{customer_signature:signed_at}`](#signed_at) | When it was signed |
+| [`{customer_signature:is_file}`](#is_file) | `y` when saved as a file |
+| [`{customer_signature:file_id}`](#file_id) | The file's id, when saved as a file |
+| [`{customer_signature:mime}`](#mime) | `image/png` when signed |
+
+## `{field_name}` {#field_name}
+
+An `<img>` of the signature, sized to the field's canvas:
+
+```html
+<img src="data:image/png;base64,iVBORw0KGgo…" alt="" width="400" height="200">
+```
+
+When the entry has no signature, it outputs nothing.
+
+| Parameter | Default | |
+| --- | --- | --- |
+| `alt=` | Empty | The image's alt text. |
+| `class=` | None | A class for the `<img>`. |
+| `width=` | Canvas width | The `<img>`'s width attribute. |
+| `height=` | Canvas height | The `<img>`'s height attribute. |
+
+```html
+{customer_signature alt="Signature of {title}" class="signature" width="200" height="100"}
+```
+
+## `{field_name:url}` {#url}
+
+The image's address, for your own markup: the PNG data URL for a signature saved in the entry, or the file's URL for one saved as a file. Empty when there's no signature, or when its file has been deleted. See [Displaying signatures](../using-autograph/displaying-signatures.mdx#with-your-own-markup).
+
+## `{field_name:width}` {#width}
+
+The field's **Canvas Width** setting: the saved image's width. The same for every entry, signed or not.
+
+## `{field_name:height}` {#height}
+
+The field's **Canvas Height** setting.
+
+## `{field_name:signed_at}` {#signed_at}
+
+When the signature was signed. Empty for a signature saved before Autograph 2.0, which has no record. Takes `format=` with ExpressionEngine's [date formatting](https://docs.expressionengine.com/latest/templates/date-variable-formatting.html):
+
+```html
+{if customer_signature:signed_at}
+    Signed {customer_signature:signed_at format="%F %j, %Y at %g:%i %a"}
+{/if}
+```
+
+## `{field_name:is_file}` {#is_file}
+
+`y` when the signature was saved as a file, empty otherwise.
+
+## `{field_name:file_id}` {#file_id}
+
+The id of the signature's file in the file manager, when saved as a file. Empty otherwise. Use it with `{exp:file:entries}` for the file's other details.
+
+## `{field_name:mime}` {#mime}
+
+`image/png` when there's a signature, empty otherwise.
+
+## Conditionals
+
+`{if customer_signature}` is true when the entry has a signature, and false when it's empty or was cleared.

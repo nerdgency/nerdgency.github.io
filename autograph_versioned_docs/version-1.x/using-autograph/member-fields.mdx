@@ -1,0 +1,74 @@
+---
+title: Member fields
+description: Collect a signature on a member's profile, at registration or on a profile edit form, and show it in templates.
+keywords:
+  - autograph
+  - member fields
+  - registration form
+  - member profile
+---
+
+# Member fields
+
+## Introduction
+
+<Since version="1.0.1" />
+
+An Autograph field can be a member field, so a signature belongs to a member rather than to an entry. Use it for a signed agreement at registration, or a signature a member keeps on file.
+
+Create it under **Members › Member Fields** and choose **Autograph** as the type. It has the same [settings](./field-settings.md) as a channel field, and the signature is saved the same way: a PNG image in the member's data.
+
+## On a member's profile
+
+In the control panel, the field appears on the member's profile with the other custom fields. **Save in Control Panel** works as it does for channel fields: on, the profile shows the pad; off, it shows the saved signature read-only. See [Control panel](./control-panel.md).
+
+## At registration
+
+Turn on **Show in registration?** for the field, then output it in `{exp:member:registration_form}` by its short name:
+
+```html title="templates/default_site/members.group/register.html"
+{exp:member:registration_form return="members/welcome"}
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username">
+
+    {!-- email, password and the other required fields --}
+
+    <label>Sign to accept the membership agreement</label>
+    {field:member_signature}
+
+    <button type="submit">Register</button>
+{/exp:member:registration_form}
+```
+
+## On a profile edit form
+
+`{exp:member:edit_profile}` outputs the pad the same way, with the member's saved signature drawn on it:
+
+```html title="templates/default_site/members.group/edit.html"
+{exp:member:edit_profile return="members/profile"}
+    <label>Your signature</label>
+    {field:member_signature}
+
+    <button type="submit">Save</button>
+{/exp:member:edit_profile}
+```
+
+## Scripts
+
+Member forms don't print scripts that fields ask for, the way Channel Forms do. So in a member form, Autograph prints its two scripts itself, just after the first Autograph field on the page. There's nothing to add to the template.
+
+## Displaying a member's signature
+
+The [template tags](../reference/template-tags.mdx) work for member fields too, wherever ExpressionEngine parses member fields, such as `{exp:member:custom_profile_data}`:
+
+```html title="templates/default_site/members.group/profile.html"
+{exp:member:custom_profile_data}
+    {if member_signature}
+        <img src="{member_signature:url}" alt="Signature of {screen_name}">
+    {/if}
+{/exp:member:custom_profile_data}
+```
+
+:::note Before 1.0.1
+Autograph 1.0.0 was offered as a member field type, but signatures never saved there.
+:::

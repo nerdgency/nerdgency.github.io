@@ -24,6 +24,33 @@ const config = {
     plugins: [
         './src/plugins/tailwind-plugin.js',
         [
+            // Autograph's docs are their own instance so they can be
+            // versioned (a version picker, 1.x and 2.x) without
+            // snapshotting Formidable's. URLs stay under /docs/autograph.
+            '@docusaurus/plugin-content-docs',
+            {
+                id: 'autograph',
+                path: 'docs-autograph',
+                routeBasePath: 'docs/autograph',
+                sidebarPath: './sidebars-autograph.js',
+                editUrl: `${siteRepo}/edit/main/`,
+                showLastUpdateTime: false,
+                // docs-autograph/ is 2.x, the released version, at
+                // /docs/autograph. 1.x is a snapshot at /docs/autograph/v1.
+                // When work on 3.0 starts: `npx docusaurus
+                // docs:version:autograph 2.x`, set lastVersion to '2.x', and
+                // give current the label 3.x, path 'next' and the
+                // 'unreleased' banner.
+                lastVersion: 'current',
+                versions: {
+                    current: {label: '2.x'},
+                    // A path without a dot: "/1.x" reads as a file with a .x extension,
+                    // so static hosts don't serve 1.x.html for it.
+                    '1.x': {label: '1.x', path: 'v1', banner: 'unmaintained'},
+                },
+            },
+        ],
+        [
             '@docusaurus/plugin-ideal-image',
             {
                 quality: 80,
@@ -38,9 +65,10 @@ const config = {
             {
                 hashed: true,
                 language: ['en'],
-                // Must match the docs plugin's routeBasePath, or every search
-                // result links to a page that does not exist.
-                docsRouteBasePath: 'docs',
+                // Must match the docs plugins' routeBasePath and path, or
+                // every search result links to a page that does not exist.
+                docsRouteBasePath: ['docs', 'docs/autograph'],
+                docsDir: ['docs', 'docs-autograph'],
                 blogRouteBasePath: 'blog',
                 indexDocs: true,
                 indexBlog: true,
@@ -151,7 +179,7 @@ const config = {
                     position: 'left',
                     items: [
                         {to: '/formidable', label: 'Formidable · forms for ExpressionEngine'},
-                        {to: '/docs/autograph', label: 'Autograph · signatures for ExpressionEngine'},
+                        {to: '/autograph', label: 'Autograph · signatures for ExpressionEngine'},
                     ],
                 },
                 {
@@ -160,10 +188,13 @@ const config = {
                     position: 'left',
                     items: [
                         {type: 'docSidebar', sidebarId: 'formidableSidebar', label: 'Formidable'},
-                        {type: 'docSidebar', sidebarId: 'autographSidebar', label: 'Autograph'},
+                        {type: 'docSidebar', sidebarId: 'autographSidebar', docsPluginId: 'autograph', label: 'Autograph'},
                     ],
                 },
                 {to: '/blog', label: 'Blog', position: 'left'},
+                // Shown only on Autograph's pages; see
+                // src/theme/NavbarItem/DocsVersionDropdownNavbarItem.js.
+                {type: 'docsVersionDropdown', docsPluginId: 'autograph', position: 'right'},
                 {
                     href: 'https://github.com/nerdgency',
                     position: 'right',

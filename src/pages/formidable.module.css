@@ -62,6 +62,12 @@
   margin: 1.75rem 0 0;
 }
 
+.store {
+  margin: 0.9rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ng-text-muted);
+}
+
 .reqs span {
   padding: 0.2rem 0.7rem;
   border: 1px solid var(--ng-border);

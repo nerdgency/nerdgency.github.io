@@ -6,3 +6,7 @@ release:
   label: Release
   permalink: /release
   description: Release announcements.
+autograph:
+  label: Autograph
+  permalink: /autograph
+  description: Posts about the Autograph signature add-on.

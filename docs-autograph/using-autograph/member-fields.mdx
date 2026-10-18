@@ -55,11 +55,11 @@ Turn on **Show in registration?** for the field, then output it in `{exp:member:
 
 ## Scripts
 
-Member forms don't print scripts that fields ask for, the way Channel Forms do. So in a member form, Autograph prints its two scripts itself, just after the first Autograph field on the page. There's nothing to add to the template.
+Member forms don't print the scripts and styles that fields ask for, the way Channel Forms do. So in a member form, Autograph prints `autograph.js` and `autograph.css` itself, just after the first Autograph field on the page. There's nothing to add to the template.
 
 ## Displaying a member's signature
 
-The [template tags](/docs/autograph/reference/template-tags) work for member fields too, wherever ExpressionEngine parses member fields, such as `{exp:member:custom_profile_data}`:
+The [template tags](../reference/template-tags.mdx) work for member fields too, wherever ExpressionEngine parses member fields, such as `{exp:member:custom_profile_data}`:
 
 ```html title="templates/default_site/members.group/profile.html"
 {exp:member:custom_profile_data}

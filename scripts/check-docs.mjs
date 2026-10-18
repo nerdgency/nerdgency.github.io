@@ -39,6 +39,10 @@ const walk = (dir) =>
 const targets = process.argv.slice(2).map((p) => path.resolve(p));
 const files = (targets.length ? targets.flatMap((t) => (fs.statSync(t).isDirectory() ? walk(t) : [t])) : [
   ...walk(path.join(root, 'docs')),
+  // Autograph's own docs plugin: the current (next) version and the
+  // snapshots of released ones.
+  ...walk(path.join(root, 'docs-autograph')),
+  ...walk(path.join(root, 'autograph_versioned_docs')),
   ...walk(path.join(root, 'blog')),
   ...walk(path.join(root, 'examples/templates')),
 ]).filter((f) => /\.(mdx?|html)$/.test(f));

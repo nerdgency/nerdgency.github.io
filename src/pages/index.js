@@ -53,7 +53,7 @@ export default function Home() {
                 <h3>Formidable</h3>
                 <p>Forms for ExpressionEngine</p>
               </div>
-              <span className={styles.badge}>1.0</span>
+              <span className={styles.badge}>1.1</span>
             </div>
             <p className={styles.productBody}>
               Build forms in the control panel or keep the ones you wrote. Conditions, multi-page and repeating
@@ -67,19 +67,19 @@ export default function Home() {
             <span className={styles.productCta}>Explore Formidable →</span>
           </Link>
 
-          <Link to="/docs/autograph" className={`${styles.product} ${styles.productQuiet}`}>
+          <Link to="/autograph" className={`${styles.product} ${styles.productQuiet}`}>
             <div className={styles.productHead}>
               <img src="/img/icons/autograph.svg" alt="" width="52" height="52" />
               <div>
                 <h3>Autograph</h3>
                 <p>Signatures for Channel Forms</p>
               </div>
-              <span className={styles.badge}>1.0</span>
+              <span className={styles.badge}>2.0</span>
             </div>
             <p className={styles.productBody}>
               A signature fieldtype for ExpressionEngine, for capturing signatures directly through Channel Forms.
             </p>
-            <span className={styles.productCta}>Read the docs →</span>
+            <span className={styles.productCta}>Explore Autograph →</span>
           </Link>
         </div>
       </Section>

@@ -65,7 +65,7 @@ Links into these docs for the things people most often look up. The address come
 
 ## Support
 
-The green card under **Documentation** is where to go when something's wrong or missing: report a bug or request a feature (new fieldtypes included) on the [issue tracker](https://github.com/nerdgency/ee-formidable-issues), browse what's already been reported, or email a security vulnerability privately. See [Getting help](/docs/formidable/getting-started/support).
+The green card under **Documentation** is where to go when something's wrong or missing: report a bug or request a feature (new fieldtypes included) on the [issue tracker](https://github.com/nerdgency/ee-addon-issues), browse what's already been reported, or email a security vulnerability privately. See [Getting help](/docs/formidable/getting-started/support).
 
 ## Guided tours
 

@@ -1,0 +1,80 @@
+---
+title: Markup
+description: The HTML an Autograph field renders, and the classes, ids and attributes to style or script it.
+keywords:
+  - autograph
+  - markup
+  - css classes
+---
+
+# Markup
+
+## Introduction
+
+This is the HTML an Autograph field renders outside the control panel: in Channel Forms, member forms, and front-end Grid and Fluid fields. Here the field is called `customer_signature`.
+
+```html
+<div class="autograph-manager autograph autograph--border"
+     data-autograph
+     data-autograph-key="customer_signature"
+     data-autograph-settings="eyJjYW52YXMiOnsid2lkdGgiOjQwMC…"
+     data-autograph-required-message="Please sign before sending.">
+
+    <canvas class="ft-autograph autograph-manager-canvas autograph__canvas"
+            id="autograph-manager-canvas-customer_signature"
+            width="400" height="200"
+            role="img"
+            aria-label="Signature pad: sign with a mouse, a pen or your finger"
+            tabindex="0"></canvas>
+
+    <span class="autograph__placeholder" aria-hidden="true">Sign here</span>
+
+    <div class="autograph-buttons autograph__toolbar">
+        <button type="button" class="autograph-manager-undo autograph__undo"
+                id="autograph-manager-undo-customer_signature">Undo</button>
+        <button type="button" class="autograph-manager-clear autograph__clear"
+                id="autograph-manager-clear-customer_signature">Clear</button>
+    </div>
+
+    <noscript><p class="autograph__noscript">Signing needs JavaScript.</p></noscript>
+
+    <textarea name="customer_signature" id="customer_signature"
+              style="display: none;"></textarea>
+</div>
+```
+
+The placeholder is there only when the field has one. **Undo** has the `hidden` attribute when **Allow Undo** is off.
+
+## Classes and attributes
+
+| Selector | Element |
+| --- | --- |
+| `.autograph-manager` | The wrapper round one pad. `autograph.js` finds pads by this class, and the pad's [API](./javascript.mdx) is on this element. |
+| `.autograph--border` | On the wrapper when **Show Border** is on. |
+| `.autograph-manager canvas` | The signing surface. |
+| `.autograph__placeholder` | The placeholder text, laid over the canvas. Hidden once signing starts. |
+| `.autograph__toolbar` | The wrapper round the buttons. |
+| `.autograph__undo`, `.autograph__clear` | The buttons. |
+| `.autograph__message` | Added under the pad when a required pad is empty on submit. Has `role="alert"`. |
+| `#{name}` | The hidden textarea that's posted. |
+| `data-autograph-image` | On the wrapper when a saved file is drawn back onto the pad. |
+
+### From 1.x
+
+These 1.x classes and ids are still on the same elements, so stylesheets and scripts written for 1.x keep working. Prefer the `autograph__*` classes in new work.
+
+| 1.x | 2.x equivalent |
+| --- | --- |
+| `ft-autograph`, `autograph-manager-canvas` | `autograph__canvas` |
+| `autograph-buttons` | `autograph__toolbar` |
+| `autograph-manager-undo` | `autograph__undo` |
+| `autograph-manager-clear` | `autograph__clear` |
+| `#autograph-manager-canvas-{name}`, `#autograph-manager-undo-{name}`, `#autograph-manager-clear-{name}` | Kept, unchanged |
+
+## The posted value
+
+The hidden textarea is what the form posts. `autograph.js` writes the signature into it as a PNG data URL after every stroke and undo, and empties it on **Clear**. For a signature already saved as a file, it holds a signed token meaning *keep the saved file* until the pad is changed. The server checks whatever arrives.
+
+## The control panel
+
+With **Sign in the Control Panel** on, the publish form shows the same pad with the control panel's button styles and `.autograph--cp` on the wrapper. With it off, the field is a read-only card, `.autograph-card`, with the image, what's known about it, and **Open**, **Remove** and **Keep** buttons.
