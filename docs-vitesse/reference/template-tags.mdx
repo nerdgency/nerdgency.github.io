@@ -1,0 +1,65 @@
+---
+title: Template tags
+description: Every Vitesse tag and parameter.
+keywords:
+  - vitesse
+  - template tags
+  - parameters
+---
+
+# Template tags
+
+## Introduction
+
+| Tag | Prints |
+| --- | --- |
+| [`{exp:vitesse:assets}`](#assets) | Stylesheets, preloads and scripts for some entries |
+| [`{exp:vitesse:css}`](#css) | Only their stylesheets |
+| [`{exp:vitesse:js}`](#js) | Only their scripts and preloads |
+| [`{exp:vitesse:url}`](#url) | The URL of one processed file |
+
+Every tag also takes the [settings parameters](../reference/configuration.md), which override `config.php` for that tag.
+
+## `{exp:vitesse:assets}` {#assets}
+
+```html
+{exp:vitesse:assets files="resources/css/app.css|resources/js/app.js"}
+```
+
+Everything the entries need: their stylesheets (including those their scripts import), preloads for the chunks they import, and their scripts, in that order.
+
+| Parameter | |
+| --- | --- |
+| `files=` | Required. The entry points, separated by `\|`, as they appear in `build.rollupOptions.input`. |
+
+## `{exp:vitesse:css}` {#css}
+
+```html
+{exp:vitesse:css files="resources/js/app.js"}
+```
+
+Only the stylesheets, for the `<head>`. In development, also `@vite/client`, if no Vitesse tag has printed it yet. Takes `files=`.
+
+## `{exp:vitesse:js}` {#js}
+
+```html
+{exp:vitesse:js files="resources/js/app.js"}
+```
+
+Only the preloads and scripts, for the end of the `<body>`. Takes `files=`. Give it the same `files=` as `{exp:vitesse:css}`. See [Stylesheets and scripts](../using-vitesse/stylesheets-and-scripts.md).
+
+## `{exp:vitesse:url}` {#url}
+
+```html
+<img src="{exp:vitesse:url src="resources/images/logo.svg"}" alt="Acme">
+```
+
+The URL of one file Vite processed, or nothing when it isn't in the manifest. See [Images and fonts](../using-vitesse/images-and-fonts.md).
+
+| Parameter | |
+| --- | --- |
+| `src=` | Required. The file's path, as Vite knows it. |
+
+## Each file once
+
+On one page, each file is printed once, however many tags ask for it, and so is `@vite/client`.

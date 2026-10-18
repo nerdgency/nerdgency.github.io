@@ -1,0 +1,240 @@
+<!doctype html>
+<!--
+  Vitesse 1.0 hero banner, and its social card, in the style of
+  formidable-1-0-hero.html. design/render-hero.mjs renders this page twice:
+    node design/render-hero.mjs vitesse-1-0
+    static/img/blog/vitesse-1-0-hero.png    1600x640 at 2x (3200x1280)
+    static/img/blog/vitesse-1-0-social.png  #social: 1600x840 at 0.75x (1200x630)
+  Edit here, then re-render both.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vitesse 1.0</title>
+<style>
+	:root {
+		--navy: #0b1120;
+		--navy-2: #111a2e;
+		--card: #172238;
+		--line: #2a3a57;
+		--text: #e7ecf5;
+		--muted: #8b98b1;
+		--amber: #faaf40;
+		--blue: #5b8def;
+		--green: #34c38f;
+		--ink: #e7ecf5;
+	}
+	* { box-sizing: border-box; margin: 0; }
+	html, body { width: 1600px; height: 640px; }
+	html.social, html.social body { height: 840px; }
+	html.social .bg { transform: translateY(100px); }
+	.social-only { display: none; }
+	html.social .social-only { display: block; }
+	html.social .name { font-size: 112px; }
+	html.social .mark { width: 230px; height: 230px; }
+	body {
+		position: relative;
+		overflow: hidden;
+		font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+		color: var(--text);
+		background:
+			radial-gradient(900px 520px at 22% 50%, rgba(250, 175, 64, 0.10), transparent 70%),
+			radial-gradient(800px 600px at 85% 20%, rgba(91, 141, 239, 0.12), transparent 70%),
+			linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+	}
+	/* Faint diagonal streaks: motion. */
+	body::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background-image: repeating-linear-gradient(115deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 44px);
+		mask-image: linear-gradient(90deg, transparent 0%, #000 45%, #000 100%);
+	}
+	body::after {
+		content: "";
+		position: absolute;
+		left: 0; right: 0; bottom: 0;
+		height: 12px;
+		background: var(--amber);
+		z-index: 4;
+	}
+
+	/* ---------------- The pieces, scattered behind ---------------- */
+	.bg { position: absolute; inset: 0; }
+	.c {
+		position: absolute;
+		padding: 16px 18px;
+		background: rgba(23, 34, 56, 0.82);
+		border: 1px solid var(--line);
+		border-radius: 14px;
+		box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+		font-size: 14px;
+		color: var(--text);
+	}
+	.far { opacity: 0.38; filter: blur(1.2px); }
+	.mid { opacity: 0.62; }
+	.near { opacity: 0.9; }
+	.lbl { font-size: 12px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.01em; }
+	.req { color: var(--amber); }
+	.input {
+		height: 38px; border: 1px solid #3a4c6e; border-radius: 8px; background: #0f182a;
+		display: flex; align-items: center; padding: 0 12px; color: #c9d3e6;
+	}
+	.row { display: flex; align-items: center; gap: 10px; }
+	/* A signing pad. */
+	.pad {
+		position: relative;
+		border: 1px solid #3a4c6e; border-radius: 10px; background: #0f182a;
+		overflow: hidden;
+	}
+	.pad svg { display: block; width: 100%; height: 100%; }
+	.pad .line { position: absolute; left: 16px; right: 16px; bottom: 22px; border-top: 1.5px dashed #3a4c6e; }
+	.pad .x { position: absolute; left: 16px; bottom: 26px; color: var(--muted); font-size: 13px; }
+	.pad .ph { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-style: italic; font-size: 15px; }
+	.pad.focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(91,141,239,0.25); }
+	.tools { display: flex; gap: 8px; margin-top: 10px; }
+	.b { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 8px; border: 1px solid #4b5f84; color: #c9d3e6; font-size: 12px; font-weight: 600; }
+	.btn { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 9px; background: var(--amber); color: var(--navy); font-weight: 700; font-size: 15px; }
+	.radio { width: 18px; height: 18px; border: 2px solid #4b5f84; border-radius: 50%; display: grid; place-items: center; flex: none; }
+	.radio.on { border-color: var(--blue); }
+	.radio.on::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+	.opt { display: flex; align-items: center; gap: 10px; margin: 7px 0; color: #c9d3e6; }
+	.toggle { width: 46px; height: 26px; border-radius: 999px; background: var(--green); position: relative; flex: none; }
+	.toggle::after { content: ""; position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; }
+	.chip { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+	.file { display: flex; align-items: center; gap: 12px; }
+	.file .thumb { width: 64px; height: 40px; border-radius: 6px; background: #0f182a; border: 1px solid #3a4c6e; overflow: hidden; }
+	.file small { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
+	.code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; color: #c9d3e6; white-space: nowrap; }
+	.code .t { color: var(--amber); }
+	.code .p { color: var(--blue); }
+	table.grid { border-collapse: collapse; font-size: 12px; color: #c9d3e6; width: 100%; }
+	table.grid th { font-weight: 500; color: var(--muted); padding: 4px 8px; text-align: left; }
+	table.grid td { padding: 6px 8px; border-top: 1px solid var(--line); vertical-align: middle; }
+	table.grid .mini { width: 120px; height: 34px; border: 1px solid #3a4c6e; border-radius: 6px; background: #0f182a; }
+
+	/* ---------------- The title ---------------- */
+	.hero {
+		position: absolute;
+		left: 110px; top: 50%;
+		transform: translateY(-50%);
+		display: flex; align-items: center; gap: 40px;
+		z-index: 2;
+	}
+	.mark { width: 210px; height: 210px; filter: drop-shadow(0 24px 40px rgba(0,0,0,0.45)); }
+	.name { font-size: 104px; font-weight: 800; letter-spacing: -0.035em; line-height: 0.95; }
+	.ver {
+		display: inline-flex; align-items: center;
+		margin-left: 18px; padding: 6px 20px 8px;
+		border-radius: 18px;
+		background: var(--amber); color: var(--navy);
+		font-size: 60px; font-weight: 800; letter-spacing: -0.02em;
+		vertical-align: 14px;
+		box-shadow: 0 12px 30px rgba(250, 175, 64, 0.35);
+	}
+	.tag { margin-top: 18px; font-size: 30px; color: #b9c4d8; font-weight: 500; letter-spacing: -0.005em; }
+	.tag b { color: var(--text); font-weight: 600; }
+	.scrim {
+		position: absolute; inset: 0; z-index: 1;
+		background: linear-gradient(90deg, rgba(11,17,32,0.96) 0%, rgba(11,17,32,0.88) 40%, rgba(11,17,32,0.25) 66%, rgba(11,17,32,0) 80%);
+	}
+	.nerd { position: absolute; right: 40px; bottom: 30px; height: 60px; z-index: 3; }
+	.corner { position: absolute; right: 0; bottom: 0; width: 360px; height: 150px; z-index: 2;
+		background: radial-gradient(ellipse at 100% 100%, rgba(11,17,32,0.95) 0%, rgba(11,17,32,0.85) 45%, rgba(11,17,32,0) 75%); }
+	.term { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13px; line-height: 1.7; color: #c9d3e6; white-space: pre; }
+	.term .ok { color: var(--green); }
+	.term .dim { color: var(--muted); }
+	.term .y { color: var(--amber); }
+	.term .k { color: var(--blue); }
+	.toast { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+	.toast .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(52,195,143,0.18); }
+	.bar { height: 8px; border-radius: 999px; background: #22314d; overflow: hidden; }
+	.bar i { display: block; height: 100%; width: 92%; background: linear-gradient(90deg, var(--amber), #ffd28a); border-radius: 999px; }
+</style>
+</head>
+<body>
+	<script>if (location.hash === '#social') document.documentElement.classList.add('social');</script>
+
+	<div class="bg">
+		<!-- the social card's extra rows, above and below -->
+		<div class="c far social-only" style="left: 760px; top: -86px; width: 330px; transform: rotate(3deg);">
+			<div class="term"><span class="dim">$</span> npx vite build</div>
+		</div>
+		<div class="c mid social-only" style="left: 1150px; top: -70px; width: 330px; transform: rotate(-2deg);">
+			<div class="code"><span class="t">{exp:vitesse:url</span> <span class="p">src=</span>"logo.svg"<span class="t">}</span></div>
+		</div>
+		<div class="c mid social-only" style="left: 640px; top: 640px; width: 340px; transform: rotate(-3deg);">
+			<div class="term"><span class="k">public/hot</span>  http://localhost:5173</div>
+		</div>
+
+		<!-- top row -->
+		<div class="c mid" style="left: 560px; top: 36px; width: 360px; transform: rotate(-4deg);">
+			<div class="code"><span class="t">{exp:vitesse:css</span> <span class="p">files=</span>"resources/js/app.js"<span class="t">}</span></div>
+		</div>
+		<div class="c near" style="left: 960px; top: 22px; width: 330px; transform: rotate(3deg);">
+			<div class="toast"><span class="dot"></span><span>[vite] hot updated: <b>/resources/css/app.css</b></span></div>
+		</div>
+		<div class="c far" style="left: 1330px; top: 40px; width: 300px; transform: rotate(-2deg);">
+			<div class="lbl">Built in</div>
+			<div class="bar"><i></i></div>
+			<div class="lbl" style="margin: 8px 0 0;">49 ms</div>
+		</div>
+
+		<!-- middle: the build -->
+		<div class="c near" style="left: 990px; top: 150px; width: 470px; transform: rotate(-2.5deg);">
+			<div class="term"><span class="dim">$</span> npx vite build
+<span class="ok">✓</span> 4 modules transformed.
+<span class="dim">public/build/</span><span class="k">.vite/manifest.json</span>     <span class="dim">0.33 kB</span>
+<span class="dim">public/build/</span><span class="y">assets/app-BxiUCzOx.css</span>  <span class="dim">0.02 kB</span>
+<span class="dim">public/build/</span><span class="y">assets/app-DwbmcGWY.js</span>   <span class="dim">0.13 kB</span>
+<span class="ok">✓ built in 49ms</span></div>
+		</div>
+		<div class="c far" style="left: 600px; top: 160px; width: 260px; transform: rotate(5deg);">
+			<div class="lbl">Mode</div>
+			<div class="row" style="justify-content: space-between;"><span>Dev server</span><span class="toggle"></span></div>
+		</div>
+
+		<!-- lower -->
+		<div class="c mid" style="left: 720px; top: 410px; width: 470px; transform: rotate(-2deg);">
+			<div class="term"><span class="dim">&lt;</span><span class="k">link</span> rel="stylesheet" href="<span class="y">/build/assets/app-BxiUCzOx.css</span>"<span class="dim">&gt;</span>
+<span class="dim">&lt;</span><span class="k">script</span> type="module" src="<span class="y">/build/assets/app-DwbmcGWY.js</span>"<span class="dim">&gt;</span></div>
+		</div>
+		<div class="c near" style="left: 1240px; top: 360px; width: 320px; transform: rotate(2.5deg);">
+			<div class="term">{
+  <span class="y">"resources/js/app.js"</span>: {
+    <span class="k">"file"</span>: "assets/app-Dwbm….js",
+    <span class="k">"css"</span>: ["assets/app-K08c….css"]
+  }
+}</div>
+		</div>
+		<div class="c mid" style="left: 990px; top: 545px; width: 320px; transform: rotate(-3deg);">
+			<div class="row" style="font-size: 13px;"><span>Template</span><span class="chip" style="background: rgba(52,195,143,0.18); color: var(--green);">HMR</span><span class="chip" style="background: rgba(91,141,239,0.18); color: var(--blue);">CDN · CSP · SRI</span></div>
+		</div>
+		<div class="c far" style="left: 470px; top: 520px; width: 320px; transform: rotate(3deg);">
+			<div class="code"><span class="t">{exp:vitesse:js</span> <span class="p">files=</span>"…"<span class="t">}</span></div>
+		</div>
+	</div>
+
+	<div class="scrim"></div>
+
+	<div class="hero">
+		<!-- static/img/icons/vitesse.svg -->
+		<svg class="mark" viewBox="0 0 200 200" aria-hidden="true">
+			<path d="M100,14 L172,56 L172,140 L100,182 L28,140 L28,56 Z" fill="#FAAF40" stroke="#374654" stroke-width="6" stroke-linejoin="round" />
+			<rect x="52" y="78" width="40" height="12" rx="6" fill="#FFFFFF" />
+			<rect x="44" y="98" width="34" height="12" rx="6" fill="#FFFFFF" />
+			<rect x="58" y="118" width="22" height="12" rx="6" fill="#FFFFFF" />
+			<polyline points="102,74 128,104 102,134" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" />
+			<circle cx="150" cy="152" r="27" fill="#FFFFFF" stroke="#374654" stroke-width="6" />
+			<path d="M154,134 L139,155 L149,155 L145,170 L161,148 L151,148 Z" fill="#FAAF40" stroke="#FAAF40" stroke-width="2" stroke-linejoin="round" />
+		</svg>
+		<div>
+			<div class="name">Vitesse<span class="ver">1.0</span></div>
+			<div class="tag">Vite for <b>ExpressionEngine</b></div>
+		</div>
+	</div>
+
+	<div class="corner"></div>
+	<img class="nerd" src="white-logo.png" alt="Nerdgency">
+</body>
+</html>

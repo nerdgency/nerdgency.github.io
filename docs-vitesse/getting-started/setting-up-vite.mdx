@@ -1,0 +1,128 @@
+---
+title: Setting up Vite
+description: A vite.config.js for ExpressionEngine and Vitesse, with the hot file that switches between Vite's dev server and your build.
+keywords:
+  - vitesse
+  - vite config
+  - hot file
+  - hot module replacement
+---
+
+# Setting up Vite
+
+## Introduction
+
+Vitesse needs two things from Vite:
+
+1. **A manifest**, written by `vite build`, saying which hashed file each entry point became.
+2. **A hot file** while the dev server runs: a small file in your web root holding the dev server's address. While it exists, Vitesse loads files from the dev server. When it's gone, Vitesse loads them from the build.
+
+Plain Vite writes the manifest when asked, but not a hot file. The configuration below adds both. If you already use `laravel-vite-plugin`, it writes the same hot file, and Vitesse works with it as it is.
+
+## The configuration
+
+This assumes your web root is `public/`, beside `vite.config.js`, and your source files are in `resources/`. Change the paths to suit your project.
+
+```js title="vite.config.js"
+import { defineConfig } from 'vite';
+import fs from 'node:fs';
+
+const port = 5173;
+const devServer = `http://localhost:${port}`;
+
+// While `vite` runs, writes the dev server's address to public/hot, which
+// tells Vitesse to load files from it. Removes the file when Vite stops,
+// so the site goes back to the built files.
+function vitesseHotFile(file = 'public/hot') {
+    return {
+        name: 'vitesse-hot-file',
+        apply: 'serve',
+        configureServer(server) {
+            server.httpServer?.once('listening', () => {
+                // The port actually listened on, read from the server.
+                const address = server.httpServer.address();
+                const protocol = server.config.server.https ? 'https' : 'http';
+                fs.writeFileSync(file, `${protocol}://localhost:${address.port}`);
+            });
+
+            const remove = () => fs.rmSync(file, { force: true });
+            process.on('exit', remove);
+            ['SIGINT', 'SIGTERM', 'SIGHUP'].forEach((signal) => process.on(signal, () => process.exit()));
+        },
+    };
+}
+
+export default defineConfig(({ command }) => ({
+    plugins: [vitesseHotFile()],
+
+    // Built files are served from /build/. Only for the build: the dev
+    // server must stay at its root.
+    base: command === 'build' ? '/build/' : '/',
+
+    // Your web root has nothing for Vite to copy.
+    publicDir: false,
+
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        emptyOutDir: true,
+        rollupOptions: {
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+        },
+    },
+
+    server: {
+        // A fixed port, so the address below stays right: if it's busy,
+        // Vite stops and says so, rather than moving to another port.
+        port,
+        strictPort: true,
+        // Images and fonts referenced from your CSS load from the dev
+        // server, not from your ExpressionEngine site.
+        origin: devServer,
+        // Let your site's pages load modules from the dev server.
+        cors: true,
+    },
+}));
+```
+
+### What each part is for
+
+| Setting | Why |
+| --- | --- |
+| `vitesseHotFile()` | Writes and removes the hot file. Without it, Vitesse always uses the build. |
+| `base` | Built CSS refers to images and fonts by URL. `/build/` makes those URLs match where the build is served. In development it must stay `/`. |
+| `publicDir: false` | Vite would otherwise copy your whole web root into the build. |
+| `build.manifest` | Writes the manifest Vitesse reads. |
+| `build.outDir` | Where the build goes. It must be the web root plus Vitesse's [build directory](../reference/configuration.md), `build` by default. |
+| `rollupOptions.input` | Your entry points. Use the same paths in Vitesse's `files=`. |
+| `server.port`, `strictPort` | Keep the dev server's address fixed. |
+| `server.origin` | Makes asset URLs in CSS point at the dev server during development. |
+| `server.cors` | Lets your site's pages, on another address, load from the dev server. |
+
+Add the hot file and the build to `.gitignore`:
+
+```text title=".gitignore"
+public/hot
+public/build/
+```
+
+## Add the tags
+
+Use the same paths as `rollupOptions.input`:
+
+```html title="templates/default_site/_partials/layout.html"
+<head>
+    {exp:vitesse:css files="resources/css/app.css|resources/js/app.js"}
+</head>
+<body>
+    {layout:contents}
+    {exp:vitesse:js files="resources/css/app.css|resources/js/app.js"}
+</body>
+```
+
+Then:
+
+- **`npx vite`** while you work. Pages load from the dev server and update as you save.
+- **`npx vite build`** to publish. Pages load the hashed files from `public/build/`.
+
+See [Development and builds](../using-vitesse/development-and-builds.md) for how the switch works, and what to deploy.

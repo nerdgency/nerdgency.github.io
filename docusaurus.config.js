@@ -61,14 +61,26 @@ const config = {
             },
         ],
         [
+            // Vitesse's docs, on their own for the same reason as Autograph's.
+            '@docusaurus/plugin-content-docs',
+            {
+                id: 'vitesse',
+                path: 'docs-vitesse',
+                routeBasePath: 'docs/vitesse',
+                sidebarPath: './sidebars-vitesse.js',
+                editUrl: `${siteRepo}/edit/main/`,
+                showLastUpdateTime: false,
+            },
+        ],
+        [
             require.resolve('@easyops-cn/docusaurus-search-local'),
             {
                 hashed: true,
                 language: ['en'],
                 // Must match the docs plugins' routeBasePath and path, or
                 // every search result links to a page that does not exist.
-                docsRouteBasePath: ['docs', 'docs/autograph'],
-                docsDir: ['docs', 'docs-autograph'],
+                docsRouteBasePath: ['docs', 'docs/autograph', 'docs/vitesse'],
+                docsDir: ['docs', 'docs-autograph', 'docs-vitesse'],
                 blogRouteBasePath: 'blog',
                 indexDocs: true,
                 indexBlog: true,
@@ -149,7 +161,7 @@ const config = {
     themeConfig: {
         image: 'img/social/nerdgency-docs.png',
         metadata: [
-            {name: 'keywords', content: 'ExpressionEngine, add-on, forms, Formidable, signatures, Autograph, Nerdgency'},
+            {name: 'keywords', content: 'ExpressionEngine, add-on, forms, Formidable, signatures, Autograph, Vite, Vitesse, Nerdgency'},
             {name: 'twitter:card', content: 'summary_large_image'},
         ],
         docs: {
@@ -180,6 +192,7 @@ const config = {
                     items: [
                         {to: '/formidable', label: 'Formidable · forms for ExpressionEngine'},
                         {to: '/autograph', label: 'Autograph · signatures for ExpressionEngine'},
+                        {to: '/vitesse', label: 'Vitesse · Vite for ExpressionEngine'},
                     ],
                 },
                 {
@@ -189,6 +202,7 @@ const config = {
                     items: [
                         {type: 'docSidebar', sidebarId: 'formidableSidebar', label: 'Formidable'},
                         {type: 'docSidebar', sidebarId: 'autographSidebar', docsPluginId: 'autograph', label: 'Autograph'},
+                        {type: 'docSidebar', sidebarId: 'vitesseSidebar', docsPluginId: 'vitesse', label: 'Vitesse'},
                     ],
                 },
                 {to: '/blog', label: 'Blog', position: 'left'},

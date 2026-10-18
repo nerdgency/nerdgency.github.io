@@ -10,3 +10,7 @@ autograph:
   label: Autograph
   permalink: /autograph
   description: Posts about the Autograph signature add-on.
+vitesse:
+  label: Vitesse
+  permalink: /vitesse
+  description: Posts about the Vitesse add-on, Vite for ExpressionEngine.

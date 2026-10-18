@@ -1,0 +1,108 @@
+---
+slug: introducing-vitesse-1-0
+title: "Introducing Vitesse: Vite for ExpressionEngine"
+description: Vitesse 1.0, a free add-on, brings Vite to ExpressionEngine templates. Hot module replacement while you work, hashed and preloaded files when you publish, and the same template for both.
+authors: [nerdgency]
+tags: [vitesse, release]
+keywords:
+  - vitesse
+  - vite
+  - expressionengine vite
+  - hot module replacement
+  - expressionengine front end
+image: /img/blog/vitesse-1-0-social.png
+---
+
+import {FeatureGrid, Feature, CodeWindow} from '@site/src/components/Marketing';
+
+![Vitesse 1.0: Vite for ExpressionEngine](/img/blog/vitesse-1-0-hero.png)
+
+[Vite](https://vite.dev) has become the way front ends are built: an instant dev server, changes on screen as you save, and a fast, tidy production build. Using it with ExpressionEngine has meant writing the glue yourself: working out which hashed file to load, remembering the CSS your scripts import, switching between the dev server and the build.
+
+**Vitesse is that glue, done properly, and it's free.** Tell a template which entry points it needs, and Vitesse prints the right tags, whether Vite's dev server is running or you've just built for production.
+
+- **Hot module replacement** while you work: save a stylesheet and the page updates.
+- **Hashed, preloaded files** when you publish, read from Vite's manifest.
+- **The same template for both**, with no switch to flip.
+- **Stylesheets in the head, scripts in the footer**, each file once.
+- **Ready for production**: CDN base URLs, CSP nonces and subresource integrity.
+
+{/* truncate */}
+
+## One template, two modes
+
+<CodeWindow title="templates/default_site/_partials/layout.html">
+{`<head>
+    {exp:vitesse:css files="resources/js/app.js"}
+</head>
+<body>
+    {layout:contents}
+    {exp:vitesse:js files="resources/js/app.js"}
+</body>`}
+</CodeWindow>
+
+While `npx vite` runs, that loads your source files from the dev server, with Vite's client for live updates. After `npx vite build`, it loads the hashed files from your build. Vitesse knows which by a small **hot file** your Vite config writes while the dev server runs. The [setup guide](/docs/vitesse/getting-started/setting-up-vite) has a complete `vite.config.js`, and if you use `laravel-vite-plugin`, Vitesse reads the hot file it already writes.
+
+## The details that usually bite
+
+Vite's manifest is simple until it isn't. Vitesse handles the parts that are easy to get wrong:
+
+<FeatureGrid columns={2}>
+  <Feature title="CSS your scripts import">
+    `import './app.css'` becomes its own file in a build. Vitesse includes it, and the CSS of every chunk your script imports.
+  </Feature>
+  <Feature title="Preloads">
+    Shared chunks get a modulepreload, so the browser fetches them in parallel.
+  </Feature>
+  <Feature title="Any entry type">
+    TypeScript, JSX, Vue, Sass, Less: each gets the right tag, in development and in the build.
+  </Feature>
+  <Feature title="Every Vite since 3">
+    Vite 5's .vite/manifest.json and the older manifest.json are both found, from your web root.
+  </Feature>
+  <Feature title="Each file once">
+    Partials can ask for what they need. Nothing is printed twice on a page.
+  </Feature>
+  <Feature title="Problems explained">
+    A missing manifest or a mistyped entry is explained in the template debugger, not left as a broken tag.
+  </Feature>
+</FeatureGrid>
+
+## Images and fonts
+
+For a file your template uses directly, `{exp:vitesse:url}` gives its URL, from the dev server or the build:
+
+<CodeWindow title="templates/default_site/_partials/header.html">
+{`<img src="{exp:vitesse:url src="resources/images/logo.svg"}" alt="Acme">`}
+</CodeWindow>
+
+## Ready for production
+
+Set things once in `config.php`, or per tag:
+
+- **A CDN:** `vitesse_base_url` serves built files from another host.
+- **A Content Security Policy:** `nonce=` puts your nonce on every tag Vitesse prints.
+- **Subresource integrity:** when your build adds hashes to the manifest, Vitesse prints them.
+
+See [Production](/docs/vitesse/using-vitesse/production) and [Configuration](/docs/vitesse/reference/configuration).
+
+## Get started
+
+Vitesse needs **ExpressionEngine 7** or later, **PHP 8.1** or later, and **Vite 3** or later. **[Download it free from the ExpressionEngine add-on store](https://expressionengine.com/add-ons/vitesse).**
+
+<Cards>
+  <CardLink to="/docs/vitesse/getting-started/installation" title="Install Vitesse">
+    Download it free, copy one folder, and Install.
+  </CardLink>
+  <CardLink to="/docs/vitesse/getting-started/setting-up-vite" title="Set up Vite">
+    A vite.config.js that works with Vitesse.
+  </CardLink>
+  <CardLink to="/docs/vitesse/reference/template-tags" title="Template tags">
+    :assets, :css, :js and :url.
+  </CardLink>
+  <CardLink to="/docs/vitesse/using-vitesse/production" title="Production">
+    CDN, CSP and integrity.
+  </CardLink>
+</Cards>
+
+Vite made front-end development fast. **Vitesse makes it fast in ExpressionEngine, too.**
