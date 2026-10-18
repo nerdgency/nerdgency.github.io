@@ -16,7 +16,7 @@ const columns = [
       {label: 'Installation', to: '/docs/formidable/getting-started/installation'},
       {label: 'Your first form', to: '/docs/formidable/getting-started/your-first-form'},
       {label: 'Template tags', to: '/docs/formidable/reference/tags/form'},
-      {label: 'Release notes', to: '/docs/formidable/prologue/release-notes'},
+      {label: 'Changelog', to: '/docs/formidable/prologue/changelog'},
     ],
   },
   {

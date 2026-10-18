@@ -61,7 +61,7 @@ Where to send the visitor after a successful submission: a template path or a fu
 
 Prefer `SUBMISSION_HANDLE`. A sequential id lets a visitor guess their neighbours' ids. When the form does not store submissions there is nothing to reference, and the tokens are left as they are.
 
-A URL on another host is refused unless that host is listed in `$config['formidable_return_hosts']`. Inherits from the form's and the site's **Return** setting. See [Settings and inheritance](/docs/formidable/building-forms/settings).
+A full URL on this site, such as `{page_url}` or `{current_url}`, is used as written, query string and `#fragment` included. A URL on another host is refused unless that host is listed in `$config['formidable_return_hosts']`. Inherits from the form's and the site's **Return** setting. See [Settings and inheritance](/docs/formidable/building-forms/settings).
 
 </Param>
 
@@ -464,9 +464,11 @@ After a failed submission:
 | `{form_has_errors}` | Whether the last submission failed validation |
 | `{form_error_count}` | How many fields failed |
 | `{form_errors}…{/form_errors}` | One row per error: `{error_name}` (the field's label), `{error_handle}`, `{error_message}`, `{error_item_attributes}` |
-| `{error:HANDLE}` | One field's message, such as `{error:email_address}` |
-| `{value:HANDLE}` | One field's submitted value |
+| `{error:HANDLE}` | One field's message, such as `{error:email_address}`. Empty when that field has no error. |
+| `{value:HANDLE}` | One field's submitted value. Empty until a submission fails. |
 | `{error_wrapper_attributes}`, `{error_heading_attributes}`, `{error_list_attributes}` | The summary's regions |
+
+In a conditional, quote `{error:HANDLE}` and `{value:HANDLE}`, as in `{if "{error:email_address}" != ""}`. Unquoted, `{if error:email_address}` is always false, because ExpressionEngine reads the part after the colon as a modifier.
 
 ```ee title="An error summary written by hand"
 {if form_has_errors}
@@ -483,7 +485,7 @@ After a failed submission:
 
 ## After a successful submission
 
-A form whose `return=` comes back to its own page shows its success state once, on the next page load.
+A form shows its success state once, on the next page load after a successful submission. That page doesn't have to be the form's own: any page with a tag for the same form (this one or [`{exp:formidable:capture}`](/docs/formidable/reference/tags/capture)) sees it. A `return=` page without one, such as a separate thank-you template, doesn't.
 
 | Variable | |
 | --- | --- |
