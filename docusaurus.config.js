@@ -170,7 +170,6 @@ const config = {
                     className: 'navbar-github-link',
                     'aria-label': 'Nerdgency on GitHub',
                 },
-                {to: '/docs/formidable/getting-started/installation', label: 'Get started', position: 'right', className: 'navbar-cta'},
             ],
         },
         // The footer is src/theme/Footer; this only keeps the copyright for feeds.

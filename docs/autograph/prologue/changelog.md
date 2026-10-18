@@ -1,6 +1,6 @@
 ---
 title: Changelog
-description: Every Autograph release, newest first, and what each one fixed or changed.
+description: Every Autograph release, newest first, with its requirements and what each one added, fixed or changed.
 keywords:
   - autograph
   - changelog
@@ -10,7 +10,7 @@ keywords:
 
 # Changelog
 
-Every change a site might notice, newest first. Autograph follows [semantic versioning](https://semver.org/):
+Every release and every change a site might notice, newest first. What's still known not to work is under [Known limitations](/docs/autograph/getting-started/troubleshooting#known-limitations). Autograph follows [semantic versioning](https://semver.org/):
 
 - **Patch releases** (1.0.x) fix things.
 - **Minor releases** (1.x.0) add things without breaking anything.
@@ -42,4 +42,17 @@ A fix release. No template, stylesheet or entry needs to change.
 
 ## 1.0.0
 
-The first release. The [release notes](./release-notes.md#autograph-10) cover everything in it.
+The first release of Autograph, a signature fieldtype for ExpressionEngine.
+
+### Requirements
+
+**ExpressionEngine 6.0** or later and **PHP 8.1** or later. See [Installation](/docs/autograph/getting-started/installation).
+
+### Added
+
+- **An Autograph fieldtype** for channel fields, with a signing pad built on [Signature Pad](https://github.com/szimek/signature_pad).
+- **Channel Form support** with no extra template work. See [Channel Forms](/docs/autograph/using-autograph/channel-forms).
+- **Per-field settings** for canvas width, canvas height and pen colour. See [Field settings](/docs/autograph/using-autograph/field-settings).
+- **A control panel switch**: let editors sign on the publish form, or show the signature read-only. See [Control panel](/docs/autograph/using-autograph/control-panel).
+- **Template tags** for the signature as an `<img>`, its data URL, and the canvas dimensions. See [Template tags](/docs/autograph/reference/template-tags).
+- **Undo and Clear** buttons beside every pad.

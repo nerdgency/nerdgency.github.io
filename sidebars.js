@@ -102,7 +102,7 @@ const sidebars = {
       value:
         '<a class="sidebar-product" href="/docs/autograph"><img src="/img/icons/autograph.svg" alt="" width="34" height="34"><span><strong>Autograph</strong><small>Signatures for ExpressionEngine</small></span></a>',
     },
-    section('Prologue', [a('index'), a('prologue/release-notes'), a('prologue/changelog'), a('prologue/upgrade-guide')]),
+    section('Prologue', [a('index'), a('prologue/changelog'), a('prologue/upgrade-guide')]),
     section('Getting started', [
       a('getting-started/installation'),
       a('getting-started/troubleshooting'),
