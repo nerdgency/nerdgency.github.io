@@ -1,0 +1,54 @@
+/*
+ * The Vitesse product page (vitesse.js). Its hero, sections and call to
+ * action share formidable.module.css, so the product pages match; this
+ * holds only what's Vitesse's own.
+ */
+
+.modes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.mode {
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem;
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius-lg);
+  background: var(--ng-bg-raised);
+}
+
+.mode h3 {
+  font-family: var(--ng-font-display);
+  font-size: 1.45rem;
+  font-weight: 560;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.mode p {
+  color: var(--ng-text-muted);
+  line-height: 1.6;
+}
+
+.modeTag {
+  align-self: flex-start;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ng-amber) 18%, transparent);
+  font-family: var(--ng-font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ng-amber-deep);
+}
+
+.modeCode {
+  margin-top: auto;
+  box-shadow: none;
+}
+
+@media (max-width: 996px) {
+  .modes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

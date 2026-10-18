@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Vitesse</title>
+    <!-- Hexagon: a built module -->
+    <path d="M100,14 L172,56 L172,140 L100,182 L28,140 L28,56 Z" fill="#FAAF40" stroke="#374654" stroke-width="6" stroke-linejoin="round" />
+    <!-- Speed lines and a forward chevron -->
+    <rect x="52" y="78" width="40" height="12" rx="6" fill="#FFFFFF" />
+    <rect x="44" y="98" width="34" height="12" rx="6" fill="#FFFFFF" />
+    <rect x="58" y="118" width="22" height="12" rx="6" fill="#FFFFFF" />
+    <polyline points="102,74 128,104 102,134" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Badge: a bolt -->
+    <circle cx="150" cy="152" r="27" fill="#FFFFFF" stroke="#374654" stroke-width="6" />
+    <path d="M154,134 L139,155 L149,155 L145,170 L161,148 L151,148 Z" fill="#FAAF40" stroke="#FAAF40" stroke-width="2" stroke-linejoin="round" />
+</svg>

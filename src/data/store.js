@@ -6,4 +6,5 @@
 export const store = {
   formidable: {url: 'https://expressionengine.com/add-ons/formidable', price: '$85'},
   autograph: {url: 'https://expressionengine.com/add-ons/autograph', price: '$15'},
+  vitesse: {url: 'https://expressionengine.com/add-ons/vitesse', price: 'Free'},
 };

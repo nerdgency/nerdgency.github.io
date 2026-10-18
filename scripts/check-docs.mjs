@@ -43,6 +43,7 @@ const files = (targets.length ? targets.flatMap((t) => (fs.statSync(t).isDirecto
   // snapshots of released ones.
   ...walk(path.join(root, 'docs-autograph')),
   ...walk(path.join(root, 'autograph_versioned_docs')),
+  ...walk(path.join(root, 'docs-vitesse')),
   ...walk(path.join(root, 'blog')),
   ...walk(path.join(root, 'examples/templates')),
 ]).filter((f) => /\.(mdx?|html)$/.test(f));

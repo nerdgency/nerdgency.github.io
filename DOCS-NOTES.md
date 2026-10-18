@@ -131,3 +131,11 @@ Items 1, 2, 4 (member fields now work: the CP view uses `name()`, and front-end 
 ## Autograph 2.0 launch
 
 Released 18 October 2026. The hero (`design/autograph-2-0-hero.html`, rendered with `node design/render-hero.mjs autograph-2-0`), the announcement (`blog/2026-10-18-introducing-autograph-2-0/`) and the product page (`src/pages/autograph.js`) are live, and the 2.x docs are the default version. Autograph is sold at https://expressionengine.com/add-ons/autograph for $15 (`src/data/store.js`); the 1.x docs link the store without a price.
+
+# Vitesse docs: maintainer notes
+
+Written October 2026 for Vitesse 1.0, released free on 18 October 2026 (https://expressionengine.com/add-ons/vitesse, `src/data/store.js`). Its docs are their own plugin instance (`id: 'vitesse'`, `docs-vitesse/`, `sidebars-vitesse.js`) at `/docs/vitesse`, unversioned for now; version them the way Autograph's are when 2.0 work starts. The product page is `src/pages/vitesse.js` (`/vitesse`), the hero `design/vitesse-1-0-hero.html` (`node design/render-hero.mjs vitesse-1-0`), and the icon `static/img/icons/vitesse.svg` (the add-on ships the same SVG, and a 512px PNG).
+
+Source of truth: `ee/packages/vitesse` (`Library/Vite.php`, `Library/Options.php`, `Tags/*`). Its `npm test` covers the behaviour the docs describe. The `vite.config.js` in Setting up Vite was run for real against Vite 5.4 (build, dev server on a non-default port, hot file written and removed, CSS asset URLs from `server.origin`).
+
+Released: the post is published, the changelog dated, and the store link and "Free" are on the product page, Installation, the Introduction and the post. Still to do on GitHub: create the tracker's `vitesse` label and push its forms.

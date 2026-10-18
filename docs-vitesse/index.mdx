@@ -1,0 +1,54 @@
+---
+title: Introduction
+slug: /
+description: Vitesse adds the files Vite builds to ExpressionEngine templates, from Vite's dev server while you work and from the build when you publish.
+keywords:
+  - vitesse
+  - vite
+  - expressionengine vite
+  - hot module replacement
+---
+
+# Meet Vitesse
+
+Vitesse is the quickest way to use [Vite](https://vite.dev) with ExpressionEngine. Tell a template which entry points it needs, and Vitesse prints the right tags for them:
+
+- **While you work**, from Vite's dev server, with hot module replacement: save a stylesheet and the page updates without reloading.
+- **When you publish**, from your build, with the hashed file names, the stylesheets your scripts import, and preloads for the chunks they need.
+
+The template is the same either way:
+
+```html title="templates/default_site/_partials/layout.html"
+<head>
+    {exp:vitesse:css files="resources/js/app.js"}
+</head>
+<body>
+    {layout:contents}
+    {exp:vitesse:js files="resources/js/app.js"}
+</body>
+```
+
+## What's in the box
+
+<Cards>
+  <CardLink to="./using-vitesse/development-and-builds" title="Dev server or build, automatically">
+    Vitesse switches by itself, whenever Vite's dev server starts or stops.
+  </CardLink>
+  <CardLink to="./using-vitesse/stylesheets-and-scripts" title="Head and footer">
+    Stylesheets in the head, scripts at the end, each file once, including the CSS your scripts import.
+  </CardLink>
+  <CardLink to="./using-vitesse/images-and-fonts" title="Images and fonts">
+    The URL of any file Vite processed, for your own markup.
+  </CardLink>
+  <CardLink to="./using-vitesse/production" title="Ready for production">
+    CDN base URLs, Content Security Policy nonces and subresource integrity.
+  </CardLink>
+</Cards>
+
+## Where to start
+
+Vitesse is free, from the [ExpressionEngine add-on store](https://expressionengine.com/add-ons/vitesse).
+
+1. [Installation](./getting-started/installation.md): where to get Vitesse, its requirements, and the folder to copy.
+2. [Setting up Vite](./getting-started/setting-up-vite.mdx): a `vite.config.js` that works with Vitesse.
+3. [Template tags](./reference/template-tags.mdx): every tag and parameter.
