@@ -15,6 +15,7 @@ const section = (label, items) => ({
 });
 
 const f = (path) => `formidable/${path}`;
+const a = (path) => `autograph/${path}`;
 
 const sidebars = {
   formidableSidebar: [
@@ -90,6 +91,30 @@ const sidebars = {
       f('reference/command-line'),
     ]),
     section('Extending', [f('extending/hooks'), f('extending/custom-fieldtypes'), f('extending/custom-connections')]),
+  ],
+
+  // Autograph is one fieldtype, so its docs are a handful of pages in the
+  // same Prologue → Reference order as Formidable's.
+  autographSidebar: [
+    {
+      type: 'html',
+      defaultStyle: false,
+      value:
+        '<a class="sidebar-product" href="/docs/autograph"><img src="/img/icons/autograph.svg" alt="" width="34" height="34"><span><strong>Autograph</strong><small>Signatures for ExpressionEngine</small></span></a>',
+    },
+    section('Prologue', [a('index'), a('prologue/release-notes'), a('prologue/changelog'), a('prologue/upgrade-guide')]),
+    section('Getting started', [
+      a('getting-started/installation'),
+      a('getting-started/troubleshooting'),
+      a('getting-started/support'),
+    ]),
+    section('Using Autograph', [
+      a('using-autograph/field-settings'),
+      a('using-autograph/channel-forms'),
+      a('using-autograph/control-panel'),
+      a('using-autograph/displaying-signatures'),
+    ]),
+    section('Reference', [a('reference/template-tags'), a('reference/markup')]),
   ],
 };
 

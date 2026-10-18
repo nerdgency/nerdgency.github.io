@@ -67,18 +67,20 @@ export default function Home() {
             <span className={styles.productCta}>Explore Formidable →</span>
           </Link>
 
-          <div className={`${styles.product} ${styles.productQuiet}`}>
+          <Link to="/docs/autograph" className={`${styles.product} ${styles.productQuiet}`}>
             <div className={styles.productHead}>
-              <span className={styles.productGlyph} aria-hidden="true">✍︎</span>
+              <img src="/img/icons/autograph.svg" alt="" width="52" height="52" />
               <div>
                 <h3>Autograph</h3>
                 <p>Signatures for Channel Forms</p>
               </div>
+              <span className={styles.badge}>1.0</span>
             </div>
             <p className={styles.productBody}>
               A signature fieldtype for ExpressionEngine, for capturing signatures directly through Channel Forms.
             </p>
-          </div>
+            <span className={styles.productCta}>Read the docs →</span>
+          </Link>
         </div>
       </Section>
 

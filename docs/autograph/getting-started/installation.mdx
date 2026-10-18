@@ -1,0 +1,72 @@
+---
+title: Installation
+description: Autograph's requirements, how to install its two folders, how to update, and how to uninstall.
+keywords:
+  - autograph
+  - install
+  - update
+---
+
+# Installation
+
+Autograph installs like any other ExpressionEngine add-on: copy two folders onto your site, then choose **Install** in the control panel.
+
+## Requirements
+
+| | |
+| --- | --- |
+| **ExpressionEngine** | 6.0 or later |
+| **PHP** | 8.1 or later |
+
+## Installing Autograph
+
+The release zip mirrors the root of an ExpressionEngine site, so each folder goes to the same place on yours:
+
+```text title="Autograph-v1.0.1.zip"
+system/user/addons/autograph/   →  your-site/system/user/addons/autograph/
+themes/user/autograph/          →  your-site/themes/user/autograph/
+```
+
+<Steps>
+  <Step title="Copy the add-on">
+    Copy `system/user/addons/autograph` into your site's `system/user/addons/` folder.
+  </Step>
+  <Step title="Copy the front-end scripts">
+    Copy `themes/user/autograph` into your site's public `themes/user/` folder. It holds `signature_pad.min.js`, which draws the pad, and `autograph.js`, which connects each pad to its field.
+  </Step>
+  <Step title="Install from the control panel">
+    Open **Developer › Add-Ons**, find **Autograph** under **Third Party Add-Ons** and choose **Install**.
+  </Step>
+  <Step title="Create a field">
+    Autograph is now a fieldtype. Create an Autograph field and assign it to a channel. See [Field settings](/docs/autograph/using-autograph/field-settings).
+  </Step>
+</Steps>
+
+### The themes folder
+
+Autograph loads its two scripts from `user/autograph/` inside your site's themes URL (ExpressionEngine's `theme_folder_url` setting), usually `/themes/user/autograph/`. If your themes are served from a subfolder or a CDN, copy the folder there. See [The pad doesn't appear](./troubleshooting.md#the-pad-doesnt-appear).
+
+:::note Before 1.0.1
+Autograph 1.0.0 always loaded the scripts from `/themes/user/autograph/` at the root of the domain, whatever `theme_folder_url` said.
+:::
+
+## Updating
+
+<Steps>
+  <Step title="Replace both folders">
+    Copy the new `system/user/addons/autograph` and `themes/user/autograph` over the old ones. Replace the folders rather than merging them, so no file the new release removed is left behind.
+  </Step>
+  <Step title="Run the update">
+    ExpressionEngine notices the new version on the **Add-Ons** screen and offers **Update**.
+  </Step>
+</Steps>
+
+Read the [upgrade guide](/docs/autograph/prologue/upgrade-guide) before updating to a new major version.
+
+## Uninstalling
+
+Remove every Autograph field from your channels first, then choose **Uninstall** for Autograph on the **Add-Ons** screen and delete both folders.
+
+:::danger Deleting a field deletes its signatures
+Signatures are stored in the entry, in the field's own column. Deleting an Autograph field deletes every signature saved in it. Export anything you need to keep first.
+:::

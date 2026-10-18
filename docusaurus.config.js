@@ -121,7 +121,7 @@ const config = {
     themeConfig: {
         image: 'img/social/nerdgency-docs.png',
         metadata: [
-            {name: 'keywords', content: 'ExpressionEngine, add-on, forms, Formidable, Nerdgency'},
+            {name: 'keywords', content: 'ExpressionEngine, add-on, forms, Formidable, signatures, Autograph, Nerdgency'},
             {name: 'twitter:card', content: 'summary_large_image'},
         ],
         docs: {
@@ -151,9 +151,18 @@ const config = {
                     position: 'left',
                     items: [
                         {to: '/formidable', label: 'Formidable · forms for ExpressionEngine'},
+                        {to: '/docs/autograph', label: 'Autograph · signatures for ExpressionEngine'},
                     ],
                 },
-                {type: 'docSidebar', sidebarId: 'formidableSidebar', label: 'Docs', position: 'left'},
+                {
+                    type: 'dropdown',
+                    label: 'Docs',
+                    position: 'left',
+                    items: [
+                        {type: 'docSidebar', sidebarId: 'formidableSidebar', label: 'Formidable'},
+                        {type: 'docSidebar', sidebarId: 'autographSidebar', label: 'Autograph'},
+                    ],
+                },
                 {to: '/blog', label: 'Blog', position: 'left'},
                 {
                     href: 'https://github.com/nerdgency',

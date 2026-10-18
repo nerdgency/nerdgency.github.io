@@ -84,3 +84,32 @@ Control panel and front-end screenshots are captured, not drawn, by
 
 - A `docs_examples` template group was created in the local EE sandbox (`system/user/templates/default_site/docs_examples.group/`, synced by EE into `exp_template_groups`). It holds the captured example templates.
 - `.backup/pre-rewrite-docs-src-static-config.tgz` holds the docs, src, static and config as they were before the rewrite, including uncommitted edits and stray `.fuse_hidden*` files. Delete it when no longer needed.
+
+# Autograph docs: maintainer notes
+
+Written October 2026 for Autograph 1.x, ahead of the next major release. Pages are in `docs/autograph/`, listed by hand in `sidebars.js` (`autographSidebar`), and reached from the **Products** and **Docs** navbar dropdowns and the homepage card.
+
+## Source of truth
+
+The add-on source in `ee/packages/autograph/dist/system/user/addons/autograph` (version `1.0.0` in `addon.setup.php`) and the shipped `dist/themes/user/autograph/autograph.js`. Not `src/autograph.js`: that is an unfinished rewrite (see below). Channel Form asset behaviour was checked in EE's `Channel_form_lib.php`. There is no source map or `check-docs` coverage for Autograph yet; the tags are few enough to check by hand.
+
+## Add-on findings
+
+Items 1, 2, 4 (by removing `MemberField`), 5, 6 (`post_save()` removed; the settings keys stay), 7 (escaping and an `autograph_alt` lang string for the CP image; the front-end `{field}` tag still has no alt), 8 and 9 were fixed in **1.0.1**, and the docs were updated to match. A stored-XSS gap found while planning (values saved and printed unchecked) was fixed in the same release. Still open: 3 (blob column) and the soft high-DPI canvas, both planned for 2.0 in `ee/packages/autograph/ROADMAP.md`.
+
+
+1. **Undo doesn't update the saved value.** `autograph.js` only writes the textarea on `endStroke` and `clear`.
+2. **Missing lang strings.** `undo` and `no_autograph` are not defined anywhere, so they render as raw keys; `clear` only resolves in the CP (`content_lang`).
+3. **Blob column.** `settings_modify_column` uses `blob` (64 KB). A large canvas can overflow it.
+4. **Member fields.** `addon.setup.php` declares `MemberField`, but `display_field_cp.php` hardcodes `field_id_N`, so member profile saves never post the value.
+5. **Hardcoded script paths** `/themes/user/autograph/*.js` in `ft.autograph.php`, not `URL_THEMES`.
+6. **Dead code.** `save_to` and `save_type` are hidden and fixed at `0` / `image/png`; `post_save()` would write `test2.png` if `save_to` were ever set.
+7. **`replace_tag()`** outputs an `<img>` with no `alt` and an empty `src` when unsigned.
+8. **cform view** has two `class` attributes on the canvas; the second (`autograph-manager-canvas`) is ignored.
+9. **src vs dist.** `src/autograph.js` uses `tns-autograph-*` ids and `data-tns-autograph-*` attributes the PHP views don't render, imports signature_pad 5.x (dist ships 4.1.7), and `vite.config.js` writes to `dist/themes/autograph/js/` rather than `dist/themes/user/autograph/`. Running `npm run build` today would not change what ships. The Reference › Markup page warns the class names may change.
+
+## Unresolved questions
+
+- **Support address.** The add-on README gives `support@triplenerdscore.net`; the support page uses it. Confirm it's still right, or move Autograph to the Formidable issue tracker model.
+- **Requirements.** EE 6.0+ / PHP 8.1+ come from the README and were not tested.
+- **Upgrade guide.** Fill in "Upgrading to the next major release" when the new version's breaking changes are known (markup/class names, signature_pad 5, storage).

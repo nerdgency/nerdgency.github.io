@@ -189,7 +189,11 @@ for (const file of files) {
   for (const m of text.matchAll(/!\[([^\]]*)\]\(([^)\s]+)/g)) {
     if (!m[1].trim()) report(file, lineOf(text, m.index), `image ${m[2]} has no alt text`);
   }
-  for (const m of text.matchAll(/<img\b[^>]*>/g)) {
+  // An <img> inside a code block or `code span` is shown, not rendered, so
+  // it needs no alt. Blank it out, keeping offsets so line numbers hold.
+  const blank = (s) => s.replace(/[^\n]/g, ' ');
+  const rendered = text.replace(/^```[\s\S]*?^```/gm, blank).replace(/`[^`\n]+`/g, blank);
+  for (const m of rendered.matchAll(/<img\b[^>]*>/g)) {
     if (!/\balt=/.test(m[0])) report(file, lineOf(text, m.index), 'an <img> has no alt attribute');
   }
   for (const m of text.matchAll(/["(](\/img\/[^")\s]+)/g)) {
